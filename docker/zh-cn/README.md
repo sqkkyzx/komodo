@@ -46,9 +46,10 @@ publishes from `sqkkyzx/komodo`, using the repository's `GITHUB_TOKEN` with
 
 The workflow loads the image into the amd64 runner, checks the Core/CLI against
 the pinned base, and starts an isolated Core and MongoDB to check `/version`,
-the homepage, and its JavaScript/CSS assets. It publishes the tested image only
-after those checks pass, verifies its registry platform/revision, and then
-updates these tags:
+the homepage, and its JavaScript/CSS assets. The JavaScript response must contain
+required Chinese login and navigation text, including when emitted as Unicode
+escapes. It publishes the tested image only after those checks pass, verifies
+its registry platform/revision, and then updates these tags:
 
 - `ghcr.io/sqkkyzx/komodo-core:sha-<full-commit-sha>`
 - `ghcr.io/sqkkyzx/komodo-core:2.3.3-zh-cn`

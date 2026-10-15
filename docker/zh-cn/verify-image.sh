@@ -212,10 +212,23 @@ if not types or types[-1] not in allowed:
     raise SystemExit(f"The {name} response has an incorrect Content-Type; SPA fallback is not accepted.")
 if not body.strip() or re.search(br"^\s*(?:<!doctype\s+html|<html[\s>])", body[:1024], re.I):
     raise SystemExit(f"The {name} response is empty or contains an HTML fallback.")
+if name == "javascript":
+    source = body.decode("utf-8")
+    # Vite may emit literal Chinese text or JavaScript Unicode escapes.
+    source = re.sub(
+        r"(?<!\\)\\u(?:([0-9a-fA-F]{4})|\{([0-9a-fA-F]{1,6})\})",
+        lambda match: chr(int(match[1] or match[2], 16)),
+        source,
+    )
+    required = ["输入用户名", "用户名不能为空", "切换账号", "计划任务"]
+    missing = [text for text in required if text not in source]
+    if missing:
+        raise SystemExit("The served JavaScript bundle is missing required zh-CN UI text: "
+                         + ", ".join(missing))
 PY
   asset_index=$((asset_index + 1))
 done <"$tmp_dir/asset-urls"
 [[ "$asset_index" == 2 ]] || fail "Both JavaScript and CSS assets must be checked."
 
-printf 'Verified linux/amd64, unchanged Core/CLI, Core %s, homepage, and referenced JS/CSS.\n' \
+printf 'Verified linux/amd64, unchanged Core/CLI, Core %s, homepage, referenced JS/CSS, and zh-CN UI text.\n' \
   "$expected_version"
