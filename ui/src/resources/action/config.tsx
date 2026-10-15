@@ -188,11 +188,16 @@ export default function ActionConfig({ id }: { id: string }) {
                       </code>
                     ) : (
                       <>
-                        <code>- 每天下午 4 点运行</code>
-                        <code>
-                          - 每月 1 日和 15 日的 21:00 运行
-                        </code>
-                        <code>- 每周日午夜运行</code>
+                        <Text size="sm">
+                          <code>Run every day at 4:00 pm</code>（每天下午 4 点运行）
+                        </Text>
+                        <Text size="sm">
+                          <code>Run at 21:00 on the 1st and 15th of the month</code>
+                          （每月 1 日和 15 日的 21:00 运行）
+                        </Text>
+                        <Text size="sm">
+                          <code>Every Sunday at midnight</code>（每周日午夜运行）
+                        </Text>
                       </>
                     )}
                   </Stack>
