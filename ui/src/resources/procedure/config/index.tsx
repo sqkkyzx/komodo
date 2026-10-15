@@ -11,7 +11,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { Types } from "komodo_client";
 import { useState } from "react";
 import Stage from "./stage";
-import { Button, Group, Select, Stack, TextInput } from "@mantine/core";
+import { Button, Group, Select, Stack, Text, TextInput } from "@mantine/core";
 import { ICONS } from "@/lib/icons";
 import TimezoneSelector from "@/components/timezone-selector";
 import WebhookBuilder from "@/components/webhook/builder";
