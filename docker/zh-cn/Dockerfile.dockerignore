@@ -1,0 +1,18 @@
+# Only send the UI, TypeScript client, and this build definition.
+**
+!ui/
+!ui/**
+!client/
+!client/core/
+!client/core/ts/
+!client/core/ts/**
+!docker/
+!docker/zh-cn/
+!docker/zh-cn/**
+
+**/node_modules
+**/dist
+**/.env*
+**/.npmrc
+**/.git
+**/.DS_Store
