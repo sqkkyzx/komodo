@@ -12,7 +12,7 @@ import {
   Text,
 } from "@mantine/core";
 import { ChevronsUpDown } from "lucide-react";
-import { fmtResourceType } from "@/lib/formatting";
+import { resourceLabel } from "@/lib/l10n";
 import { ICONS } from "@/lib/icons";
 import { useDebounce, useSearchCombobox } from "mogh_ui";
 import { keepPreviousData } from "@tanstack/react-query";
@@ -152,7 +152,7 @@ export default function ResourceSelector({
           <Group gap="xs" wrap="nowrap">
             <Components.Icon id={selected} />
             <Text className="text-ellipsis">
-              {name || (placeholder ?? `Select ${fmtResourceType(type)}`)}
+              {name || (placeholder ?? `选择${resourceLabel(type)}`)}
             </Text>
           </Group>
         </Button>
@@ -163,7 +163,7 @@ export default function ResourceSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder="search..."
+          placeholder="搜索…"
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
           {/* {isFetching && (
@@ -180,7 +180,7 @@ export default function ResourceSelector({
             </Combobox.Option>
           ))}
           {resources.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
+            <Combobox.Empty>没有结果。</Combobox.Empty>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

@@ -43,10 +43,12 @@ export default function SwarmNodeTabs({
     () => [
       {
         value: "Tasks",
+        label: "任务",
         icon: ICONS.SwarmTask,
       },
       {
         value: "Inspect",
+        label: "检查",
         icon: ICONS.Inspect,
         disabled: !specificInspect,
       },

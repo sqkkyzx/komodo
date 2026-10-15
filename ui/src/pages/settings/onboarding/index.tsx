@@ -19,14 +19,14 @@ import { Section } from "mogh_ui";
 import NewOnboardingKey from "./new";
 
 export default function SettingsOnboardingKeys() {
-  useSetTitle("Onboarding");
+  useSetTitle("服务器注册");
   const { data } = useRead("ListOnboardingKeys", {});
   const keys = data ?? [];
   const invalidate = useInvalidate();
   const { mutate } = useWrite("UpdateOnboardingKey", {
     onSuccess: () => {
       invalidate(["ListOnboardingKeys"]);
-      notifications.show({ message: "Updated onboarding key", color: "green" });
+      notifications.show({ message: "注册密钥已更新", color: "green" });
     },
   });
   const expiresSize = useMatches({
@@ -41,7 +41,7 @@ export default function SettingsOnboardingKeys() {
     () => [
       {
         accessorKey: "name",
-        header: ({ column }) => <SortableHeader column={column} title="Name" />,
+        header: ({ column }) => <SortableHeader column={column} title="名称" />,
         cell: ({ row }) => (
           <TextInput
             defaultValue={row.original.name}
@@ -59,7 +59,7 @@ export default function SettingsOnboardingKeys() {
       },
       {
         accessorKey: "copy_server",
-        header: "Template",
+        header: "模板",
         cell: ({ row }) => (
           <ResourceSelector
             type="Server"
@@ -73,7 +73,7 @@ export default function SettingsOnboardingKeys() {
       },
       {
         accessorKey: "tags",
-        header: "Tags",
+        header: "标签",
         cell: ({ row }) => {
           const tags = useRead("ListTags", {}).data;
           const otherTags = tags?.filter(
@@ -82,7 +82,7 @@ export default function SettingsOnboardingKeys() {
           return (
             <Group wrap="nowrap" gap="sm">
               <TagSelector
-                title="Select Tags"
+                title="选择标签"
                 tags={otherTags}
                 onSelect={(tag) =>
                   mutate({
@@ -122,8 +122,8 @@ export default function SettingsOnboardingKeys() {
         header: ({ column }) => (
           <SortableHeader
             column={column}
-            title="Privileged"
-            description="Allow the onboarding key to update an existing Server's public key and configuration to enable the connection."
+            title="特权"
+            description="允许此注册密钥更新现有服务器的公钥和配置以建立连接。"
           />
         ),
         cell: ({ row }) => (
@@ -141,7 +141,7 @@ export default function SettingsOnboardingKeys() {
       {
         accessorKey: "create_builder",
         header: ({ column }) => (
-          <SortableHeader column={column} title="Create Builder" />
+          <SortableHeader column={column} title="创建构建器" />
         ),
         cell: ({ row }) => (
           <Switch
@@ -158,7 +158,7 @@ export default function SettingsOnboardingKeys() {
       {
         accessorKey: "enabled",
         header: ({ column }) => (
-          <SortableHeader column={column} title="Enabled" />
+          <SortableHeader column={column} title="已启用" />
         ),
         cell: ({
           row: {
@@ -175,7 +175,7 @@ export default function SettingsOnboardingKeys() {
       {
         accessorKey: "expires",
         header: ({ column }) => (
-          <SortableHeader column={column} title="Expires" />
+          <SortableHeader column={column} title="过期时间" />
         ),
         cell: ({
           row: {
@@ -189,13 +189,13 @@ export default function SettingsOnboardingKeys() {
             styles={{ label: { width: "fit-content", height: "fit-content" } }}
             size={expiresSize}
           >
-            {expires ? fmtDateWithMinutes(new Date(expires)) : "Never"}
+            {expires ? fmtDateWithMinutes(new Date(expires)) : "永不过期"}
           </Badge>
         ),
       },
       {
         accessorKey: "public_key",
-        header: "Delete",
+        header: "删除",
         cell: ({ row }) => (
           <DeleteOnboardingKey publicKey={row.original.public_key} />
         ),
@@ -206,7 +206,7 @@ export default function SettingsOnboardingKeys() {
 
   return (
     <Section
-      title="Server Onboarding Keys"
+      title="服务器注册密钥"
       icon={<ICONS.OnboardingKey className="w-5 h-5" />}
       actions={<NewOnboardingKey />}
     >

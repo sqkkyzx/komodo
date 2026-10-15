@@ -130,7 +130,7 @@ export default function StackServiceSelector({
           <Group gap="xs" wrap="nowrap">
             <ICONS.Service size="1rem" color={hexColorByIntention(intention)} />
             <Text className="text-ellipsis">
-              {name || (placeholder ?? "Select service")}
+              {name || (placeholder ?? "选择服务")}
             </Text>
           </Group>
         </Button>
@@ -141,7 +141,7 @@ export default function StackServiceSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder="Search"
+          placeholder="搜索"
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
           {filtered.map((service) => (
@@ -163,9 +163,7 @@ export default function StackServiceSelector({
               </Group>
             </Combobox.Option>
           ))}
-          {filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
-          )}
+          {filtered.length === 0 && <Combobox.Empty>无结果。</Combobox.Empty>}
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>

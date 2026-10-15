@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import {
   swarmStateIntention,
   swarmNodeStateIntention,
@@ -52,21 +53,21 @@ export const SwarmComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { intention: "Good", value: summary?.healthy ?? 0, title: "Healthy" },
+      { intention: "Good", value: summary?.healthy ?? 0, title: "健康" },
       {
         intention: "Critical",
         value: (summary?.unhealthy ?? 0) + (summary?.down ?? 0),
-        title: "Unhealthy",
+        title: "不健康",
       },
       {
         intention: "Unknown",
         value: summary?.unknown ?? 0,
-        title: "Unknown",
+        title: "未知",
       },
     ];
   },
 
-  Description: () => <>Control and monitor docker swarms.</>,
+  Description: () => <>管理和监控 Docker 集群。</>,
 
   New: () => <NewResource type="Swarm" />,
 
@@ -99,7 +100,7 @@ export const SwarmComponents: RequiredResourceComponents<
 
   State: ({ id }) => {
     let state = useSwarm(id)?.info.state;
-    return <StatusBadge text={state} intent={swarmStateIntention(state)} />;
+    return <StatusBadge text={displayLabel(state)} intent={swarmStateIntention(state)} />;
   },
   Info: {
     Join: ({ id }) => {
@@ -108,7 +109,7 @@ export const SwarmComponents: RequiredResourceComponents<
       return (
         <Box>
           <Modal
-            title={<Text fz="h3">Join Commands</Text>}
+            title={<Text fz="h3">加入命令</Text>}
             opened={opened}
             onClose={close}
             size="auto"
@@ -121,7 +122,7 @@ export const SwarmComponents: RequiredResourceComponents<
             leftSection={<ICONS.JoinSwarm size="1rem" />}
             disabled={!specificInspect}
           >
-            Join
+            加入
           </Button>
         </Box>
       );

@@ -31,7 +31,7 @@ export default function ProvidersFromConfig({
 
   return (
     <Stack gap="xs">
-      <Text c="dimmed">From config file:</Text>
+      <Text c="dimmed">来自配置文件：</Text>
       <Group>
         {accounts.map(([domain, username]) => (
           <Badge variant="default" size="lg" tt="none">

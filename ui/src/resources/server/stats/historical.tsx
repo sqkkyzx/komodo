@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { fmtSizeBytes, Section } from "mogh_ui";
 import { useStatsGranularity } from "../hooks";
 import { ReactNode, useMemo } from "react";
@@ -57,7 +58,7 @@ export default function ServerHistoricalStats({ id }: { id: string }) {
   return (
     <Section
       withBorder
-      title="Historical"
+      title="历史"
       icon={<ChartLine size="1.3rem" />}
       titleRight={
         <Group ml={{ sm: "xl" }} onClick={(e) => e.stopPropagation()}>
@@ -77,7 +78,7 @@ export default function ServerHistoricalStats({ id }: { id: string }) {
               Types.Timelength.OneHour,
               Types.Timelength.SixHours,
               Types.Timelength.OneDay,
-            ]}
+            ].map((value) => ({ value, label: displayLabel(value) }))}
             w={120}
           />
           <ShowHideButton show={show} setShow={setShow} />
@@ -243,12 +244,12 @@ function StatChart({
   const xTickFormatter = (ts: number) => {
     const date = new Date(ts);
     if (timeDiff < 2 * 60 * 60 * 1000) {
-      return date.toLocaleTimeString([], {
+      return date.toLocaleTimeString("zh-CN", {
         hour: "2-digit",
         minute: "2-digit",
       });
     }
-    return date.toLocaleString([], {
+    return date.toLocaleString("zh-CN", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
@@ -264,7 +265,7 @@ function StatChart({
       <Group gap="xs">
         {icon}
         <Text fz="xl" fw={500}>
-          {type}
+          {displayLabel(type)}
         </Text>
       </Group>
       {isPending ? (
@@ -335,7 +336,7 @@ function StatChart({
                 fontSize: 12,
               }}
               labelStyle={{ color: "var(--mantine-color-dimmed)" }}
-              labelFormatter={(label) => new Date(Number(label)).toLocaleString()}
+              labelFormatter={(label) => new Date(Number(label)).toLocaleString("zh-CN")}
               // Memory tooltip lists top-of-stack first, matching the chart.
               itemSorter={
                 isMemory
@@ -352,7 +353,7 @@ function StatChart({
                     : isMemory
                       ? `${v.toFixed(2)} GB`
                       : `${v.toFixed(1)}%`;
-                return [formatted, name];
+                return [formatted, displayLabel(String(name ?? ""))];
               }}
             />
             {(isLoadAvg || isMemory) && (
@@ -389,6 +390,7 @@ function StatChart({
                 key={series.label}
                 type="monotone"
                 dataKey={series.label}
+                name={displayLabel(series.label)}
                 // Stack only for Memory; other charts overlay.
                 stackId={isMemory ? "mem" : undefined}
                 stroke={colors[series.label]}

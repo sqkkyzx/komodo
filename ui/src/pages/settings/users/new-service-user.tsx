@@ -9,25 +9,25 @@ export default function NewServiceUser() {
   const { mutateAsync: create, isPending } = useWrite("CreateServiceUser", {
     onSuccess: () => {
       inv(["ListUsers"]);
-      notifications.show({ message: "Created Service User", color: "green" });
+      notifications.show({ message: "服务用户已创建", color: "green" });
     },
   });
   const [username, setUsername] = useState("");
 
   return (
     <CreateModal
-      entityType="Service User"
+      entityType="服务用户"
       onConfirm={() => create({ username, description: "" }).then(() => true)}
       loading={isPending}
-      configureLabel="a unique username"
+      configureLabel="唯一的用户名"
       configSection={() => (
         <>
           <TextInput
             autoFocus
-            placeholder="username"
+            placeholder="用户名"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            error={!username.trim() && "Enter username"}
+            error={!username.trim() && "请输入用户名"}
           />
         </>
       )}

@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { ContainerPort } from "@/components/docker/container-ports";
 import DockerResourceLink from "@/components/docker/link";
 import { containerStateIntention } from "@/lib/color";
@@ -34,7 +35,7 @@ export default function Container() {
   if (type !== "servers") {
     return (
       <Center h="50vh">
-        <Text>This resource type does not have any containers.</Text>
+        <Text>此资源类型没有容器。</Text>
       </Center>
     );
   }
@@ -49,7 +50,7 @@ function ContainerInner({
   containerName: string;
 }) {
   const server = useServer(serverId);
-  useSetTitle(`${server?.name} | Container | ${containerName}`);
+  useSetTitle(`${server?.name} | 容器 | ${containerName}`);
   const { specific } = usePermissions({
     type: "Server",
     id: serverId,
@@ -81,13 +82,13 @@ function ContainerInner({
 
   return (
     <ResourceSubPage
-      entityTypeName="Container"
+      entityTypeName="容器"
       parentType="Server"
       parentId={serverId}
       name={listContainer?.name}
       icon={ICONS.Container}
       intent={intention}
-      state={state}
+      state={state ? displayLabel(state) : state}
       status={listContainer?.status}
       info={
         <>
@@ -152,7 +153,7 @@ function ContainerInner({
 
       {/* TOP LEVEL CONTAINER INFO */}
       {listContainer && (
-        <Section title="Details" icon={<ICONS.Info size="1.3rem" />}>
+        <Section title="详情" icon={<ICONS.Info size="1.3rem" />}>
           <DataTable
             tableKey="container-info"
             data={[listContainer]}
@@ -162,15 +163,15 @@ function ContainerInner({
                 accessorKey: "id",
               },
               {
-                header: "Image",
+                header: "镜像",
                 accessorKey: "image",
               },
               {
-                header: "Network Mode",
+                header: "网络模式",
                 accessorKey: "network_mode",
               },
               {
-                header: "Networks",
+                header: "网络",
                 accessorKey: "networks",
               },
             ]}

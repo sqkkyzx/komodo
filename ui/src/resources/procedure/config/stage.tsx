@@ -52,7 +52,7 @@ export default function ProcedureStage({
           />
           <Menu>
             <Menu.Target>
-              <ActionIcon aria-label="Open menu">
+              <ActionIcon aria-label="打开菜单">
                 <Ellipsis size="1rem" />
               </ActionIcon>
             </Menu.Target>
@@ -62,7 +62,7 @@ export default function ProcedureStage({
                   rightSection={<ArrowUp size="1rem" />}
                   onClick={moveUp}
                 >
-                  Move Up
+                  上移
                 </Menu.Item>
               )}
               {moveDown && (
@@ -70,7 +70,7 @@ export default function ProcedureStage({
                   rightSection={<ArrowDown size="1rem" />}
                   onClick={moveDown}
                 >
-                  Move Down
+                  下移
                 </Menu.Item>
               )}
 
@@ -85,7 +85,7 @@ export default function ProcedureStage({
                 }
                 onClick={insertAbove}
               >
-                Insert Above
+                在上方插入
               </Menu.Item>
               <Menu.Item
                 rightSection={
@@ -96,7 +96,7 @@ export default function ProcedureStage({
                 }
                 onClick={insertBelow}
               >
-                Insert Below
+                在下方插入
               </Menu.Item>
 
               <Menu.Divider />
@@ -105,7 +105,7 @@ export default function ProcedureStage({
                 rightSection={<Trash size="1rem" />}
                 onClick={removeStage}
               >
-                Remove
+                移除
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
@@ -125,12 +125,12 @@ export default function ProcedureStage({
             }
             disabled={disabled}
           >
-            Add Execution
+            添加执行任务
           </Button>
         }
         columns={[
           {
-            header: "Execution",
+            header: "执行任务",
             cell: ({ row: { original, index } }) => (
               <ProcedureExecutionSelector
                 disabled={disabled}
@@ -158,7 +158,7 @@ export default function ProcedureStage({
             ),
           },
           {
-            header: "Target",
+            header: "目标",
             cell: ({
               row: {
                 original: {
@@ -192,7 +192,7 @@ export default function ProcedureStage({
             },
           },
           {
-            header: "Add / Remove",
+            header: "添加 / 移除",
             cell: ({ row: { index } }) => (
               <Group>
                 <ActionIcon
@@ -228,7 +228,7 @@ export default function ProcedureStage({
             ),
           },
           {
-            header: "Enabled",
+            header: "已启用",
             cell: ({
               row: {
                 original: { enabled },

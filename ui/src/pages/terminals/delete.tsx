@@ -24,7 +24,7 @@ export default function DeleteTerminal({
     onSuccess: () => {
       refetch?.();
       notifications.show({
-        message: `Deleted Terminal '${terminal}'`,
+        message: `已删除终端“${terminal}”`,
         color: "green",
       });
       navTo && nav(navTo);
@@ -40,7 +40,7 @@ export default function DeleteTerminal({
       confirmProps={{ variant: "filled", color: "red" }}
       {...buttonProps}
     >
-      Delete
+      删除
     </ConfirmButton>
   );
 }

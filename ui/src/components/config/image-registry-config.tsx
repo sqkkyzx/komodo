@@ -38,11 +38,11 @@ export default function ImageRegistryConfig({
     <ConfigItem
       label={
         <Group>
-          <Text c="dimmed">Pushes to:</Text>
+          <Text c="dimmed">推送到：</Text>
           {registry?.domain && registry.domain + " / "}
           {registry?.domain && (namespace ? namespace : "<namespace>") + " / "}
           {imageName}
-          {!registry?.domain && <Badge>Local</Badge>}
+          {!registry?.domain && <Badge>本地</Badge>}
         </Group>
       }
       gap="xs"

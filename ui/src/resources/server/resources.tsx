@@ -15,21 +15,21 @@ export default function ServerHostedResourcesSection({
 }: ServerHostedResourcesSectionProps) {
   return (
     <Section gap={48} {...sectionProps}>
-      <Section title="Stacks" icon={<ICONS.Stack size="1.3rem" />}>
+      <Section title="应用栈" icon={<ICONS.Stack size="1.3rem" />}>
         <ResourceTable
           type="Stack"
           newProps={{ serverId }}
           specific={{ server_ids: [serverId] }}
         />
       </Section>
-      <Section title="Deployments" icon={<ICONS.Deployment size="1.3rem" />}>
+      <Section title="部署" icon={<ICONS.Deployment size="1.3rem" />}>
         <ResourceTable
           type="Deployment"
           newProps={{ serverId }}
           specific={{ server_ids: [serverId] }}
         />
       </Section>
-      <Section title="Repos" icon={<ICONS.Repo size="1.3rem" />}>
+      <Section title="代码仓库" icon={<ICONS.Repo size="1.3rem" />}>
         <ResourceTable
           type="Repo"
           newProps={{ serverId }}

@@ -10,7 +10,7 @@ export default function UserDisabled() {
       <Paper bdrs="md" p="xl">
         <Stack justify="center" align="center">
           <UserX size="2rem" />
-          <Text fz="h2">User Not Enabled</Text>
+          <Text fz="h2">用户尚未启用</Text>
           <Button
             variant="filled"
             color="red"
@@ -20,7 +20,7 @@ export default function UserDisabled() {
               location.reload();
             }}
           >
-            Log Out
+            退出登录
           </Button>
         </Stack>
       </Paper>

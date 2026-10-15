@@ -31,7 +31,7 @@ export default function LinkedRepo({
       label={
         linkedRepo ? (
           <Group fz="h3" fw="bold">
-            Repo:
+            代码仓库：
             <ResourceLink
               type="Repo"
               id={linkedRepo}
@@ -40,10 +40,10 @@ export default function LinkedRepo({
             />
           </Group>
         ) : (
-          "Select Repo"
+          "选择代码仓库"
         )
       }
-      description={`Select an existing Repo to attach${!repoLinked ? ", or configure the repo below" : ""}.`}
+      description={`选择已有代码仓库进行关联${!repoLinked ? "，或在下方配置代码仓库" : ""}。`}
     >
       <ResourceSelector
         type="Repo"

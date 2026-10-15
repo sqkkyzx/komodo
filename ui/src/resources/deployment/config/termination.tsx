@@ -14,14 +14,14 @@ export function TerminationSignal({
   disabled: boolean;
 }) {
   return (
-    <ConfigItem label="Default termination signal">
+    <ConfigItem label="默认终止信号">
       <Select
         value={arg}
         onChange={(value) =>
           value && set({ termination_signal: value as Types.TerminationSignal })
         }
         disabled={disabled}
-        placeholder="Select signal"
+        placeholder="选择信号"
         data={Object.values(Types.TerminationSignal).reverse()}
         w={{ base: "100%", xs: "fit-content" }}
       />
@@ -43,13 +43,13 @@ export function TerminationTimeout({
     setInput(arg.toString());
   }, [arg]);
   const num = Number(input);
-  const error = num || num === 0 ? undefined : "Timeout must be a number";
+  const error = num || num === 0 ? undefined : "超时必须为数字";
   return (
-    <ConfigItem label="Termination timeout">
+    <ConfigItem label="终止超时">
       <Group gap="xs">
         <TextInput
           w={100}
-          placeholder="time in seconds"
+          placeholder="以秒为单位"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onBlur={(e) => {
@@ -58,7 +58,7 @@ export function TerminationTimeout({
               set({ termination_timeout: num });
             } else {
               notifications.show({
-                message: "Termination timeout must be a number",
+                message: "终止超时必须为数字",
                 color: "red",
               });
             }
@@ -66,7 +66,7 @@ export function TerminationTimeout({
           error={error}
           disabled={disabled}
         />
-        seconds
+        秒
       </Group>
     </ConfigItem>
   );

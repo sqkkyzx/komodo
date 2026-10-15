@@ -24,7 +24,7 @@ export default function SwarmStackLogsSection({
       disabled={disabled}
       extraController={
         <Select
-          placeholder="Select service"
+          placeholder="选择服务"
           value={service}
           onChange={(service) => service && setService(service)}
           data={stack.Services.map((s) => s.Name).filter((s) => s!) as string[]}

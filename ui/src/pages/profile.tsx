@@ -37,13 +37,13 @@ export default function Profile() {
   const [password, setPassword] = useState("");
   const { mutate: updateUsername } = useManageAuth("UpdateUsername", {
     onSuccess: () => {
-      notifications.show({ message: "Username updated.", color: "green" });
+      notifications.show({ message: "用户名已更新。", color: "green" });
       refetchUser();
     },
   });
   const { mutate: updatePassword } = useManageAuth("UpdatePassword", {
     onSuccess: () => {
-      notifications.show({ message: "Password updated.", color: "green" });
+      notifications.show({ message: "密码已更新。", color: "green" });
       setPassword("");
       refetchUser();
     },
@@ -53,7 +53,7 @@ export default function Profile() {
     {
       onSuccess: () => {
         notifications.show({
-          message: "External login skip 2fa mode updated.",
+          message: "外部登录跳过双重验证设置已更新。",
           color: "green",
         });
         refetchUser();
@@ -62,25 +62,22 @@ export default function Profile() {
   );
 
   return (
-    <PageGuard
-      isPending={isPending}
-      error={!user ? "User not found" : undefined}
-    >
+    <PageGuard isPending={isPending} error={!user ? "未找到用户" : undefined}>
       {user && (
         <EntityPage>
           <UserHeader user={user} />
           <Section
-            title="Login"
+            title="登录"
             titleFz="h3"
             icon={<ICONS.Key size="1.2rem" />}
             withBorder
           >
             <Stack gap="0">
               <Group>
-                <Text ff="monospace">Username:</Text>
+                <Text ff="monospace">用户名：</Text>
 
                 <TextInput
-                  placeholder="Update username"
+                  placeholder="更新用户名"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   w={250}
@@ -96,10 +93,10 @@ export default function Profile() {
 
               {options?.local && (
                 <Group mt="sm">
-                  <Text ff="monospace">Password:</Text>
+                  <Text ff="monospace">密码：</Text>
 
                   <PasswordInput
-                    placeholder="Update password"
+                    placeholder="更新密码"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     w={250}
@@ -172,7 +169,7 @@ export default function Profile() {
               />
               {(!!user.totp?.confirmed_at || !!user.passkey?.created_at) && (
                 <EnableSwitch
-                  label="Skip 2FA for external logins"
+                  label="外部登录时跳过双重验证"
                   checked={user.external_skip_2fa}
                   onCheckedChange={(external_skip_2fa) =>
                     updateExternalSkip2fa({ external_skip_2fa })

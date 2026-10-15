@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { procedureStateIntention } from "@/lib/color";
 import { useListItem, useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
@@ -49,26 +50,26 @@ export const ProcedureComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { title: "Ok", intention: "Good", value: summary?.ok ?? 0 },
+      { title: "正常", intention: "Good", value: summary?.ok ?? 0 },
       {
-        title: "Running",
+        title: "运行中",
         intention: "Warning",
         value: summary?.running ?? 0,
       },
       {
-        title: "Failed",
+        title: "失败",
         intention: "Critical",
         value: summary?.failed ?? 0,
       },
       {
-        title: "Unknown",
+        title: "未知",
         intention: "Unknown",
         value: summary?.unknown ?? 0,
       },
     ];
   },
 
-  Description: () => <>Orchestrate multiple Komodo executions.</>,
+  Description: () => <>编排多个 Komodo 执行任务。</>,
 
   New: () => <NewResource type="Procedure" />,
 
@@ -100,14 +101,14 @@ export const ProcedureComponents: RequiredResourceComponents<
         icon={ICONS.Procedure}
         name={procedure?.name}
         state={procedure?.info.state}
-        status={`${procedure?.info.stages} Stage${procedure?.info.stages === 1 ? "" : "s"}`}
+        status={`${procedure?.info.stages} 个阶段`}
       />
     );
   },
 
   State: ({ id }) => {
     let state = useProcedure(id)?.info.state;
-    return <StatusBadge text={state} intent={procedureStateIntention(state)} />;
+    return <StatusBadge text={displayLabel(state)} intent={procedureStateIntention(state)} />;
   },
   Info: {
     Schedule: ({ id }) => {
@@ -115,11 +116,11 @@ export const ProcedureComponents: RequiredResourceComponents<
       return (
         <Group gap="xs">
           <Clock size="1rem" />
-          Next Run:
+          下次运行：
           <Text fw="bold">
             {nextScheduledRun
-              ? new Date(nextScheduledRun).toLocaleString()
-              : "Not Scheduled"}
+              ? new Date(nextScheduledRun).toLocaleString("zh-CN")
+              : "未设置计划"}
           </Text>
         </Group>
       );
@@ -136,7 +137,7 @@ export const ProcedureComponents: RequiredResourceComponents<
         <Popover position="bottom-start" opened={opened}>
           <Popover.Target>
             <Badge color="red" onMouseEnter={open} onMouseLeave={close}>
-              Schedule Error
+              计划错误
             </Badge>
           </Popover.Target>
 

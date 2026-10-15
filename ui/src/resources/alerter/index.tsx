@@ -42,10 +42,10 @@ export const AlerterComponents: RequiredResourceComponents<
       {},
       { refetchInterval: 10_000 },
     ).data;
-    return [{ intention: "Good", value: summary?.total ?? 0, title: "Total" }];
+    return [{ intention: "Good", value: summary?.total ?? 0, title: "总计" }];
   },
 
-  Description: () => <>Route alerts to various endpoints.</>,
+  Description: () => <>将告警发送到不同端点。</>,
 
   New: () => <NewResource type="Alerter" />,
 
@@ -98,7 +98,7 @@ export const AlerterComponents: RequiredResourceComponents<
           onClick={() => mutate({ alerter: id })}
           disabled={isPending}
         >
-          Test Alerter
+          测试告警器
         </ConfirmButton>
       );
     },

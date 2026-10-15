@@ -24,7 +24,7 @@ export default function Image() {
   if (type !== "servers") {
     return (
       <Center h="50vh">
-        <Text>This resource type does not have any images.</Text>
+        <Text>此资源类型没有镜像。</Text>
       </Center>
     );
   }
@@ -40,7 +40,7 @@ function ImageInner({
 }) {
   const [showHistory, setShowHistory] = useState(false);
   const server = useServer(serverId);
-  useSetTitle(`${server?.name} | Image | ${imageName}`);
+  useSetTitle(`${server?.name} | 镜像 | ${imageName}`);
   const nav = useNavigate();
 
   const { specific } = usePermissions({
@@ -87,25 +87,25 @@ function ImageInner({
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect image."
+          ? "无法检查镜像。"
           : !image
-            ? "No image found with name: " + imageName
+            ? "未找到以下名称的镜像：" + imageName
             : undefined
       }
     >
       {image && (
         <ResourceSubPage
-          entityTypeName="Image"
+          entityTypeName="镜像"
           parentType="Server"
           parentId={serverId}
           name={imageName}
           icon={ICONS.Image}
           intent={intention}
-          state={unused ? "Unused" : "In Use"}
+          state={unused ? "未使用" : "使用中"}
           info={
             image.Id && (
               <Group gap="xs">
-                <Text>Id:</Text>
+                <Text>ID：</Text>
                 <Text title={image.Id} maw={150} className="text-ellipsis">
                   {image.Id}
                 </Text>
@@ -123,7 +123,7 @@ function ImageInner({
                   deleteImage({ server: serverId, name: imageName })
                 }
               >
-                Delete Image
+                删除镜像
               </ConfirmButton>
             )
           }
@@ -133,26 +133,26 @@ function ImageInner({
           )}
 
           {/* TOP LEVEL IMAGE INFO */}
-          <Section title="Details" icon={<ICONS.Info size="1.3rem" />}>
+          <Section title="详情" icon={<ICONS.Info size="1.3rem" />}>
             <DataTable
               tableKey="image-info"
               data={[image]}
               columns={[
                 {
                   accessorKey: "Architecture",
-                  header: "Architecture",
+                  header: "架构",
                 },
                 {
                   accessorKey: "Os",
-                  header: "Os",
+                  header: "操作系统",
                 },
                 {
                   accessorKey: "Size",
-                  header: "Size",
+                  header: "大小",
                   cell: ({ row }) =>
                     row.original.Size
                       ? fmtSizeBytes(row.original.Size)
-                      : "Unknown",
+                      : "未知",
                 },
               ]}
             />
@@ -160,7 +160,7 @@ function ImageInner({
 
           {history && history.length > 0 && (
             <Section
-              title="History"
+              title="历史记录"
               icon={<ICONS.History size="1.3rem" />}
               titleRight={
                 <Box pl="md">
@@ -175,11 +175,11 @@ function ImageInner({
                   columns={[
                     {
                       accessorKey: "CreatedBy",
-                      header: "Created By",
+                      header: "创建命令",
                     },
                     {
                       accessorKey: "Created",
-                      header: "Timestamp",
+                      header: "时间",
                       cell: ({ row }) =>
                         fmtDateWithMinutes(
                           new Date(row.original.Created * 1000),

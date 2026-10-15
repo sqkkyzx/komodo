@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { Types } from "komodo_client";
 import { useRead } from "@/lib/hooks";
 import { hexColorByIntention } from "mogh_ui";
@@ -35,7 +36,7 @@ export function ServerLoadAverage({
   };
 
   return (
-    <InfoCard title="Load Average" w={{ base: "100%", lg: 300 }}>
+    <InfoCard title="平均负载" w={{ base: "100%", lg: 300 }}>
       {/* CURRENT LOAD */}
       <Stack gap="0.4rem">
         <Group justify="space-between" align="end" gap="xs">
@@ -44,8 +45,8 @@ export function ServerLoadAverage({
           </Text>
           <Text c="dimmed">
             {cores && cores > 0
-              ? `${(pct(one) ?? 0).toFixed(0)}% of ${cores} Cores`
-              : "N/A"}
+              ? `${cores} 核心的 ${(pct(one) ?? 0).toFixed(0)}%`
+              : "不适用"}
           </Text>
         </Group>
         <Progress value={pct(one) ?? 0} color="bw" size="lg" />
@@ -62,7 +63,7 @@ export function ServerLoadAverage({
         ).map(([label, value]) => (
           <Stack key={label} gap="0.1rem">
             <Group justify="space-between" gap="0">
-              <Text c="dimmed">{label}</Text>
+              <Text c="dimmed">{displayLabel(label)}</Text>
               <Text c={textColor(value)}>{value.toFixed(2)}</Text>
             </Group>
             <Progress value={pct(value) ?? 0} color="bw" />

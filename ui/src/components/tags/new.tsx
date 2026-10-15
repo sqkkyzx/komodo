@@ -10,13 +10,13 @@ export default function NewTag() {
   const { mutateAsync: create, isPending } = useWrite("CreateTag", {
     onSuccess: () => {
       invalidate(["ListTags"], ["GetTag"]);
-      notifications.show({ message: "Tag Created" });
+      notifications.show({ message: "标签已创建" });
       setName("");
     },
   });
   return (
     <CreateModal
-      entityType="Tag"
+      entityType="标签"
       onConfirm={() => create({ name }).then(() => true)}
       disabled={false}
       loading={isPending}
@@ -25,10 +25,10 @@ export default function NewTag() {
         <>
           <TextInput
             autoFocus
-            placeholder="tag-name"
+            placeholder="标签名称"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            error={!name.trim() && "Enter name"}
+            error={!name.trim() && "请输入名称"}
           />
         </>
       )}

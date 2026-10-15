@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRead, useWrite } from "@/lib/hooks";
@@ -44,12 +45,9 @@ export default function NewResource<Config>({
   const [templateId, setTemplateId] = useState(copyId);
   const [name, setName] = useState(_name);
 
-  const placeholderType =
-    type === "ResourceSync" ? "resource-sync" : type.toLowerCase();
-
   const onConfirm = async () => {
     if (!name.trim()) {
-      notifications.show({ message: "Name cannot be empty", color: "red" });
+      notifications.show({ message: "名称不能为空", color: "red" });
       return false;
     }
     try {
@@ -62,14 +60,14 @@ export default function NewResource<Config>({
       }
       return true;
     } catch (error) {
-      notifications.show({ message: "Unexpected error.", color: "red" });
+      notifications.show({ message: "发生意外错误。", color: "red" });
       return false;
     }
   };
 
   return (
     <CreateModal
-      entityType={readableType ?? type}
+      entityType={readableType ?? resourceLabel(type)}
       onConfirm={onConfirm}
       disabled={false}
       loading={createPending || copyPending}
@@ -79,7 +77,7 @@ export default function NewResource<Config>({
         <Stack>
           <TextInput
             autoFocus
-            placeholder={`${placeholderType}-name`}
+            placeholder={`输入${resourceLabel(type)}名称`}
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => {
@@ -90,7 +88,7 @@ export default function NewResource<Config>({
                 onConfirm();
               }
             }}
-            error={!name.trim() && "Enter name"}
+            error={!name.trim() && "输入名称"}
           />
 
           {!templateId && extraInputs}
@@ -110,13 +108,13 @@ export default function NewResource<Config>({
                     ? {
                         label: (
                           <Text mb="4" size="sm" c="dimmed">
-                            Copy Source
+                            复制来源
                           </Text>
                         ),
                       }
                     : undefined
                 }
-                placeholder="Select Template"
+                placeholder="选择模板"
                 targetProps={{ w: "100%", maw: "100%" }}
                 width="target"
                 position="bottom"
@@ -128,7 +126,7 @@ export default function NewResource<Config>({
         </Stack>
       )}
     >
-      {copyId ? "Copy" : null}
+      {copyId ? "复制" : null}
     </CreateModal>
   );
 }

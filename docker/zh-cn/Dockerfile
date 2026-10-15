@@ -22,7 +22,7 @@ RUN yarn install --frozen-lockfile --non-interactive
 COPY ui/ ./
 # Keep the client link local to the builder and use the deployment's own origin.
 ENV VITE_KOMODO_HOST=""
-RUN ln -s ../../client node_modules/komodo_client && yarn build
+RUN ln -s ../../client node_modules/komodo_client && yarn check:l10n && yarn build
 
 FROM ${CORE_IMAGE}
 ARG CORE_IMAGE

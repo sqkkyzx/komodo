@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { MonacoEditor, ConfigInput, ConfigItem } from "mogh_ui";
 import { Select } from "@mantine/core";
 import { Types } from "komodo_client";
@@ -22,8 +23,8 @@ export default function AlerterConfigEndpoint({
   return (
     <>
       <ConfigItem
-        label="Endpoint"
-        description="Configure the endpoint to send the alert to."
+        label="端点"
+        description="配置接收告警的端点。"
       >
         <Select
           value={endpoint.type}
@@ -37,7 +38,7 @@ export default function AlerterConfigEndpoint({
             })
           }
           disabled={disabled}
-          data={ENDPOINT_TYPES}
+          data={ENDPOINT_TYPES.map((value) => ({ value, label: displayLabel(value) }))}
           w={{ base: "85%", lg: 400 }}
         />
         <MonacoEditor
@@ -51,8 +52,8 @@ export default function AlerterConfigEndpoint({
       </ConfigItem>
       {endpoint.type === "Ntfy" && (
         <ConfigInput
-          label="Email"
-          description="Request Ntfy to send an email to this address. SMTP must be configured on the Ntfy instance. Only one email address per alerter is supported."
+          label="邮箱"
+          description="请求 Ntfy 向此地址发送邮件。需先在 Ntfy 实例中配置 SMTP。每个告警器仅支持一个邮箱地址。"
           placeholder="john@example.com"
           value={endpoint.params.email}
           onValueChange={(email) =>

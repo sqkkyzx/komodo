@@ -22,8 +22,7 @@ export default function SettingsUserGroups({
   const filtered = filterBySplit(groups, search, (group) => group.name);
   return (
     <Section
-      title="User Groups"
-     
+      title="用户组"
       icon={<ICONS.Users size="1.3rem" />}
       titleRight={
         <Box ml="md">
@@ -41,14 +40,14 @@ export default function SettingsUserGroups({
         tableKey="user-groups"
         data={filtered}
         columns={[
-          { header: "Name", accessorKey: "name" },
+          { header: "名称", accessorKey: "name" },
           {
-            header: "Members",
+            header: "成员",
             accessorFn: (group) =>
-              group.everyone ? "Everyone" : (group.users ?? []).length,
+              group.everyone ? "所有人" : (group.users ?? []).length,
           },
           {
-            header: "Delete",
+            header: "删除",
             cell: ({ row: { original: group } }) => (
               <DeleteUserGroup group={group} />
             ),

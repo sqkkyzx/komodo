@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import ContainerPorts from "@/components/docker/container-ports";
 import DockerResourceLink from "@/components/docker/link";
 import { containerStateIntention } from "@/lib/color";
@@ -97,7 +98,7 @@ export default function Containers() {
             id: "Name",
             accessorKey: "name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <DockerResourceLink
@@ -123,7 +124,7 @@ export default function Containers() {
               else return 0;
             },
             header: ({ column }) => (
-              <SortableHeader column={column} title="Server" />
+              <SortableHeader column={column} title="服务器" />
             ),
             cell: ({ row }) => (
               <ResourceLink type="Server" id={row.original.server_id!} />
@@ -133,13 +134,13 @@ export default function Containers() {
             id: "State",
             accessorKey: "state",
             header: ({ column }) => (
-              <SortableHeader column={column} title="State" />
+              <SortableHeader column={column} title="状态" />
             ),
             cell: ({ row }) => {
               const state = row.original?.state;
               return (
                 <StatusBadge
-                  text={state}
+                  text={displayLabel(state)}
                   intent={containerStateIntention(state)}
                 />
               );
@@ -149,7 +150,7 @@ export default function Containers() {
             id: "Image",
             accessorKey: "image",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Image" />
+              <SortableHeader column={column} title="镜像" />
             ),
             cell: ({ row }) => (
               <DockerResourceLink
@@ -164,7 +165,7 @@ export default function Containers() {
             id: "Networks",
             accessorKey: "networks.0",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Networks" />
+              <SortableHeader column={column} title="网络" />
             ),
             cell: ({ row }) =>
               (row.original.networks?.length ?? 0) > 0 ? (
@@ -209,7 +210,7 @@ export default function Containers() {
               return pa === pb ? 0 : pa > pb ? 1 : -1;
             },
             header: ({ column }) => (
-              <SortableHeader column={column} title="Ports" />
+              <SortableHeader column={column} title="端口" />
             ),
             cell: ({ row }) => (
               <ContainerPorts
@@ -222,7 +223,7 @@ export default function Containers() {
             id: "Volumes",
             accessorKey: "volumes.0",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Volumes" />
+              <SortableHeader column={column} title="存储卷" />
             ),
             cell: ({ row }) => (
               <DividedChildren wrap="nowrap" gap="xs">
@@ -244,9 +245,9 @@ export default function Containers() {
 
   return (
     <Page
-      title="Containers"
+      title="容器"
       icon={ICONS.Container}
-      description="See containers across all servers."
+      description="查看所有服务器上的容器。"
     >
       <Stack>
         <Group justify="space-between">

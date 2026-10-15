@@ -49,8 +49,8 @@ export default function SwarmDockerResources({
       <Section titleOther={titleOther}>
         <Center h="20vh">
           <Stack align="center" justify="center" gap="0">
-            <Text fz="h2">Swarm unreachable</Text>
-            <Text c="dimmed">Docker resources are not available</Text>
+            <Text fz="h2">无法连接集群</Text>
+            <Text c="dimmed">Docker 资源不可用</Text>
           </Stack>
         </Center>
       </Section>

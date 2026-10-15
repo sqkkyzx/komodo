@@ -108,11 +108,11 @@ export default function LogViewer({
             }}
           />
         ))}
-        {!(lines?.length ?? 0) && <Text>No log.</Text>}
+        {!(lines?.length ?? 0) && <Text>暂无日志。</Text>}
       </Box>
       <ActionIcon
         onClick={scrollToBottom}
-        title="Scroll to bottom"
+        title="滚动到底部"
         size="lg"
         pos="absolute"
         top={12}

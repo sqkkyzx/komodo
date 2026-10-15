@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 const SCHEDULE_SORT_KEYS = Object.values(Types.ScheduleSortBy);
 
 export default function Schedules() {
-  useSetTitle("Schedules");
+  useSetTitle("计划任务");
 
   const [page, setPage] = useState(0);
 
@@ -67,8 +67,8 @@ export default function Schedules() {
   return (
     <Page
       icon={ICONS.Schedule}
-      title="Schedules"
-      description="See an overview of your scheduled Actions and Procedures."
+      title="计划任务"
+      description="查看已计划的操作和流程。"
     >
       <Stack>
         <Group justify="end">
@@ -103,7 +103,7 @@ export default function Schedules() {
               id: "Name",
               accessorKey: "name",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Target" />
+                <SortableHeader column={column} title="目标" />
               ),
               cell: ({ row }) => (
                 <ResourceLink
@@ -116,25 +116,25 @@ export default function Schedules() {
               id: "Schedule",
               accessorKey: "schedule",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Schedule" />
+                <SortableHeader column={column} title="计划" />
               ),
             },
             {
               id: "NextRun",
               accessorKey: "next_scheduled_run",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Next Run" />
+                <SortableHeader column={column} title="下次运行" />
               ),
               cell: ({ row }) =>
                 row.original.next_scheduled_run
                   ? new Date(row.original.next_scheduled_run).toLocaleString()
-                  : "Not Scheduled",
+                  : "未设置计划",
             },
             {
               id: "Enabled",
               accessorKey: "enabled",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Enabled" />
+                <SortableHeader column={column} title="已启用" />
               ),
               cell: ({ row: { original: schedule } }) => (
                 <ScheduleEnableSwitch
@@ -145,7 +145,7 @@ export default function Schedules() {
               ),
             },
             {
-              header: "Tags",
+              header: "标签",
               cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
             },
           ]}
@@ -166,8 +166,7 @@ function ScheduleEnableSwitch({
 }) {
   const { canWrite } = usePermissions({ type, id });
   const { mutate } = useWrite(`Update${type}`, {
-    onSuccess: () =>
-      notifications.show({ message: "Updated Schedule enabled." }),
+    onSuccess: () => notifications.show({ message: "计划启用状态已更新。" }),
   });
   return (
     <Switch

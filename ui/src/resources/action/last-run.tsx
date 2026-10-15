@@ -22,7 +22,7 @@ export default function ActionLastRun({ id }: { id: string }) {
   if (!log?.stdout && !log?.stderr) {
     return (
       <Section withBorder>
-        <Text c="Neutral">Never run</Text>
+        <Text c="Neutral">从未运行</Text>
       </Section>
     );
   }
@@ -31,14 +31,14 @@ export default function ActionLastRun({ id }: { id: string }) {
     <Stack>
       {!log?.stdout && !log?.stderr && (
         <Box className="bordered-light" p="lg" bdrs="md">
-          <Text c="Neutral">Never run</Text>
+          <Text c="Neutral">从未运行</Text>
         </Box>
       )}
       {log.stdout && (
         <Stack className="bordered-light" p="lg" bdrs="md">
           <Group gap="xs">
-            <Text>Last run:</Text>
-            <Text c="Good">Stdout</Text>
+            <Text>上次运行：</Text>
+            <Text c="Good">标准输出</Text>
           </Group>
           <Code
             component="pre"
@@ -54,8 +54,8 @@ export default function ActionLastRun({ id }: { id: string }) {
       {log.stderr && (
         <Stack className="bordered-light" p="lg" bdrs="md">
           <Group gap="xs">
-            <Text>Last run:</Text>
-            <Text c="Critical">Stderr</Text>
+            <Text>上次运行：</Text>
+            <Text c="Critical">标准错误</Text>
           </Group>
           <Code
             component="pre"

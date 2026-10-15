@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { Center, Text } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import {
@@ -44,7 +45,7 @@ export default function StackService() {
   if (type !== "stacks") {
     return (
       <Center h="50vh">
-        <Text>This resource type does not have any services.</Text>
+        <Text>此资源类型没有服务。</Text>
       </Center>
     );
   }
@@ -84,17 +85,15 @@ function StackServiceInner({
 
   return (
     <ResourceSubPage
-      entityTypeName="Stack Service"
+      entityTypeName="应用栈服务"
       parentType="Stack"
       parentId={stackId}
       name={serviceName}
       icon={ICONS.Service}
       intent={intention}
-      state={state}
+      state={state ? displayLabel(state) : state}
       status={
-        swarmService
-          ? `${swarmService.Replicas} Replica${swarmService.Replicas === 1 ? "" : "s"}`
-          : container?.status
+        swarmService ? `${swarmService.Replicas} 个副本` : container?.status
       }
       info={
         <>

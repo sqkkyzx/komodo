@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useRead } from "@/lib/hooks";
 import { filterBySplit } from "mogh_ui";
 import { ReactNode } from "react";
@@ -24,7 +25,7 @@ export default function SwarmStacks({
   const filtered = filterBySplit(
     stacks,
     search,
-    (stack) => stack.Name ?? "Unknown",
+    (stack) => stack.Name ?? "未知",
   );
 
   return (
@@ -39,7 +40,7 @@ export default function SwarmStacks({
           {
             accessorKey: "Name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <SwarmResourceLink
@@ -53,11 +54,11 @@ export default function SwarmStacks({
           {
             accessorKey: "State",
             header: ({ column }) => (
-              <SortableHeader column={column} title="State" />
+              <SortableHeader column={column} title="状态" />
             ),
             cell: ({ row }) => (
               <StatusBadge
-                text={row.original.State}
+                text={displayLabel(row.original.State)}
                 intent={swarmStateIntention(row.original.State)}
               />
             ),
@@ -65,7 +66,7 @@ export default function SwarmStacks({
           {
             accessorKey: "Services",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Services" />
+              <SortableHeader column={column} title="服务" />
             ),
           },
         ]}

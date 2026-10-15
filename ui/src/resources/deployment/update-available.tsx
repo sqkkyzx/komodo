@@ -27,7 +27,7 @@ export default function DeploymentUpdateAvailable({
     "CheckDeploymentForUpdate",
     {
       onSuccess: () => {
-        notifications.show({ message: "Checked for updates", color: "blue" });
+        notifications.show({ message: "已检查更新", color: "blue" });
         inv(["ListDeployments"]);
       },
     },
@@ -75,12 +75,12 @@ export default function DeploymentUpdateAvailable({
                 bd={"1px solid " + hexColorByIntention("Neutral")}
                 leftSection={<ICONS.UpdateAvailable size="1rem" />}
               >
-                Update Available
+                有可用更新
               </Button>
             )}
           </HoverCard.Target>
           <HoverCard.Dropdown>
-            There is a newer image available.
+            发现可用的新镜像。
           </HoverCard.Dropdown>
         </HoverCard>
       </Box>
@@ -91,14 +91,14 @@ export default function DeploymentUpdateAvailable({
     <>
       <Box>
         <Button
-          title="Check for updates"
+          title="检查更新"
           variant="outline"
           c="dimmed"
           rightSection={<ICONS.UpdateAvailable size="1rem" />}
           onClick={() => checkForUpdate({ deployment: id })}
           loading={checkPending}
         >
-          Check
+          检查
         </Button>
       </Box>
       {info?.update_available && (
@@ -106,7 +106,7 @@ export default function DeploymentUpdateAvailable({
           <ConfirmModalWithDisable
             title={
               <>
-                Confirm <b>Redeploy</b>
+                确认 <b>重新部署</b>
               </>
             }
             confirmText={deployment.name}
@@ -122,7 +122,7 @@ export default function DeploymentUpdateAvailable({
             }
             loading={pending}
           >
-            Update Available
+            有可用更新
           </ConfirmModalWithDisable>
         </Box>
       )}

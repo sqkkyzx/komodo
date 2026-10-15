@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { RESOURCE_TARGETS, UsableResource } from "@/resources";
 import { Select, SelectProps } from "@mantine/core";
 
@@ -16,12 +17,15 @@ export default function ResourceTypeSelector({
 }: ResourceTypeSelectorProps) {
   return (
     <Select
-      placeholder="Select resource type"
+      placeholder="选择资源类型"
       value={value}
       onChange={(type) => {
         onChange?.(type as UsableResource);
       }}
-      data={RESOURCE_TARGETS}
+      data={RESOURCE_TARGETS.map((value) => ({
+        value,
+        label: resourceLabel(value),
+      }))}
       w={{ base: "100%", xs: 200 }}
       searchable
       clearable

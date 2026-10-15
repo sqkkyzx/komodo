@@ -44,8 +44,8 @@ export default function ServerDockerResources({
       <Section titleOther={titleOther}>
         <Center h="20vh">
           <Stack align="center" justify="center" gap="0">
-            <Text fz="h2">Server unreachable</Text>
-            <Text c="dimmed">Docker resources are not available</Text>
+            <Text fz="h2">无法连接服务器</Text>
+            <Text c="dimmed">Docker 资源不可用</Text>
           </Stack>
         </Center>
       </Section>

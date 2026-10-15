@@ -1,4 +1,5 @@
 import { ICONS } from "@/lib/icons";
+import { displayLabel } from "@/lib/l10n";
 import { ConfigItem } from "mogh_ui";
 import {
   ActionIcon,
@@ -46,7 +47,7 @@ export default function StackConfigFiles({
           }
           w={{ base: "85%", lg: 400 }}
         >
-          Add File
+          添加文件
         </Button>
       )}
       {values.length > 0 && (
@@ -89,7 +90,7 @@ export default function StackConfigFiles({
                   <MultiSelect
                     leftSection={<ICONS.Service size="1rem" />}
                     placeholder={
-                      services?.length ? "Add services" : "All services"
+                      services?.length ? "添加服务" : "全部服务"
                     }
                     value={services}
                     data={allServices}
@@ -120,7 +121,10 @@ export default function StackConfigFiles({
                       });
                     }}
                     disabled={disabled}
-                    data={Object.values(Types.StackFileRequires)}
+                    data={Object.values(Types.StackFileRequires).map((value) => ({
+                      value,
+                      label: displayLabel(value),
+                    }))}
                   />
                 </Group>
               </Group>

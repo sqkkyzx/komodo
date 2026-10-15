@@ -32,28 +32,28 @@ export default function UrlBuilderConfig({ id }: { id: string }) {
       groups={{
         "": [
           {
-            label: "General",
+            label: "常规",
             labelHidden: true,
             fields: {
               address: {
-                description: "The address of the Periphery agent",
+                description: "Periphery 代理地址",
                 placeholder: "wss://periphery:8120",
               },
             },
           },
           {
-            label: "Connection",
+            label: "连接",
             labelHidden: true,
             fields: {
               periphery_public_key: {
-                label: "Periphery Public Key",
+                label: "Periphery 公钥",
                 description:
-                  "If provided, the associated private key must be set as Periphery 'private_key'. For Periphery -> Core connection, either this or using 'periphery_public_key' in Core config is required for Periphery to be able to connect.",
+                  "若填写此项，需将对应私钥设置为 Periphery 的 private_key。使用 Periphery 主动连接 Core 时，必须填写此项或在 Core 中配置 periphery_public_key。",
                 placeholder: "custom-public-key",
               },
               insecure_tls: {
                 hidden: !tls_address,
-                description: "Skip Periphery TLS certificate validation.",
+                description: "跳过 Periphery 的 TLS 证书验证。",
               },
             },
           },

@@ -35,7 +35,7 @@ export default function LogSection({ disabled, ...props }: LogSectionProps) {
   if (disabled) {
     return (
       <Section {...props}>
-        <Text>Logs are not available</Text>
+        <Text>日志不可用</Text>
       </Section>
     );
   }
@@ -98,7 +98,7 @@ export function LogSectionInner({
   const addTerm = () => {
     if (!search.length) return;
     if (terms.includes(search)) {
-      notifications.show({ message: "Search term is already present" });
+      notifications.show({ message: "该搜索词已存在" });
       setSearch("");
       return;
     }
@@ -127,7 +127,7 @@ export function LogSectionInner({
       actions={
         <Group gap="lg">
           <Switch
-            label="Invert"
+            label="反向匹配"
             checked={invert}
             onChange={(e) => setInvert(e.target.checked)}
           />
@@ -145,7 +145,7 @@ export function LogSectionInner({
           ))}
 
           <TextInput
-            placeholder="Search Logs"
+            placeholder="搜索日志"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onBlur={addTerm}
@@ -168,7 +168,10 @@ export function LogSectionInner({
           <SegmentedControl
             value={stream}
             onChange={(stream) => setStream(stream as LogStream)}
-            data={["stdout", "stderr"]}
+            data={[
+              { value: "stdout", label: "标准输出" },
+              { value: "stderr", label: "标准错误" },
+            ]}
             disabled={streamSelectDisabled}
           />
 
@@ -177,13 +180,13 @@ export function LogSectionInner({
           </ActionIcon>
 
           <Switch
-            label="Timestamps"
+            label="时间戳"
             checked={timestamps}
             onChange={(e) => setTimestamps(e.target.checked)}
           />
 
           <Switch
-            label="Poll"
+            label="轮询"
             checked={poll}
             onChange={(e) => setPoll(e.target.checked)}
           />
@@ -193,7 +196,7 @@ export function LogSectionInner({
             onChange={(tail) => tail && setTail(tail)}
             data={["100", "500", "1000", "5000"].map((value) => ({
               value,
-              label: `${value} lines`,
+              label: `${value} 行`,
             }))}
             disabled={search.length > 0}
             w={130}

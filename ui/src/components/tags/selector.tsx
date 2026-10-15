@@ -47,13 +47,13 @@ export default function TagSelector({
   const { mutateAsync: create } = useWrite("CreateTag", {
     onSuccess: () => {
       inv([`ListTags`]);
-      notifications.show({ message: `Created tag ${search}`, color: "green" });
+      notifications.show({ message: `标签 ${search} 已创建`, color: "green" });
     },
   });
 
   const createTag = async (name: string) => {
     if (!name) {
-      notifications.show({ message: "Must provide tag name in input" });
+      notifications.show({ message: "请在输入框中填写标签名称" });
       return;
     }
     const tag = await create({ name });
@@ -113,7 +113,7 @@ export default function TagSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" />}
-          placeholder="Search"
+          placeholder="搜索"
           styles={{
             section: {
               marginRight: 4,
@@ -133,7 +133,7 @@ export default function TagSelector({
             </Combobox.Option>
           ))}
           {!canCreate && filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
+            <Combobox.Empty>无结果。</Combobox.Empty>
           )}
           {canCreate && (
             <>
@@ -144,7 +144,7 @@ export default function TagSelector({
               >
                 <Center>
                   <ICONS.Create size="1rem" />
-                  Create Tag
+                  创建标签
                 </Center>
               </Combobox.Option>
             </>

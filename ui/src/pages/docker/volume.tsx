@@ -12,6 +12,7 @@ import { Section } from "mogh_ui";
 import { Center, Group, Loader, Text } from "@mantine/core";
 import { Types } from "komodo_client";
 import { useNavigate, useParams } from "react-router-dom";
+import { displayLabel } from "@/lib/l10n";
 
 export default function Volume() {
   const { type, id, volume } = useParams() as {
@@ -22,7 +23,7 @@ export default function Volume() {
   if (type !== "servers") {
     return (
       <Center h="50vh">
-        <Text>This resource type does not have any volumes.</Text>
+        <Text>此资源类型没有存储卷。</Text>
       </Center>
     );
   }
@@ -37,7 +38,7 @@ function VolumeInner({
   volumeName: string;
 }) {
   const server = useServer(serverId);
-  useSetTitle(`${server?.name} | Volume | ${volumeName}`);
+  useSetTitle(`${server?.name} | 存储卷 | ${volumeName}`);
   const nav = useNavigate();
 
   const { specific } = usePermissions({
@@ -80,7 +81,7 @@ function VolumeInner({
   if (isError) {
     return (
       <Center h="30vh">
-        <Text>Failed to inspect volume.</Text>
+        <Text>无法检查存储卷。</Text>
       </Center>
     );
   }
@@ -88,7 +89,7 @@ function VolumeInner({
   if (!volume) {
     return (
       <Center h="30vh">
-        <Text>No volume found with given name: {volumeName}</Text>
+        <Text>未找到名为 {volumeName} 的存储卷</Text>
       </Center>
     );
   }
@@ -99,18 +100,18 @@ function VolumeInner({
 
   return (
     <ResourceSubPage
-      entityTypeName="Volume"
+      entityTypeName="存储卷"
       parentType="Server"
       parentId={serverId}
       name={volumeName}
       icon={ICONS.Volume}
       intent={intention}
-      state={unused ? "Unused" : "In Use"}
+      state={unused ? "未使用" : "使用中"}
       info={
         volume.Scope && (
           <Group gap="xs">
-            <Text c="dimmed">Scope:</Text>
-            <Text>{volume.Scope}</Text>
+            <Text c="dimmed">范围：</Text>
+            <Text>{displayLabel(volume.Scope)}</Text>
           </Group>
         )
       }
@@ -122,7 +123,7 @@ function VolumeInner({
             loading={deletePending}
             onClick={() => deleteVolume({ server: serverId, name: volumeName })}
           >
-            Delete Volume
+            删除存储卷
           </ConfirmButton>
         )
       }
@@ -132,26 +133,27 @@ function VolumeInner({
       )}
 
       {/* TOP LEVEL NETWORK INFO */}
-      <Section title="Details" icon={<ICONS.Info size="1.3rem" />}>
+      <Section title="详情" icon={<ICONS.Info size="1.3rem" />}>
         <DataTable
           tableKey="volume-info"
           data={[volume]}
           columns={[
             {
               accessorKey: "Driver",
-              header: "Driver",
+              header: "驱动",
             },
             {
               accessorKey: "Scope",
-              header: "Scope",
+              header: "范围",
+              cell: ({ row }) => displayLabel(row.original.Scope),
             },
             {
               accessorKey: "CreatedAt",
-              header: "Created At",
+              header: "创建时间",
             },
             {
               accessorKey: "UsageData.Size",
-              header: "Used Size",
+              header: "已用空间",
             },
           ]}
         />

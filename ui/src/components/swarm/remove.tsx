@@ -43,7 +43,7 @@ export default function RemoveSwarmResource({
         remove({ swarm: swarmId, [key]: [resourceId], detach: false } as any)
       }
     >
-      Remove
+      移除
     </ConfirmModalWithDisable>
   );
 }

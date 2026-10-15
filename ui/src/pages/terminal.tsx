@@ -53,7 +53,7 @@ export default function Terminal() {
           terminal={terminal}
         />
       ) : (
-        <Text>Missing :service in URL</Text>
+        <Text>URL 中缺少 :service</Text>
       );
 
     case "deployments":
@@ -66,7 +66,7 @@ export default function Terminal() {
       );
 
     default:
-      return <Text>This resource type does not have any Terminals.</Text>;
+      return <Text>此资源类型没有终端。</Text>;
   }
 }
 
@@ -80,7 +80,7 @@ function ServerTerminalPage({
   terminal: string;
 }) {
   const server = useServer(id);
-  useSetTitle(`${server?.name} | Terminal | ${terminal}`);
+  useSetTitle(`${server?.name} | 终端 | ${terminal}`);
   const target: Types.TerminalTarget = useMemo(
     () => ({
       type: "Server",
@@ -109,7 +109,7 @@ function ContainerTerminalPage({
   terminal: string;
 }) {
   const server = useServer(id);
-  useSetTitle(`${server?.name} | ${container} Terminal | ${terminal}`);
+  useSetTitle(`${server?.name} | ${container} 终端 | ${terminal}`);
   const target: Types.TerminalTarget = useMemo(
     () => ({
       type: "Container",
@@ -140,7 +140,7 @@ function StackServiceTerminalPage({
   terminal: string;
 }) {
   const stack = useStack(id);
-  useSetTitle(`${stack?.name} | ${service} Terminal | ${terminal}`);
+  useSetTitle(`${stack?.name} | ${service} 终端 | ${terminal}`);
   const target: Types.TerminalTarget = useMemo(
     () => ({
       type: "Stack",
@@ -177,7 +177,7 @@ function DeploymentTerminalPage({
   terminal: string;
 }) {
   const deployment = useDeployment(id);
-  useSetTitle(`${deployment?.name} | Terminal | ${terminal}`);
+  useSetTitle(`${deployment?.name} | 终端 | ${terminal}`);
   const target: Types.TerminalTarget = useMemo(
     () => ({
       type: "Deployment",
@@ -209,7 +209,7 @@ function TerminalLayout({
       icon={ICONS.Terminal}
       customDescription={
         <>
-          <Text>Terminal</Text>|{Link}|
+          <Text>终端</Text>|{Link}|
           <DeleteTerminal
             terminal={terminal}
             target={target}

@@ -1,4 +1,5 @@
-import { fmtUpperCamelcase, useSearchCombobox } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
+import { useSearchCombobox } from "mogh_ui";
 import { useInvalidate, useWrite } from "@/lib/hooks";
 import { filterBySplit } from "mogh_ui";
 import { ICONS } from "@/lib/icons";
@@ -28,7 +29,7 @@ export default function TagColorSelector({
   const filtered = filterBySplit(
     Object.values(Types.TagColor),
     search,
-    (item) => item,
+    (item) => `${item} ${displayLabel(item)}`,
   );
 
   const inv = useInvalidate();
@@ -57,7 +58,7 @@ export default function TagColorSelector({
           w={200}
           justify="space-between"
         >
-          {fmtUpperCamelcase(color)}
+          {displayLabel(color)}
         </Button>
       </Combobox.Target>
       <Combobox.Dropdown>
@@ -65,7 +66,7 @@ export default function TagColorSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" />}
-          placeholder="Search"
+          placeholder="搜索"
           styles={{
             section: {
               marginRight: 4,
@@ -76,13 +77,13 @@ export default function TagColorSelector({
           {filtered.map((color) => (
             <Combobox.Option key={color} value={color}>
               <Group justify="space-between">
-                <Text>{fmtUpperCamelcase(color)}</Text>
+                <Text>{displayLabel(color)}</Text>
                 <Box w={25} h={25} bg={`Tag${color}.9`} bdrs="md" />
               </Group>
             </Combobox.Option>
           ))}
           {filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
+            <Combobox.Empty>无匹配结果。</Combobox.Empty>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

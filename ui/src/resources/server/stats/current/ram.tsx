@@ -23,20 +23,20 @@ export function ServerRamUsage({
       : undefined;
   return (
     <StatBar
-      title="RAM Usage"
+      title="内存使用率"
       icon={<ICONS.Memory size="1.3rem" />}
       description={
         usedRam !== undefined &&
         totalRam !== undefined && (
           <>
             <Text span fz="sm">
-              Used <b>{usedRam.toFixed(1)} GB</b> of{" "}
+              已使用 <b>{usedRam.toFixed(1)} GB</b> /{" "}
               <b>{totalRam.toFixed(1)} GB</b>
             </Text>
             <Group gap="xs" fz="xs" c="dimmed" mt={2}>
-              <span>{availableRam?.toFixed(1)} GB available</span>
+              <span>{availableRam?.toFixed(1)} GB 可用</span>
               {zfsArc > 0 && <span>· ZFS ARC {zfsArc.toFixed(1)} GB</span>}
-              {buffCache > 0 && <span>· Cache {buffCache.toFixed(1)} GB</span>}
+              {buffCache > 0 && <span>· 缓存 {buffCache.toFixed(1)} GB</span>}
             </Group>
           </>
         )

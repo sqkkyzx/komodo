@@ -14,7 +14,7 @@ export default function DeleteVariable({
   const { mutate, isPending } = useWrite("DeleteVariable", {
     onSuccess: () => {
       invalidate(["ListVariables"]);
-      notifications.show({ message: "Variable Deleted" });
+      notifications.show({ message: "变量已删除" });
     },
   });
   return (
@@ -28,7 +28,7 @@ export default function DeleteVariable({
       disabled={disabled}
       confirmProps={{ variant: "filled", color: "red" }}
     >
-      Delete
+      删除
     </ConfirmButton>
   );
 }

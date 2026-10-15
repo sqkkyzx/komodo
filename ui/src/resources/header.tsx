@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { EntityHeader, EntityHeaderProps } from "mogh_ui";
 import { UsableResource } from ".";
 import { useInvalidate, useWrite } from "@/lib/hooks";
@@ -23,7 +24,7 @@ export default function ResourceHeader({
     {
       onSuccess: () => {
         inv([`List${type}s`], [`Get${type}`]);
-        notifications.show({ message: "Renamed " + type, color: "green" });
+        notifications.show({ message: "已重命名" + resourceLabel(type), color: "green" });
       },
     },
   );

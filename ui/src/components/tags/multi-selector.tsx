@@ -15,7 +15,7 @@ export interface TagMultiSelectorProps extends ComboboxProps {
 }
 
 export default function TagMultiSelector({
-  title = "Select Tags",
+  title = "选择标签",
   value,
   onChange,
   useName,

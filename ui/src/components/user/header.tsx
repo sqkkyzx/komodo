@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { ICONS } from "@/lib/icons";
 import { DividedChildren } from "mogh_ui";
 import { EntityHeader } from "mogh_ui";
@@ -19,24 +20,29 @@ export default function UserHeader({ user }: UserHeaderProps) {
           name={user?.username}
           icon={ICONS.User}
           intent={enabledIntent}
-          state={user?.enabled ? "Enabled" : "Disabled"}
+          state={user?.enabled ? "已启用" : "已禁用"}
         />
         <DividedChildren px="md">
           <Box>
             <UserAvatar userId={user?._id?.$oid!} onlyAvatar />
           </Box>
           <Text>
-            Level:{" "}
+            级别：{" "}
             <b>
               {user?.super_admin
-                ? "Super Admin"
+                ? "超级管理员"
                 : user?.admin
-                  ? "Admin"
-                  : "User"}
+                  ? "管理员"
+                  : "用户"}
             </b>
           </Text>
           <Text>
-            Type: <b>{user?.config.type}</b>
+            类型：{" "}
+            <b>
+              {user?.config.type === "Service"
+                ? "服务用户"
+                : displayLabel(user?.config.type)}
+            </b>
           </Text>
         </DividedChildren>
       </Stack>

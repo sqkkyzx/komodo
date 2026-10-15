@@ -64,7 +64,7 @@ export default function ResourceSubPage({
             items={[
               resourceTypeCrumb(parentType),
               {
-                label: parent?.name ?? "Unknown",
+                label: parent?.name ?? "未知",
                 to: `/${usableResourcePath(parentType)}/${parentId}`,
               },
               { label: headerProps.name },
@@ -92,7 +92,7 @@ export default function ResourceSubPage({
       <Stack gap="xl">
         {canExecute && executions && (
           <Section
-            title="Execute"
+            title="执行"
             icon={<ICONS.Execution size="1.3rem" />}
             my="md"
           >

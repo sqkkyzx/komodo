@@ -43,19 +43,23 @@ export default function SwarmStackTabs({
     () => [
       {
         value: "Services",
+        label: "服务",
         icon: ICONS.SwarmService,
       },
       {
         value: "Tasks",
+        label: "任务",
         icon: ICONS.SwarmTask,
       },
       {
         value: "Log",
+        label: "日志",
         icon: ICONS.Log,
         disabled: !specificLogs,
       },
       {
         value: "Inspect",
+        label: "检查",
         icon: ICONS.Inspect,
         disabled: !specificInspect,
       },

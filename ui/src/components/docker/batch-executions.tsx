@@ -1,4 +1,5 @@
-import { fmtUpperCamelcase, sendCopyNotification } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
+import { sendCopyNotification } from "mogh_ui";
 import { useExecute, useRead, useSelectedDockerResources } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
 import {
@@ -118,7 +119,7 @@ function DockerBatchExecutionsDropdownMenu({
         onClick={() => onSelect(DELETE_EXECUTIONS[type])}
         disabled={disabled}
       >
-        {fmtUpperCamelcase(DELETE_EXECUTIONS[type].replaceAll(type, ""))}
+        {displayLabel(DELETE_EXECUTIONS[type].replaceAll(type, ""))}
       </Button>
     );
   }
@@ -132,7 +133,7 @@ function DockerBatchExecutionsDropdownMenu({
           disabled={disabled}
           w={{ base: "100%", sm: "fit-content" }}
         >
-          Execute
+          执行
         </Button>
       </Menu.Target>
       <Menu.Dropdown>
@@ -144,7 +145,7 @@ function DockerBatchExecutionsDropdownMenu({
               onClick={() => onSelect(execution)}
               renderRoot={(props) => <Button fullWidth {...props} />}
             >
-              {fmtUpperCamelcase(execution.replaceAll(type, ""))}
+              {displayLabel(execution.replaceAll(type, ""))}
             </Menu.Item>
           ))}
 
@@ -162,7 +163,7 @@ function DockerBatchExecutionsDropdownMenu({
               />
             )}
           >
-            {fmtUpperCamelcase(DELETE_EXECUTIONS[type].replaceAll(type, ""))}
+            {displayLabel(DELETE_EXECUTIONS[type].replaceAll(type, ""))}
           </Menu.Item>
         </Stack>
       </Menu.Dropdown>
@@ -194,14 +195,14 @@ function DockerBatchExecutionsModal({
 
   if (!execution) return;
 
-  const formatted = fmtUpperCamelcase(execution.replaceAll(type, ""));
+  const formatted = displayLabel(execution.replaceAll(type, ""));
   const isDelete = execution === DELETE_EXECUTIONS[type];
 
   return (
     <Modal
       opened={!!execution}
       onClose={() => onClose()}
-      title={<Text size="lg">Group Execute - {formatted}</Text>}
+      title={<Text size="lg">批量执行 - {formatted}</Text>}
       size="lg"
     >
       <Stack>
@@ -220,12 +221,12 @@ function DockerBatchExecutionsModal({
           }}
           style={{ cursor: "pointer" }}
         >
-          Please enter <b>{formatted}</b> below to confirm this action.
+          请输入 <b>{formatted}</b> 以确认此操作。
           {(location.origin.startsWith("https") ||
             // For dev
             location.origin.startsWith("http://localhost:")) && (
             <Text fz="sm" c="dimmed">
-              You may click the text in bold to copy it
+              点击加粗文字即可复制
             </Text>
           )}
         </Text>
@@ -233,7 +234,7 @@ function DockerBatchExecutionsModal({
         <TextInput
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          error={input === formatted ? undefined : "Does not match"}
+          error={input === formatted ? undefined : "输入不匹配"}
         />
 
         <Group justify="end">

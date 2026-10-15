@@ -32,16 +32,16 @@ export default function AlerterConfig({ id }: { id: string }) {
       groups={{
         "": [
           {
-            label: "Enabled",
+            label: "已启用",
             labelHidden: true,
             fields: {
               enabled: {
-                description: "Whether to send alerts to the endpoint.",
+                description: "是否向此端点发送告警。",
               },
             },
           },
           {
-            label: "Endpoint",
+            label: "端点",
             labelHidden: true,
             fields: {
               endpoint: (endpoint, set) => (
@@ -54,7 +54,7 @@ export default function AlerterConfig({ id }: { id: string }) {
             },
           },
           {
-            label: "Filter",
+            label: "筛选",
             labelHidden: true,
             fields: {
               alert_types: (alertTypes, set) => (
@@ -83,13 +83,10 @@ export default function AlerterConfig({ id }: { id: string }) {
             },
           },
           {
-            label: "Maintenance",
+            label: "维护",
             description: (
               <>
-                Configure maintenance windows to temporarily disable alerts
-                during scheduled maintenance periods. When a maintenance window
-                is active, alerts which would be sent by this alerter will be
-                suppressed.
+                配置维护窗口，在计划维护期间暂停告警。维护窗口生效时，此告警器将不发送告警。
               </>
             ),
             fields: {

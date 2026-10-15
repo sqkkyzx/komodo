@@ -33,14 +33,14 @@ export default function ServerBuilderConfig({ id }: { id: string }) {
       groups={{
         "": [
           {
-            label: "Server",
+            label: "服务器",
             labelHidden: true,
             fields: {
               server_ids: (serverIds, set) => {
                 return (
                   <ConfigItem
-                    label="Select Servers"
-                    description="If multiple servers are configured, builds will be distributed among them."
+                    label="选择服务器"
+                    description="若配置多台服务器，构建将在这些服务器间分配。"
                     gap="sm"
                   >
                     {serverIds?.map((serverId, index) => {
@@ -98,7 +98,7 @@ export default function ServerBuilderConfig({ id }: { id: string }) {
                         leftSection={<ICONS.Add size="1rem" />}
                         w={{ base: "100%", lg: 400 }}
                       >
-                        Add Server
+                        添加服务器
                       </Button>
                     )}
                   </ConfigItem>

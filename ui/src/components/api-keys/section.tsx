@@ -29,7 +29,7 @@ export default function ApiKeysSection({
     {
       onSuccess: () => {
         inv(["ListApiKeys"]);
-        notifications.show({ message: "API key deleted.", color: "green" });
+        notifications.show({ message: "API 密钥已删除。", color: "green" });
       },
     },
   );
@@ -38,14 +38,14 @@ export default function ApiKeysSection({
     {
       onSuccess: () => {
         inv(["ListApiKeysForServiceUser"]);
-        notifications.show({ message: "API key deleted.", color: "green" });
+        notifications.show({ message: "API 密钥已删除。", color: "green" });
       },
     },
   );
   return (
     <Section
       isPending={isPending}
-      title="API Keys"
+      title="API 密钥"
       titleFz="h3"
       icon={<ICONS.Key size="1.2rem" />}
       titleRight={

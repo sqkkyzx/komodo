@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useAllResources } from "@/lib/hooks";
 import { filterBySplit } from "mogh_ui";
 import { UsableResource } from "@/resources";
@@ -104,15 +105,14 @@ export default function AlerterConfigResources({
 
   return (
     <>
-      <ConfigItem label={`Resource ${blacklist ? "Blacklist" : "Whitelist"}`}>
+      <ConfigItem label={`资源${blacklist ? "黑名单" : "白名单"}`}>
         <Group>
           <Button leftSection={<ICONS.Edit size="1rem" />} onClick={open}>
-            Edit Resources
+            编辑资源
           </Button>
           {resources.length ? (
             <Text c="dimmed">
-              Alerts {blacklist ? "blacklisted" : "whitelisted"} by{" "}
-              <b>{resources.length}</b> resources
+              {blacklist ? "屏蔽" : "仅接收"}以下 <b>{resources.length}</b> 个资源的告警
             </Text>
           ) : undefined}
         </Group>
@@ -120,7 +120,7 @@ export default function AlerterConfigResources({
       <Modal
         opened={opened}
         onClose={close}
-        title={`Edit ${blacklist ? "Blacklisted" : "Whitelisted"} Resources`}
+        title={`编辑${blacklist ? "黑名单中的" : "白名单中的"}资源`}
         size="xl"
       >
         <Stack gap="xs">
@@ -132,14 +132,14 @@ export default function AlerterConfigResources({
               {
                 accessorKey: "type",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Resource" />
+                  <SortableHeader column={column} title="资源" />
                 ),
                 cell: ({ row }) => {
                   const Icon = ICONS[row.original.type as UsableResource];
                   return (
                     <Group gap="xs">
                       <Icon size="1rem" />
-                      {row.original.type}
+                      {displayLabel(row.original.type)}
                     </Group>
                   );
                 },
@@ -147,7 +147,7 @@ export default function AlerterConfigResources({
               {
                 accessorKey: "id",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Target" />
+                  <SortableHeader column={column} title="目标" />
                 ),
                 cell: ({ row: { original: resource_target } }) => {
                   return (
@@ -163,7 +163,7 @@ export default function AlerterConfigResources({
                 header: ({ column }) => (
                   <SortableHeader
                     column={column}
-                    title={blacklist ? "Blacklist" : "Whitelist"}
+                    title={blacklist ? "黑名单" : "白名单"}
                   />
                 ),
                 cell: ({ row }) => {

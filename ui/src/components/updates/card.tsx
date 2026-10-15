@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { BoxProps, Flex, FlexProps, Group, Loader, Stack } from "@mantine/core";
 import { Types } from "komodo_client";
 import { UpdateStatus } from "komodo_client/dist/types";
@@ -8,7 +9,7 @@ import { ICONS } from "@/lib/icons";
 import UserAvatar from "@/components/user-avatar";
 import { useUpdateDetails } from "./details";
 import ResourceLink from "@/resources/link";
-import { fmtDate, fmtUpperCamelcase, hexColorByIntention } from "mogh_ui";
+import { fmtDate, hexColorByIntention } from "mogh_ui";
 
 export default function UpdateCard({
   update,
@@ -33,7 +34,7 @@ export default function UpdateCard({
     >
       <Group wrap="nowrap" gap="xs">
         <Icon update={update} />
-        {fmtUpperCamelcase(update.operation)}
+        {displayLabel(update.operation)}
         {!versionIsNone(update.version) && (
           <Group c="dimmed" gap="xs">
             <ICONS.Version size="1rem" />
@@ -73,7 +74,7 @@ export default function UpdateCard({
             {update.target.type === "System" ? (
               <>
                 <ICONS.System size="1rem" />
-                System
+                系统
               </>
             ) : (
               <ResourceLink

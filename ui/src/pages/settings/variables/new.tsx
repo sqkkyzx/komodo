@@ -10,7 +10,7 @@ export default function NewVariable() {
   const { mutateAsync: create, isPending } = useWrite("CreateVariable", {
     onSuccess: () => {
       invalidate(["ListVariables"], ["GetVariable"]);
-      notifications.show({ message: "Variable Created" });
+      notifications.show({ message: "变量已创建" });
       setName("");
     },
   });
@@ -18,7 +18,7 @@ export default function NewVariable() {
   const disabled = !user?.admin;
   return (
     <CreateModal
-      entityType="Variable"
+      entityType="变量"
       onConfirm={() => create({ name }).then(() => true)}
       disabled={disabled}
       loading={isPending}
@@ -27,10 +27,10 @@ export default function NewVariable() {
         <>
           <TextInput
             autoFocus
-            placeholder="variable-name"
+            placeholder="变量名称"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            error={!name.trim() && "Enter name"}
+            error={!name.trim() && "请输入名称"}
           />
         </>
       )}

@@ -58,7 +58,7 @@ export function RunProcedure({ id }: { id: string }) {
         onClick={() => cancel({ procedure: id })}
         loading={cancelPending || cancelling}
       >
-        Cancel Run
+        取消运行
       </ConfirmButton>
     );
   } else {
@@ -69,7 +69,7 @@ export function RunProcedure({ id }: { id: string }) {
         onConfirm={() => run({ procedure: id })}
         loading={runPending}
       >
-        Run Procedure
+        运行流程
       </ConfirmModalWithDisable>
     );
   }

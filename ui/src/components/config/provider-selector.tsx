@@ -36,8 +36,8 @@ export default function ProviderSelector({
   if (customMode) {
     return (
       <TextInput
-        label={showLabel && "Domain"}
-        placeholder="Input custom provider domain"
+        label={showLabel && "域名"}
+        placeholder="输入自定义服务商域名"
         w={{ base: "85%", lg: 400 }}
         value={selected}
         onChange={(e) => onSelect(e.target.value)}
@@ -69,11 +69,14 @@ export default function ProviderSelector({
 
   return (
     <Select
-      placeholder="Select Provider"
-      label={showLabel && "Domain"}
+      placeholder="选择服务商"
+      label={showLabel && "域名"}
       value={selected || "None"}
       disabled={disabled}
-      data={providers}
+      data={providers.map((value) => ({
+        value,
+        label: value === "None" ? "无" : value === "Custom" ? "自定义" : value,
+      }))}
       onChange={(value) => {
         if (value === "Custom") {
           onSelect("");
@@ -100,16 +103,13 @@ export function ProviderSelectorConfig({
   https?: boolean;
   onHttpsSwitch?: () => void;
 } & ProviderSelectorProps) {
-  const select = accountType === "git" ? "git provider" : "docker registry";
-  const label = accountType === "git" ? "Git Provider" : "Image Registry";
+  const select = accountType === "git" ? "Git 服务商" : "镜像仓库";
+  const label = accountType === "git" ? "Git 服务商" : "镜像仓库";
   const selector = (
     <ProviderSelector accountType={accountType} w="fit-content" {...props} />
   );
   return (
-    <ConfigItem
-      label={label}
-      description={description ?? `Select ${select} domain`}
-    >
+    <ConfigItem label={label} description={description ?? `选择${select}域名`}>
       {accountType === "git" ? (
         <Group>
           <Button

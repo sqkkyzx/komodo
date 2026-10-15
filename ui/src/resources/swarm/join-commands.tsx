@@ -21,13 +21,13 @@ export default function JoinSwarmCommands({
   return (
     <Stack>
       <Text c="dimmed">
-        Copy a command below and run it on the target host to join the swarm.
+        复制下方命令并在目标主机上运行，以加入集群。
       </Text>
 
       {addr && tokens ? (
         <>
           <Group justify="space-between" gap="sm">
-            <Text>As Manager</Text>
+            <Text>作为管理节点</Text>
             <Group gap="sm" wrap="nowrap">
               <Text
                 ff="monospace"
@@ -46,7 +46,7 @@ export default function JoinSwarmCommands({
           </Group>
 
           <Group justify="space-between">
-            <Text>As Worker</Text>
+            <Text>作为工作节点</Text>
             <Group gap="sm" wrap="nowrap">
               <Text
                 ff="monospace"
@@ -72,7 +72,7 @@ export default function JoinSwarmCommands({
 
       <Group justify="end">
         <Button leftSection={<ICONS.Check size="1rem" />} onClick={close}>
-          Close
+          关闭
         </Button>
       </Group>
     </Stack>

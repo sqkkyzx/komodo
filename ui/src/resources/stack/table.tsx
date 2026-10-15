@@ -47,7 +47,7 @@ export default function StackTable({
       columns={[
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           id: "Name",
           accessorKey: "name",
@@ -62,7 +62,7 @@ export default function StackTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Source" />
+            <SortableHeader column={column} title="来源" />
           ),
           id: "Source",
           accessorKey: "info.repo",
@@ -70,7 +70,7 @@ export default function StackTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Host" />
+            <SortableHeader column={column} title="主机" />
           ),
           id: "Host",
           accessorKey: "info.server_id",
@@ -101,12 +101,12 @@ export default function StackTable({
           id: "State",
           accessorKey: "info.state",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => <StackComponents.State id={row.original.id} />,
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

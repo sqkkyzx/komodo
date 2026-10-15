@@ -26,9 +26,9 @@ export default function SwarmTaskInspectSection({
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm task."
+          ? "无法检查集群任务。"
           : !inspect
-            ? `No swarm task found with given id: ${task}`
+            ? `未找到以下 ID 的集群任务：${task}`
             : undefined
       }
       {...sectionProps}

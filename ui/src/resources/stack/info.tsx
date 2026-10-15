@@ -32,8 +32,8 @@ export default function StackInfo({
     onSuccess: (res) => {
       notifications.show({
         message: res.success
-          ? "Contents written."
-          : "Failed to write contents.",
+          ? "已写入文件内容。"
+          : "写入文件内容失败。",
         color: res.success ? "green" : "red",
       });
     },
@@ -64,7 +64,7 @@ export default function StackInfo({
             {/* HEADER */}
             <Group justify="between">
               <Group ff="monospace">
-                <Text c="dimmed">Path:</Text>
+                <Text c="dimmed">路径：</Text>
                 {error.path}
               </Group>
 
@@ -82,7 +82,7 @@ export default function StackInfo({
                     }
                   }}
                 >
-                  Initialize File
+                  初始化文件
                 </ConfirmButton>
               )}
             </Group>
@@ -137,9 +137,9 @@ export default function StackInfo({
               >
                 {/* PATH */}
                 <Group ff="monospace">
-                  <Text c="dimmed">File:</Text>
+                  <Text c="dimmed">文件：</Text>
                   {content.path}
-                  <CopyButton label="file path" content={content.path} />
+                  <CopyButton label="文件路径" content={content.path} />
                 </Group>
 
                 {/* SAVE */}
@@ -155,7 +155,7 @@ export default function StackInfo({
                           setEdits({ ...edits, [content.path]: undefined });
                         }}
                       >
-                        Reset
+                        重置
                       </Button>
                       <ConfirmUpdate
                         original={{ contents: content.contents }}
@@ -202,10 +202,9 @@ export default function StackInfo({
         <Stack className="bordered-light" bdrs="md" p="xl">
           {/* HEADER */}
           <Stack ff="monospace" gap="0">
-            <Text fz="md">Deployed config:</Text>
+            <Text fz="md">已部署配置：</Text>
             <Text fz="sm" c="dimmed">
-              Output of '<code>docker compose config</code>' when Stack was last
-              deployed.
+              命令 '<code>docker compose config</code>' 在上次部署应用栈时的输出。
             </Text>
           </Stack>
 

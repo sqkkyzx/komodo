@@ -4,14 +4,14 @@ import { PageGuard } from "mogh_ui";
 import { useParams } from "react-router-dom";
 
 export default function Alert() {
-  useSetTitle("Alert");
+  useSetTitle("告警");
   const id = useParams().id as string;
   const { data: alert, isPending } = useRead("GetAlert", { id });
 
   return (
     <PageGuard
       isPending={isPending}
-      error={!alert ? "Alert could not be found." : undefined}
+      error={!alert ? "未找到告警。" : undefined}
     >
       <AlertDetails alertId={id} />
     </PageGuard>

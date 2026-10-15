@@ -32,7 +32,7 @@ export default function DeploymentTasksSection({
   if (!swarmId || !service) {
     return (
       <Section {...props}>
-        <Text>Did not find {!swarmId ? "Swarm" : "Swarm Service"}</Text>
+        <Text>未找到 {!swarmId ? "集群" : "集群服务"}</Text>
       </Section>
     );
   }

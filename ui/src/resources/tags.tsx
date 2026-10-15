@@ -32,7 +32,7 @@ export const ResourceTags = ({
   const { mutate } = useWrite("UpdateResourceMeta", {
     onSuccess: () => {
       inv([`List${type}s`]);
-      notifications.show({ message: "Removed tag" });
+      notifications.show({ message: "已移除标签" });
     },
   });
   return (
@@ -71,20 +71,20 @@ export const AddResourceTags = (target: UsableResourceTarget) => {
   const { mutate: update } = useWrite("UpdateResourceMeta", {
     onSuccess: () => {
       inv([`List${type}s`]);
-      notifications.show({ message: `Added tag ${search}`, color: "green" });
+      notifications.show({ message: `已添加标签 ${search}`, color: "green" });
     },
   });
 
   const { mutateAsync: create } = useWrite("CreateTag", {
     onSuccess: () => {
       inv([`ListTags`]);
-      notifications.show({ message: `Created tag ${search}`, color: "green" });
+      notifications.show({ message: `已创建标签 ${search}`, color: "green" });
     },
   });
 
   const createTag = async (name: string) => {
     if (!name) {
-      notifications.show({ message: "Must provide tag name in input" });
+      notifications.show({ message: "请输入标签名称" });
       return;
     }
     const tag = await create({ name });
@@ -144,7 +144,7 @@ export const AddResourceTags = (target: UsableResourceTarget) => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" />}
-          placeholder="Search / Create"
+          placeholder="搜索 / 创建"
           styles={{
             section: {
               marginRight: 4,
@@ -169,7 +169,7 @@ export const AddResourceTags = (target: UsableResourceTarget) => {
           >
             <Center>
               <ICONS.Create size="1rem" />
-              Create Tag
+              创建标签
             </Center>
           </Combobox.Option>
         </Combobox.Options>

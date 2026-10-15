@@ -19,10 +19,10 @@ export default function DeleteUserGroup({ groupId }: { groupId: string }) {
     <ConfirmModal
       title={
         <>
-          Confirm <b>Delete</b>
+          确认 <b>删除</b>
         </>
       }
-      confirmButtonContent="Delete"
+      confirmButtonContent="删除"
       icon={<ICONS.Delete size="1rem" />}
       targetNoIcon
       targetProps={{ variant: "filled", color: "red", w: "fit", px: "xs" }}

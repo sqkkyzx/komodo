@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { Fragment, ReactNode } from "react";
 import { useStack } from ".";
 import { useRead } from "@/lib/hooks";
@@ -56,7 +57,7 @@ function StackServicesSwarm({
         {
           accessorKey: "service",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Service" />
+            <SortableHeader column={column} title="服务" />
           ),
           cell: ({ row }) => (
             <StackServiceLink id={stackId} service={row.original.service} />
@@ -65,13 +66,13 @@ function StackServicesSwarm({
         {
           accessorKey: "swarm_service.State",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => {
             const state = row.original.swarm_service?.State;
             return (
               <StatusBadge
-                text={state ?? (isUnknown ? "Unknown" : "Down")}
+                text={displayLabel(state ?? (isUnknown ? "未知" : "未运行"))}
                 intent={
                   state
                     ? swarmStateIntention(state)
@@ -85,14 +86,15 @@ function StackServicesSwarm({
         },
         {
           accessorKey: "swarm_service.Runtime",
+          cell: ({ row }) => displayLabel(row.original.swarm_service?.Runtime),
           header: ({ column }) => (
-            <SortableHeader column={column} title="Runtime" />
+            <SortableHeader column={column} title="运行时间" />
           ),
         },
         {
           accessorKey: "swarm_service.Image",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Image" />
+            <SortableHeader column={column} title="镜像" />
           ),
           cell: ({ row }) => {
             // It usually returns the image hash after the @, its very long so removed here
@@ -102,7 +104,7 @@ function StackServicesSwarm({
         {
           accessorKey: "swarm_service.Replicas",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Replicas" />
+            <SortableHeader column={column} title="副本数" />
           ),
         },
       ]}
@@ -128,7 +130,7 @@ function StackServicesServer({
         {
           accessorKey: "service",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Service" />
+            <SortableHeader column={column} title="服务" />
           ),
           cell: ({ row }) => (
             <StackServiceLink id={stackId} service={row.original.service} />
@@ -137,13 +139,13 @@ function StackServicesServer({
         {
           accessorKey: "container.state",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => {
             const state = row.original.container?.state;
             return (
               <StatusBadge
-                text={state ?? (isUnknown ? "Unknown" : "Down")}
+                text={displayLabel(state ?? (isUnknown ? "未知" : "未运行"))}
                 intent={
                   state
                     ? containerStateIntention(state)
@@ -158,7 +160,7 @@ function StackServicesServer({
         {
           accessorKey: "container.image",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Image" />
+            <SortableHeader column={column} title="镜像" />
           ),
           cell: ({ row }) =>
             serverId && (
@@ -174,7 +176,7 @@ function StackServicesServer({
         {
           accessorKey: "container.networks.0",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Networks" />
+            <SortableHeader column={column} title="网络" />
           ),
           cell: ({ row }) =>
             (row.original.container?.networks?.length ?? 0) > 0 ? (
@@ -207,7 +209,7 @@ function StackServicesServer({
         {
           accessorKey: "container.ports.0",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Ports" />
+            <SortableHeader column={column} title="端口" />
           ),
           cell: ({ row }) => (
             <ContainerPorts

@@ -155,7 +155,7 @@ function InspectDeploymentContainer({
   return (
     <Section titleOther={titleOther}>
       <MonacoEditor
-        value={inspect ? JSON.stringify(inspect, null, 2) : "NO DATA"}
+        value={inspect ? JSON.stringify(inspect, null, 2) : "暂无数据"}
         language="json"
         readOnly
       />

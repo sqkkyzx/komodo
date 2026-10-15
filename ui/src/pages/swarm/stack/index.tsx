@@ -23,7 +23,7 @@ export default function SwarmStack() {
     swarm: swarmId,
     stack: _stack,
   });
-  useSetTitle(`${swarm?.name} | Stack | ${stack?.Name ?? "Unknown"}`);
+  useSetTitle(`${swarm?.name} | 应用栈 | ${stack?.Name ?? "未知"}`);
 
   const state = stack?.State;
   const intent = swarmStateIntention(state);
@@ -33,21 +33,21 @@ export default function SwarmStack() {
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm stack."
+          ? "无法检查集群应用栈。"
           : !stack
-            ? `No swarm stack found with given name: ${_stack}`
+            ? `未找到以下名称的集群应用栈：${_stack}`
             : undefined
       }
     >
       <ResourceSubPage
-        entityTypeName="Swarm Stack"
+        entityTypeName="集群应用栈"
         parentType="Swarm"
         parentId={swarmId}
         name={stack?.Name}
         icon={ICONS.SwarmStack}
         intent={intent}
         state={state}
-        status={`${stack?.Services.length} Service${stack?.Services.length === 1 ? "" : "s"}`}
+        status={`${stack?.Services.length} 个服务`}
         executions={
           stack?.Name && (
             <RemoveSwarmResource
@@ -59,11 +59,7 @@ export default function SwarmStack() {
         }
       >
         {swarm && stack && (
-          <SwarmStackTabs
-            swarm={swarm}
-            stack={stack}
-            intent={intent}
-          />
+          <SwarmStackTabs swarm={swarm} stack={stack} intent={intent} />
         )}
       </ResourceSubPage>
     </PageGuard>

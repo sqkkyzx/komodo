@@ -44,7 +44,7 @@ export function CloneRepo({ id }: { id: string }) {
       disabled={pending}
       loading={pending}
     >
-      {isCloned ? "Reclone" : "Clone"}
+      {isCloned ? "重新克隆" : "克隆"}
     </ConfirmButton>
   );
 }
@@ -72,7 +72,7 @@ export function PullRepo({ id }: { id: string }) {
       disabled={pending}
       loading={pending}
     >
-      Pull
+      拉取
     </ConfirmButton>
   );
 }
@@ -134,7 +134,7 @@ export function BuildRepo({ id }: { id: string }) {
         disabled={cancelDisabled}
         loading={cancelPending}
       >
-        Cancel Build
+        取消构建
       </ConfirmButton>
     );
   } else {
@@ -145,7 +145,7 @@ export function BuildRepo({ id }: { id: string }) {
         disabled={runPending || building}
         loading={runPending || building}
       >
-        Build
+        构建
       </ConfirmButton>
     );
   }

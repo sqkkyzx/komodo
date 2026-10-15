@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import SwarmResourceLink from "@/components/swarm/link";
 import RemoveSwarmResource from "@/components/swarm/remove";
 import { swarmStateIntention } from "@/lib/color";
@@ -36,7 +37,7 @@ export default function SwarmService() {
     }).data?.filter((task) => service?.ID && task.ServiceID === service.ID) ??
     [];
   useSetTitle(
-    `${swarm?.name} | Service | ${service?.Name ?? service?.ID ?? "Unknown"}`,
+    `${swarm?.name} | 服务 | ${service?.Name ?? service?.ID ?? "未知"}`,
   );
 
   const state = service?.State;
@@ -47,21 +48,21 @@ export default function SwarmService() {
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm service."
+          ? "无法检查集群服务。"
           : !service
-            ? `No swarm service found with given name: ${_service}`
+            ? `未找到以下名称的集群服务：${_service}`
             : undefined
       }
     >
       <ResourceSubPage
-        entityTypeName="Swarm Service"
+        entityTypeName="集群服务"
         parentType="Swarm"
         parentId={swarmId}
         name={service?.Name}
         icon={ICONS.SwarmService}
         intent={intent}
-        state={state}
-        status={`${tasks.length} Task${tasks.length === 1 ? "" : "s"}`}
+        state={state ? displayLabel(state) : state}
+        status={`${tasks.length} 个任务`}
         info={
           <>
             {service?.Configs.map((config) => (

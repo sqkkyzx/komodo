@@ -12,7 +12,7 @@ export default function DeleteOnboardingKey({
   const { mutate, isPending } = useWrite("DeleteOnboardingKey", {
     onSuccess: () => {
       invalidate(["ListOnboardingKeys"]);
-      notifications.show({ message: "Onboarding Key Deleted" });
+      notifications.show({ message: "注册密钥已删除" });
     },
   });
   return (
@@ -25,7 +25,7 @@ export default function DeleteOnboardingKey({
       loading={isPending}
       confirmProps={{ variant: "filled", color: "red" }}
     >
-      Delete
+      删除
     </ConfirmButton>
   );
 }

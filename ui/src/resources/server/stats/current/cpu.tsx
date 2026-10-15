@@ -8,7 +8,7 @@ export default function ServerCpuUsage({ id }: { id: string }) {
   const stats = useServerStats(id);
   return (
     <StatBar
-      title="CPU Usage"
+      title="CPU 使用率"
       icon={<ICONS.Cpu size="1.3rem" />}
       percentage={stats?.cpu_perc}
       warning={server?.config?.cpu_warning}

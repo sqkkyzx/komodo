@@ -37,28 +37,28 @@ export default function KeyboardShortcuts() {
       <Modal
         opened={opened}
         onClose={close}
-        title={<Text size="xl">Keyboard Shortcuts</Text>}
+        title={<Text size="xl">键盘快捷键</Text>}
         size="lg"
       >
         <SimpleGrid cols={2} p="md" bg="accent.1">
-          <KeyboardShortcut label="Save" keys={["Meta", "Enter"]} />
-          <KeyboardShortcut label="New" keys={["Shift", "N"]} />
-          <KeyboardShortcut label="Go Home" keys={["Shift", "H"]} />
+          <KeyboardShortcut label="保存" keys={["Meta", "Enter"]} />
+          <KeyboardShortcut label="新建" keys={["Shift", "N"]} />
+          <KeyboardShortcut label="返回首页" keys={["Shift", "H"]} />
 
-          <KeyboardShortcut label="Go to Servers" keys={["Shift", "G"]} />
-          <KeyboardShortcut label="Go to Stacks" keys={["Shift", "Z"]} />
-          <KeyboardShortcut label="Go to Deployments" keys={["Shift", "D"]} />
-          <KeyboardShortcut label="Go to Builds" keys={["Shift", "B"]} />
-          <KeyboardShortcut label="Go to Repos" keys={["Shift", "R"]} />
-          <KeyboardShortcut label="Go to Procedures" keys={["Shift", "P"]} />
-          <KeyboardShortcut label="Go to Variables" keys={["Shift", "V"]} />
-          <KeyboardShortcut label="Go to Terminals" keys={["Shift", "X"]} />
-          <KeyboardShortcut label="Go to Schedules" keys={["Shift", "C"]} />
+          <KeyboardShortcut label="前往服务器" keys={["Shift", "G"]} />
+          <KeyboardShortcut label="前往应用栈" keys={["Shift", "Z"]} />
+          <KeyboardShortcut label="前往部署" keys={["Shift", "D"]} />
+          <KeyboardShortcut label="前往构建" keys={["Shift", "B"]} />
+          <KeyboardShortcut label="前往代码仓库" keys={["Shift", "R"]} />
+          <KeyboardShortcut label="前往流程" keys={["Shift", "P"]} />
+          <KeyboardShortcut label="前往变量" keys={["Shift", "V"]} />
+          <KeyboardShortcut label="前往终端" keys={["Shift", "X"]} />
+          <KeyboardShortcut label="前往计划任务" keys={["Shift", "C"]} />
 
-          <KeyboardShortcut label="Search" keys={["Shift", "S"]} />
-          <KeyboardShortcut label="Add Filter Tag" keys={["Shift", "T"]} />
+          <KeyboardShortcut label="搜索" keys={["Shift", "S"]} />
+          <KeyboardShortcut label="添加筛选标签" keys={["Shift", "T"]} />
           <KeyboardShortcut
-            label="Clear Filter Tags"
+            label="清除筛选标签"
             keys={["Shift", "C"]}
             divider={false}
           />

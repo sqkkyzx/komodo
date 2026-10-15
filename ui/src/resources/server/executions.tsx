@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import {
   useExecute,
   useInvalidate,
@@ -64,7 +65,7 @@ export const Prune = ({
         loading={pending}
         disabled={!canExecute || pending}
       >
-        {`Prune ${type}`}
+        {`清理${displayLabel(type)}`}
       </ConfirmButton>
     );
   } else {
@@ -76,7 +77,7 @@ export const Prune = ({
         loading={pending}
         disabled={!canExecute || pending}
       >
-        {`Prune ${type}`}
+        {`清理${displayLabel(type)}`}
       </ConfirmModalWithDisable>
     );
   }

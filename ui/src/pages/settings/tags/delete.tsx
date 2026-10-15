@@ -14,7 +14,7 @@ export default function DeleteTag({
   const { mutate, isPending } = useWrite("DeleteTag", {
     onSuccess: () => {
       invalidate(["ListTags"]);
-      notifications.show({ message: "Tag Deleted" });
+      notifications.show({ message: "标签已删除" });
     },
   });
   return (
@@ -28,7 +28,7 @@ export default function DeleteTag({
       disabled={disabled}
       confirmProps={{ variant: "filled", color: "red" }}
     >
-      Delete
+      删除
     </ConfirmButton>
   );
 }

@@ -32,7 +32,7 @@ export default function UserGroupAddUser({
     onSuccess: () => {
       inv(["ListUserGroups"]);
       notifications.show({
-        message: "Added User to User Group",
+        message: "已将用户添加到用户组",
         color: "green",
       });
     },
@@ -59,7 +59,7 @@ export default function UserGroupAddUser({
           leftSection={<ICONS.Add size="1rem" />}
           loading={isPending}
         >
-          Add User
+          添加用户
         </Button>
       </Combobox.Target>
 
@@ -68,7 +68,7 @@ export default function UserGroupAddUser({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder="search..."
+          placeholder="搜索…"
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
           {filtered.map((user) => (
@@ -77,7 +77,7 @@ export default function UserGroupAddUser({
             </Combobox.Option>
           ))}
           {filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
+            <Combobox.Empty>无匹配结果。</Combobox.Empty>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

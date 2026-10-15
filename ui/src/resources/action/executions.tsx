@@ -56,7 +56,7 @@ export function RunAction({ id }: { id: string }) {
         onClick={() => cancel({ action: id })}
         loading={cancelPending || cancelling}
       >
-        Cancel Run
+        取消运行
       </ConfirmButton>
     );
   } else {
@@ -67,7 +67,7 @@ export function RunAction({ id }: { id: string }) {
         onConfirm={() => run({ action: id, args: {} })}
         loading={runPending}
       >
-        Run Action
+        运行操作
       </ConfirmModalWithDisable>
     );
   }

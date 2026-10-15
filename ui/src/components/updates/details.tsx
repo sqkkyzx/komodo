@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { fmtVersion } from "@/lib/formatting";
 import { useRead } from "@/lib/hooks";
 import { useWebsocketMessages } from "@/lib/socket";
@@ -7,12 +8,7 @@ import { ActionIcon, Code, Drawer, Group, Stack, Text } from "@mantine/core";
 import UserAvatar from "@/components/user-avatar";
 import { ICONS } from "@/lib/icons";
 import { Clock, Link2, SquarePen } from "lucide-react";
-import {
-  CopyButton,
-  fmtDateWithMinutes,
-  fmtDuration,
-  fmtUpperCamelcase,
-} from "mogh_ui";
+import { CopyButton, fmtDateWithMinutes, fmtDuration } from "mogh_ui";
 import { Section } from "mogh_ui";
 import { MonacoDiffEditor } from "mogh_ui";
 import { LoadingScreen } from "mogh_ui";
@@ -85,7 +81,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
       {/** HEADER */}
       <Group justify="space-between">
         <Text fz="h2">
-          {fmtUpperCamelcase(update.operation)}{" "}
+          {displayLabel(update.operation)}{" "}
           {!versionIsNone(update.version) && fmtVersion(update.version)}
         </Text>
         <ActionIcon size="lg" variant="filled" color="red" onClick={close}>
@@ -109,7 +105,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
           ) : (
             <Group gap="xs" wrap="nowrap">
               <ICONS.Settings size="1rem" />
-              System
+              系统
             </Group>
           )}
 
@@ -131,12 +127,12 @@ export function UpdateDetailsContent({ id }: { id: string }) {
             <Clock size="1rem" />
             {update.end_ts
               ? fmtDuration(update.start_ts, update.end_ts)
-              : "ongoing"}
+              : "进行中"}
           </Group>
           <CopyButton
             content={`${location.origin}/updates/${update._id?.$oid}`}
             icon={<Link2 size="1rem" />}
-            label="shareable link"
+            label="分享链接"
           />
         </Group>
       </Stack>
@@ -145,7 +141,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
         {/** CONFIG CHANGE DIFF */}
         {update.prev_toml && update.current_toml && (
           <Section
-            title="Changes Made"
+            title="变更内容"
             titleFz="h3"
             icon={<SquarePen size="1.2rem" />}
             withBorder
@@ -169,7 +165,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
             description={
               <Group c="dimmed" gap="xs">
                 <Text>
-                  Stage {i + 1} of {update.logs.length}
+                  阶段 {i + 1} / {update.logs.length}
                 </Text>
                 <Text>|</Text>
                 <Clock size="1rem" />
@@ -181,7 +177,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
           >
             {log.command && (
               <Stack className="bordered-light" bdrs="md" p="md">
-                <Text fw="bold">command</Text>
+                <Text fw="bold">命令</Text>
                 <Code
                   fz="sm"
                   mah={500}
@@ -195,7 +191,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
             )}
             {log.stdout && (
               <Stack className="bordered-light" bdrs="md" p="md">
-                <Text fw="bold">stdout</Text>
+                <Text fw="bold">标准输出</Text>
                 <Code
                   component="pre"
                   fz="sm"
@@ -209,7 +205,7 @@ export function UpdateDetailsContent({ id }: { id: string }) {
             )}
             {log.stderr && (
               <Stack className="bordered-light" bdrs="md" p="md">
-                <Text fw="bold">stderr</Text>
+                <Text fw="bold">标准错误</Text>
                 <Code
                   component="pre"
                   fz="sm"

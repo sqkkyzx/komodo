@@ -31,7 +31,7 @@ export default function StackLog({ id, ...props }: StackLogProps) {
         isSwarm ? (
           <Select
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={selectedServices?.length ? undefined : "All services"}
+            placeholder={selectedServices?.length ? undefined : "全部服务"}
             value={selectedServices[0] ?? allServices?.[0]}
             data={allServices}
             onChange={(service) => service && setServices([service])}
@@ -41,7 +41,7 @@ export default function StackLog({ id, ...props }: StackLogProps) {
         ) : (
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={selectedServices?.length ? undefined : "All services"}
+            placeholder={selectedServices?.length ? undefined : "全部服务"}
             value={selectedServices}
             data={allServices}
             onChange={setServices}

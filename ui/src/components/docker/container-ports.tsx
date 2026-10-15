@@ -142,7 +142,7 @@ export function ContainerPort({
                 {link}
               </>
             ) : (
-              "Missing external address"
+              "缺少外部地址"
             )}
           </Group>
 
@@ -156,7 +156,7 @@ export function ContainerPort({
           {ports.length > 10 && (
             <Group c="dimmed">
               <Text>+</Text>
-              <Text>{ports.length - 10} more...</Text>
+              <Text>{ports.length - 10} 项更多内容…</Text>
             </Group>
           )}
         </Stack>

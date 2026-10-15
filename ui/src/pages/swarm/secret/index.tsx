@@ -26,7 +26,7 @@ export default function SwarmSecret() {
     swarm: swarmId,
     secret: _secret,
   });
-  useSetTitle(`${swarm?.name} | Secret | ${secret?.Spec?.Name ?? "Unknown"}`);
+  useSetTitle(`${swarm?.name} | 机密 | ${secret?.Spec?.Name ?? "未知"}`);
 
   const intent = inUse ? "Good" : "Critical";
 
@@ -35,14 +35,14 @@ export default function SwarmSecret() {
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm secret."
+          ? "无法检查集群机密。"
           : !secret
-            ? `No swarm secret found with given name: ${_secret}`
+            ? `未找到以下名称的集群机密：${_secret}`
             : undefined
       }
     >
       <ResourceSubPage
-        entityTypeName="Swarm Config"
+        entityTypeName="集群机密"
         parentType="Swarm"
         parentId={swarmId}
         name={secret?.Spec?.Name}
@@ -51,7 +51,7 @@ export default function SwarmSecret() {
         state={
           !inUse && (
             <Badge variant="filled" color="red">
-              Unused
+              未使用
             </Badge>
           )
         }

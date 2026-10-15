@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { filterMultitermBySplit } from "mogh_ui";
 import { ICONS } from "@/lib/icons";
 import { DataTable, SortableHeader } from "mogh_ui";
@@ -54,7 +55,7 @@ export default function SwarmTasksSection({
   return (
     <Section
       titleOther={titleOther}
-      title={!titleOther ? "Tasks" : undefined}
+      title={!titleOther ? "任务" : undefined}
       icon={!titleOther ? <ICONS.SwarmTask size="1.3rem" /> : undefined}
       actions={
         _search || setShow ? (
@@ -90,7 +91,7 @@ export default function SwarmTasksSection({
             {
               accessorKey: "node.Hostname",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Node" />
+                <SortableHeader column={column} title="节点" />
               ),
               cell: ({ row }) => (
                 <SwarmResourceLink
@@ -104,7 +105,7 @@ export default function SwarmTasksSection({
             {
               accessorKey: "service.Name",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Service" />
+                <SortableHeader column={column} title="服务" />
               ),
               cell: ({ row }) => (
                 <SwarmResourceLink
@@ -118,11 +119,11 @@ export default function SwarmTasksSection({
             {
               accessorKey: "State",
               header: ({ column }) => (
-                <SortableHeader column={column} title="State" />
+                <SortableHeader column={column} title="状态" />
               ),
               cell: ({ row }) => (
                 <StatusBadge
-                  text={row.original.State}
+                  text={displayLabel(row.original.State)}
                   intent={swarmTaskStateIntention(
                     row.original.State,
                     row.original.DesiredState,
@@ -133,11 +134,11 @@ export default function SwarmTasksSection({
             {
               accessorKey: "DesiredState",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Desired State" />
+                <SortableHeader column={column} title="期望状态" />
               ),
               cell: ({ row }) => (
                 <StatusBadge
-                  text={row.original.DesiredState}
+                  text={displayLabel(row.original.DesiredState)}
                   intent={swarmTaskStateIntention(
                     row.original.State,
                     row.original.DesiredState,
@@ -148,12 +149,12 @@ export default function SwarmTasksSection({
             {
               accessorKey: "UpdatedAt",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Updated" />
+                <SortableHeader column={column} title="更新时间" />
               ),
               cell: ({ row }) =>
                 row.original.UpdatedAt
                   ? new Date(row.original.UpdatedAt).toLocaleString()
-                  : "Unknown",
+                  : "未知",
             },
             // {
             //   accessorKey: "CreatedAt",
@@ -163,7 +164,7 @@ export default function SwarmTasksSection({
             //   cell: ({ row }) =>
             //     row.original.CreatedAt
             //       ? new Date(row.original.CreatedAt).toLocaleString()
-            //       : "Unknown",
+            //       : "未知",
             //   size: 200,
             // },
           ]}

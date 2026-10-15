@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useExecute, usePermissions, useRead } from "@/lib/hooks";
 import { ReactNode } from "react";
 import { useFullResourceSync } from ".";
@@ -34,15 +35,15 @@ export default function ResourceSyncPending({
     <Section titleOther={titleOther} mih={500}>
       {/* INFO ON EXECUTE / COMMIT MODE */}
       <Group>
-        <Text c="dimmed">{view} Mode:</Text>
+        <Text c="dimmed">{displayLabel(view)}模式：</Text>
         {view === "Execute" && (
           <Text>
-            Update resources in the <b>UI</b> to match the <b>file changes.</b>
+            更新 <b>界面</b> 以匹配 <b>文件变更。</b>
           </Text>
         )}
         {view === "Commit" && (
           <Text>
-            Update resources in the <b>file</b> to match the <b>UI changes.</b>
+            更新 <b>文件</b> 以匹配 <b>界面中的变更。</b>
           </Text>
         )}
       </Group>
@@ -51,7 +52,7 @@ export default function ResourceSyncPending({
       {!!sync?.info?.pending_error && (
         <Stack className="bordered-light" bdrs="md" p="xl">
           <Text c="red" ff="monospace">
-            Error
+            错误
           </Text>
           <Code
             component="pre"
@@ -69,7 +70,7 @@ export default function ResourceSyncPending({
       {view === "Execute" && !!sync?.info?.pending_deploy_error && (
         <Stack className="bordered-light" bdrs="md" p="xl">
           <Text c="red" ff="monospace">
-            Deploy Error
+            部署错误
           </Text>
           <Code
             component="pre"
@@ -87,8 +88,7 @@ export default function ResourceSyncPending({
       {view === "Execute" && !!sync?.info?.pending_deploys?.length && (
         <Stack className="bordered-light" bdrs="md" p="xl">
           <Text c="yellow" ff="monospace">
-            Deploy {sync.info.pending_deploys.length} Resource
-            {sync.info.pending_deploys.length === 1 ? "" : "s"}
+            部署 {sync.info.pending_deploys.length} 个资源
           </Text>
           {sync.info.pending_deploys.map(
             ({ target: { type, id }, reason, after }) => (
@@ -106,14 +106,14 @@ export default function ResourceSyncPending({
                   mah={500}
                   dangerouslySetInnerHTML={{
                     __html:
-                      '<span style="color: var(--mantine-color-dimmed)">Reason:</span> ' +
+                      '<span style="color: var(--mantine-color-dimmed)">原因：</span> ' +
                       sanitizeOnlySpan(reason),
                   }}
                   style={{ overflowY: "auto" }}
                 />
                 {after.length > 0 && (
                   <Group gap="xs">
-                    <Text c="dimmed">After: </Text>
+                    <Text c="dimmed">变更后： </Text>
                     {after.map(({ type, id }) => (
                       <ResourceLink
                         key={type + id}
@@ -146,10 +146,10 @@ export default function ResourceSyncPending({
                   ff="monospace"
                   c={diffTypeIntention(update.data.type, view === "Commit")}
                 >
-                  {view === "Commit"
+                  {displayLabel(view === "Commit"
                     ? reversePendingType(update.data.type)
-                    : update.data.type}{" "}
-                  {update.target.type}
+                    : update.data.type)}{" "}
+                  {displayLabel(update.target.type)}
                 </Text>
                 {update.data.type === "Create" ? (
                   <Text>{update.data.data.name}</Text>
@@ -176,7 +176,7 @@ export default function ResourceSyncPending({
                   }
                   loading={loading}
                 >
-                  Execute Change
+                  执行变更
                 </ConfirmButton>
               )}
             </Group>
@@ -232,8 +232,8 @@ export default function ResourceSyncPending({
               ff="monospace"
               c={diffTypeIntention(data.type, view === "Commit")}
             >
-              {view === "Commit" ? reversePendingType(data.type) : data.type}{" "}
-              Variable
+              {displayLabel(view === "Commit" ? reversePendingType(data.type) : data.type)}{" "}
+              变量
             </Text>
             {data.type === "Create" && (
               <MonacoEditor
@@ -285,8 +285,8 @@ export default function ResourceSyncPending({
               ff="monospace"
               c={diffTypeIntention(data.type, view === "Commit")}
             >
-              {view === "Commit" ? reversePendingType(data.type) : data.type}{" "}
-              User Group
+              {displayLabel(view === "Commit" ? reversePendingType(data.type) : data.type)}{" "}
+              用户组
             </Text>
             {data.type === "Create" && (
               <MonacoEditor

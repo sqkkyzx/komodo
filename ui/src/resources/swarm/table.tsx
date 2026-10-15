@@ -45,7 +45,7 @@ export default function SwarmTable({
       columns={[
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           id: "Name",
           accessorKey: "name",
@@ -53,14 +53,14 @@ export default function SwarmTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           id: "State",
           accessorKey: "info.state",
           cell: ({ row }) => <SwarmComponents.State id={row.original.id} />,
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { AccountSelectorConfig } from "@/components/config/account-selector";
 import LinkedRepo from "@/components/config/linked-repo";
 import { ProviderSelectorConfig } from "@/components/config/provider-selector";
@@ -118,21 +119,21 @@ export default function ResourceSyncConfig({
   let groups: ConfigProps<Types.ResourceSyncConfig>["groups"] = {};
 
   const chooseMode: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-    label: "Choose Mode",
+    label: "选择模式",
     labelHidden: true,
     fields: {
       file_contents: () => {
         return (
           <ConfigItem
-            label="Choose Mode"
-            description="Will the file contents be defined in UI, stored on the server, or pulled from a git repo?"
+            label="选择模式"
+            description="选择在界面中编辑文件、使用服务器上的文件，或从 Git 仓库拉取。"
           >
             <Select
               w="fit-content"
-              placeholder="Choose Mode"
+              placeholder="选择模式"
               value={mode}
               onChange={(mode) => mode && setMode(mode as SyncMode)}
-              data={SYNC_MODES}
+              data={SYNC_MODES.map((value) => ({ value, label: displayLabel(value) }))}
               disabled={disabled}
             />
           </ConfigItem>
@@ -142,13 +143,13 @@ export default function ResourceSyncConfig({
   };
 
   const generalCommon: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-    label: "General",
+    label: "常规",
     fields: {
       delete: (delete_mode, set) => {
         return (
           <ConfigSwitch
-            label="Delete Unmatched Resources"
-            description="Executions will delete any resources not found in the resource files. Only use this when using one sync for everything."
+            label="删除未匹配资源"
+            description="执行时会删除资源文件中未包含的资源。仅在通过单个资源同步管理全部资源时使用。"
             value={managed || delete_mode}
             onCheckedChange={(delete_mode) => set({ delete: delete_mode })}
             disabled={disabled || managed}
@@ -156,35 +157,35 @@ export default function ResourceSyncConfig({
         );
       },
       managed: {
-        label: "Managed",
+        label: "托管模式",
         description:
-          "Enabled managed mode / the 'Commit' button. Commit is the 'reverse' of Execute, and will update the sync file with your configs updated in the UI.",
+          "启用托管模式及“提交”按钮。“提交”与“执行”的方向相反，会将界面中的配置更新写回同步文件。",
       },
     },
   };
 
   const includeToggles: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-    label: "Include",
+    label: "包含内容",
     fields: {
       include_resources: {
-        label: "Sync Resources",
-        description: "Include resources (servers, stacks, etc.) in the sync.",
+        label: "同步资源",
+        description: "同步服务器、应用栈等资源。",
       },
       include_variables: {
-        label: "Sync Variables",
-        description: "Include variables in the sync.",
+        label: "同步变量",
+        description: "同步变量。",
       },
       include_user_groups: {
-        label: "Sync User Groups",
-        description: "Include user groups in the sync.",
+        label: "同步用户组",
+        description: "同步用户组。",
       },
     },
   };
 
   const includeResources = update.include_resources ?? config.include_resources;
   const matchTags: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-    label: "Match Tags",
-    description: "Only sync resources matching all of these tags.",
+    label: "匹配标签",
+    description: "仅同步匹配全部所选标签的资源。",
     fields: {
       match_tags: (values, set) => {
         return (
@@ -201,12 +202,12 @@ export default function ResourceSyncConfig({
   };
 
   const pendingAlerts: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-    label: "Alerts",
+    label: "告警",
     fields: {
       pending_alert: {
-        label: "Pending Alerts",
+        label: "待同步告警",
         description:
-          "Send a message to your Alerters when the Sync has Pending Changes",
+          "资源同步存在待处理变更时，通过告警器发送消息",
       },
     },
   };
@@ -219,18 +220,18 @@ export default function ResourceSyncConfig({
     groups = {
       "": [
         {
-          label: "General",
+          label: "常规",
           fields: {
             resource_path: (values, set) => (
               <ConfigList
-                label="Resource Paths"
-                addLabel="Add Path"
-                description="Add '.toml' files or folders to the sync. Relative to '/syncs/{sync_name}'."
+                label="资源路径"
+                addLabel="添加路径"
+                description="添加要同步的 .toml 文件或文件夹，路径相对于 /syncs/{sync_name}。"
                 field="resource_path"
                 values={values ?? []}
                 set={set}
                 disabled={disabled}
-                placeholder="Input resource path"
+                placeholder="输入资源路径"
               />
             ),
             ...generalCommon.fields,
@@ -244,7 +245,7 @@ export default function ResourceSyncConfig({
   } else if (mode === "Git Repo") {
     const repoLinked = !!(update.linked_repo ?? config.linked_repo);
     const sourceConfig: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-      label: "Source",
+      label: "来源",
       contentHidden: !show.git,
       actions: (
         <ShowHideButton
@@ -285,32 +286,32 @@ export default function ResourceSyncConfig({
                     selected={value}
                     onSelect={(git_account) => set({ git_account })}
                     disabled={disabled}
-                    placeholder="None"
+                    placeholder="无"
                   />
                 );
               },
               repo: {
-                placeholder: "Enter repo",
+                placeholder: "输入代码仓库",
                 description:
-                  "The repo path on the provider. {namespace}/{repo_name}",
+                  "代码托管平台上的仓库路径：{namespace}/{repo_name}",
               },
               branch: {
-                placeholder: "Enter branch",
-                description: "Select a custom branch, or default to 'main'.",
+                placeholder: "输入分支",
+                description: "选择自定义分支，默认为 main。",
               },
               commit: {
-                label: "Commit Hash",
-                placeholder: "Input commit hash",
+                label: "提交哈希",
+                placeholder: "输入提交哈希",
                 description:
-                  "Optional. Switch to a specific commit hash after cloning the branch.",
+                  "可选。克隆分支后切换到指定提交。",
               },
             }
           : {}),
       },
     };
     const webhooksConfig: ConfigGroupArgs<Types.ResourceSyncConfig> = {
-      label: "Webhooks",
-      description: `Copy the webhook given here, and configure your ${webhookIntegration}-style repo provider to send webhooks to Komodo`,
+      label: "Webhook",
+      description: `复制此处的 Webhook 地址，并在兼容 ${webhookIntegration} 的代码托管平台中配置向 Komodo 发送 Webhook`,
       contentHidden: !show.webhooks,
       actions: (
         <ShowHideButton
@@ -324,8 +325,8 @@ export default function ResourceSyncConfig({
             return null;
           }
           return (
-            <ConfigItem label="Configure Branch">
-              <Text>Must configure Branch before webhooks will work.</Text>
+            <ConfigItem label="配置分支">
+              <Text>需先配置分支，Webhook 才能生效。</Text>
             </ConfigItem>
           );
         },
@@ -333,8 +334,8 @@ export default function ResourceSyncConfig({
         ["Refresh" as any]: () =>
           (update.branch ?? config.branch) && (
             <CopyWebhookUrl
-              label="Webhook URL - Refresh Pending"
-              description="Trigger an update of the pending sync cache."
+              label="Webhook 地址 - 刷新待处理变更"
+              description="触发待同步缓存更新。"
               integration={webhookIntegration}
               path={`/sync/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/refresh`}
             />
@@ -342,8 +343,8 @@ export default function ResourceSyncConfig({
         ["Sync" as any]: () =>
           (update.branch ?? config.branch) && (
             <CopyWebhookUrl
-              label="Webhook URL - Execute Sync"
-              description="Trigger an execution of the sync."
+              label="Webhook 地址 - 执行同步"
+              description="触发同步执行。"
               integration={webhookIntegration}
               path={`/sync/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/sync`}
             />
@@ -351,8 +352,8 @@ export default function ResourceSyncConfig({
         webhook_enabled: true,
         webhook_secret: {
           description:
-            "Provide a custom webhook secret for this resource, or use the global default.",
-          placeholder: "Input custom secret",
+            "为此资源设置自定义 Webhook 密钥，或使用全局默认值。",
+          placeholder: "输入自定义密钥",
         },
       },
     };
@@ -360,23 +361,23 @@ export default function ResourceSyncConfig({
       "": [
         sourceConfig,
         {
-          label: "General",
+          label: "常规",
           fields: {
             resource_path: (values, set) => (
               <ConfigList
-                label="Resource Paths"
-                addLabel="Add Path"
+                label="资源路径"
+                addLabel="添加路径"
                 description={
                   <>
-                    Add '.toml' files or folders to the sync,{" "}
-                    <b>relative to the root of the repo.</b>
+                    添加要同步的 .toml 文件或文件夹，{" "}
+                    <b>相对于代码仓库根目录。</b>
                   </>
                 }
                 field="resource_path"
                 values={values ?? []}
                 set={set}
                 disabled={disabled}
-                placeholder="Input resource path"
+                placeholder="输入资源路径"
               />
             ),
             ...generalCommon.fields,
@@ -392,9 +393,9 @@ export default function ResourceSyncConfig({
     groups = {
       "": [
         {
-          label: "Resource File",
+          label: "资源文件",
           description:
-            "Manage the resource file contents here, or use a git repo / the files on host option.",
+            "在此管理资源文件内容，也可选择 Git 仓库或主机上的文件。",
           actions: (
             <ShowHideButton
               show={show.file}

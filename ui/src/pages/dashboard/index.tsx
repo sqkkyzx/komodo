@@ -20,7 +20,7 @@ export default function Dashboard() {
   return (
     <Page
       aboveTitle={<DashboardActiveResources />}
-      title="Dashboard"
+      title="仪表盘"
       icon={ICONS.Dashboard}
       oppositeTitle={
         <Group w={{ base: "100%", xs: "fit-content" }}>

@@ -1,4 +1,4 @@
-import { fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 import { useExecute, useSelectedResources, useWrite } from "@/lib/hooks";
 import { usableResourceExecuteKey } from "@/lib/utils";
 import { UsableResource } from "@/resources";
@@ -78,7 +78,7 @@ function BatchExecutionsDropdownMenu<T extends Request>({
           disabled={disabled}
           w={{ base: "100%", sm: "fit-content" }}
         >
-          Execute
+          执行
         </Button>
       </Menu.Target>
       <Menu.Dropdown>
@@ -88,7 +88,7 @@ function BatchExecutionsDropdownMenu<T extends Request>({
               onClick={() => onSelect("RefreshResourceSyncPending" as any)}
               renderRoot={(props) => <Button fullWidth {...props} />}
             >
-              Refresh
+              刷新
             </Menu.Item>
           )}
 
@@ -99,7 +99,7 @@ function BatchExecutionsDropdownMenu<T extends Request>({
               onClick={() => onSelect(execution)}
               renderRoot={(props) => <Button fullWidth {...props} />}
             >
-              {fmtUpperCamelcase(
+              {displayLabel(
                 execution.replaceAll("Batch", "").replaceAll(type, ""),
               )}
             </Menu.Item>
@@ -119,7 +119,7 @@ function BatchExecutionsDropdownMenu<T extends Request>({
               />
             )}
           >
-            Delete
+            删除
           </Menu.Item>
         </Stack>
       </Menu.Dropdown>
@@ -160,7 +160,7 @@ function BatchExecutionsModal({
 
   if (!execution) return;
 
-  const formatted = fmtUpperCamelcase(
+  const formatted = displayLabel(
     execution.replaceAll("Batch", "").replaceAll(type, ""),
   );
   const isPending = executePending || writePending;
@@ -169,7 +169,7 @@ function BatchExecutionsModal({
     <Modal
       opened={!!execution}
       onClose={() => onClose()}
-      title={<Text size="lg">Group Execute - {formatted}</Text>}
+      title={<Text size="lg">批量执行 - {formatted}</Text>}
       size="lg"
     >
       <Stack>
@@ -190,12 +190,12 @@ function BatchExecutionsModal({
               }}
               style={{ cursor: "pointer" }}
             >
-              Please enter <b>{formatted}</b> below to confirm this action.
+              请输入 <b>{formatted}</b> 以确认此操作。
               {(location.origin.startsWith("https") ||
                 // For dev
                 location.origin.startsWith("http://localhost:")) && (
                 <Text fz="sm" c="dimmed">
-                  You may click the text in bold to copy it
+                  可点击加粗文字进行复制
                 </Text>
               )}
             </Text>
@@ -203,7 +203,7 @@ function BatchExecutionsModal({
             <TextInput
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              error={input === formatted ? undefined : "Does not match"}
+              error={input === formatted ? undefined : "输入不匹配"}
             />
           </>
         )}

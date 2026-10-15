@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import {
   usePermissions,
   useRead,
@@ -22,7 +23,7 @@ const PROCEDURE_GIT_PROVIDER = "Procedure";
 
 export function newStage(next_index: number) {
   return {
-    name: `Stage ${next_index}`,
+    name: `阶段 ${next_index}`,
     enabled: true,
     executions: [defaultEnabledExecution()],
   };
@@ -76,9 +77,9 @@ export default function ProcedureConfig({ id }: { id: string }) {
       groups={{
         "": [
           {
-            label: "Stages",
+            label: "阶段",
             description:
-              "The executions in a stage are all run in parallel. The stages themselves are run sequentially.",
+              "同一阶段内的任务并行执行，各阶段按顺序执行。",
             fields: {
               stages: (stages, set) => (
                 <Stack gap="xl">
@@ -164,29 +165,29 @@ export default function ProcedureConfig({ id }: { id: string }) {
                     disabled={disabled}
                     w="fit-content"
                   >
-                    Add Stage
+                    添加阶段
                   </Button>
                 </Stack>
               ),
             },
           },
           {
-            label: "Alert",
+            label: "告警",
             labelHidden: true,
             fields: {
               failure_alert: {
-                description: "Send an alert any time the Procedure fails",
+                description: "流程失败时发送告警",
               },
             },
           },
           {
-            label: "Schedule",
+            label: "计划任务",
             description:
-              "Configure the Procedure to run at defined times using English or CRON.",
+              "使用英文时间表达式或 CRON 配置流程的运行时间。",
             fields: {
               schedule_enabled: (schedule_enabled, set) => (
                 <ConfigSwitch
-                  label="Enabled"
+                  label="已启用"
                   value={
                     (update.schedule ?? config.schedule)
                       ? schedule_enabled
@@ -200,8 +201,8 @@ export default function ProcedureConfig({ id }: { id: string }) {
               ),
               schedule_format: (schedule_format, set) => (
                 <ConfigItem
-                  label="Format"
-                  description="Choose whether to provide English or CRON schedule expression"
+                  label="格式"
+                  description="选择英文时间表达式或 CRON 表达式"
                 >
                   <Select
                     value={schedule_format}
@@ -212,27 +213,27 @@ export default function ProcedureConfig({ id }: { id: string }) {
                           schedule_format as Types.ScheduleFormat,
                       })
                     }
-                    data={Object.values(Types.ScheduleFormat)}
+                    data={Object.values(Types.ScheduleFormat).map((value) => ({ value, label: displayLabel(value) }))}
                     w={{ base: "85%", lg: 400 }}
                   />
                 </ConfigItem>
               ),
               schedule: {
-                label: "Expression",
+                label: "表达式",
                 description: (
                   <Stack gap="0" pt="0.2rem">
                     {(update.schedule_format ?? config.schedule_format) ===
                     "Cron" ? (
                       <code>
-                        second - minute - hour - day - month - day-of-week
+                        秒 - 分 - 时 - 日 - 月 - 星期
                       </code>
                     ) : (
                       <>
-                        <code>- Run every day at 4:00 pm</code>
+                        <code>- 每天下午 4 点运行</code>
                         <code>
-                          - Run at 21:00 on the 1st and 15th of the month
+                          - 每月 1 日和 15 日的 21:00 运行
                         </code>
-                        <code>- Every Sunday at midnight</code>
+                        <code>- 每周日午夜运行</code>
                       </>
                     )}
                   </Stack>
@@ -240,13 +241,13 @@ export default function ProcedureConfig({ id }: { id: string }) {
                 placeholder:
                   (update.schedule_format ?? config.schedule_format) === "Cron"
                     ? "0 0 0 ? * SUN"
-                    : "Enter English expression",
+                    : "输入英文时间表达式",
               },
               schedule_timezone: (timezone, set) => {
                 return (
                   <ConfigItem
-                    label="Timezone"
-                    description="Select specific IANA timezone for schedule expression."
+                    label="时区"
+                    description="为计划表达式选择 IANA 时区。"
                   >
                     <TimezoneSelector
                       timezone={timezone ?? ""}
@@ -259,13 +260,13 @@ export default function ProcedureConfig({ id }: { id: string }) {
                 );
               },
               schedule_alert: {
-                description: "Send an alert when the scheduled run occurs",
+                description: "计划任务运行时发送告警",
               },
             },
           },
           {
-            label: "Webhooks",
-            description: `Copy the webhook given here, and configure your ${webhookIntegration}-style repo provider to send webhooks to Komodo`,
+            label: "Webhook",
+            description: `复制此处的 Webhook 地址，并在兼容 ${webhookIntegration} 的代码托管平台中配置向 Komodo 发送 Webhook`,
             fields: {
               ["Builder" as any]: () => (
                 <WebhookBuilder
@@ -273,15 +274,15 @@ export default function ProcedureConfig({ id }: { id: string }) {
                   extra={
                     <Group align="end">
                       <TextInput
-                        label="Listen on branch?"
-                        placeholder="Branch"
+                        label="监听指定分支？"
+                        placeholder="分支"
                         value={branch}
                         onChange={(e) => setBranch(e.target.value)}
                         w={{ base: "100%", sm: 200 }}
                         disabled={branch === "__ANY__"}
                       />
                       <LabelledSwitch
-                        label="No branch check"
+                        label="不检查分支"
                         checked={branch === "__ANY__"}
                         onCheckedChange={(checked) => {
                           if (checked) {
@@ -297,7 +298,7 @@ export default function ProcedureConfig({ id }: { id: string }) {
               ),
               ["run" as any]: () => (
                 <CopyWebhookUrl
-                  label="Webhook URL - Run"
+                  label="Webhook 地址 - 运行"
                   integration={webhookIntegration}
                   path={`/procedure/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/${branch}`}
                 />
@@ -305,8 +306,8 @@ export default function ProcedureConfig({ id }: { id: string }) {
               webhook_enabled: true,
               webhook_secret: {
                 description:
-                  "Provide a custom webhook secret for this resource, or use the global default.",
-                placeholder: "Input custom secret",
+                  "为此资源设置自定义 Webhook 密钥，或使用全局默认值。",
+                placeholder: "输入自定义密钥",
               },
             },
           },

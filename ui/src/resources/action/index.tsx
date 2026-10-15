@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { actionStateIntention } from "@/lib/color";
 import { useListItem, useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
@@ -47,26 +48,26 @@ export const ActionComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { title: "Ok", intention: "Good", value: summary?.ok ?? 0 },
+      { title: "正常", intention: "Good", value: summary?.ok ?? 0 },
       {
-        title: "Running",
+        title: "运行中",
         intention: "Warning",
         value: summary?.running ?? 0,
       },
       {
-        title: "Failed",
+        title: "失败",
         intention: "Critical",
         value: summary?.failed ?? 0,
       },
       {
-        title: "Unknown",
+        title: "未知",
         intention: "Unknown",
         value: summary?.unknown ?? 0,
       },
     ];
   },
 
-  Description: () => <>Custom scripts using the Komodo client.</>,
+  Description: () => <>使用 Komodo 客户端运行自定义脚本。</>,
 
   New: () => <NewResource type="Action" />,
 
@@ -103,7 +104,7 @@ export const ActionComponents: RequiredResourceComponents<
 
   State: ({ id }) => {
     let state = useAction(id)?.info.state;
-    return <StatusBadge text={state} intent={actionStateIntention(state)} />;
+    return <StatusBadge text={displayLabel(state)} intent={actionStateIntention(state)} />;
   },
   Info: {
     Schedule: ({ id }) => {
@@ -111,11 +112,11 @@ export const ActionComponents: RequiredResourceComponents<
       return (
         <Group gap="xs">
           <Clock size="1rem" />
-          Next Run:
+          下次运行：
           <Text fw="bold">
             {nextScheduledRun
-              ? new Date(nextScheduledRun).toLocaleString()
-              : "Not Scheduled"}
+              ? new Date(nextScheduledRun).toLocaleString("zh-CN")
+              : "未设置计划"}
           </Text>
         </Group>
       );
@@ -132,7 +133,7 @@ export const ActionComponents: RequiredResourceComponents<
         <Popover position="bottom-start" opened={opened}>
           <Popover.Target>
             <Badge color="red" onMouseEnter={open} onMouseLeave={close}>
-              Schedule Error
+              计划错误
             </Badge>
           </Popover.Target>
 

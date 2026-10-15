@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { useInvalidate, usePermissions, useWrite } from "@/lib/hooks";
 import { UsableResource } from "@/resources";
 import { LabelledSwitch } from "mogh_ui";
@@ -19,14 +20,14 @@ export default function TemplateSwitch({
     onSuccess: () => {
       inv([`List${type}s`], [`Get${type}`]);
       notifications.show({
-        message: `Updated is template on ${type} ${resource?.name}`,
+        message: `已更新${resourceLabel(type)} ${resource?.name} 的模板设置`,
         color: "green",
       });
     },
   });
   return (
     <LabelledSwitch
-      label="Template"
+      label="模板"
       checked={resource?.template}
       onCheckedChange={(template) =>
         canWrite &&

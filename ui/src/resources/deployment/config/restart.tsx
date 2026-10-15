@@ -1,4 +1,4 @@
-import { fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 import { ConfigItem } from "mogh_ui";
 import { Select } from "@mantine/core";
 import { Types } from "komodo_client";
@@ -16,8 +16,8 @@ export default function DeploymentRestartSelector({
 }: DeploymentRestartSelectorProps) {
   return (
     <ConfigItem
-      label="Restart Mode"
-      description="Configure the --restart behavior."
+      label="重启策略"
+      description="配置 --restart 重启策略。"
     >
       <Select
         value={selected || undefined}
@@ -25,9 +25,9 @@ export default function DeploymentRestartSelector({
           restart && set({ restart: restart as Types.RestartMode })
         }
         disabled={disabled}
-        placeholder="Select Mode"
+        placeholder="选择模式"
         data={Object.entries(Types.RestartMode).map(([label, value]) => ({
-          label: fmtUpperCamelcase(label),
+          label: displayLabel(label),
           value,
         }))}
         tt="capitalize"

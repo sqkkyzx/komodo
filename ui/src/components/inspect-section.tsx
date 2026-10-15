@@ -44,12 +44,12 @@ export default function InspectSection({
         !!__json
           ? undefined
           : isError
-            ? "There was an error fetching the information"
+            ? "获取信息时发生错误"
             : !json
-              ? "Did not find requested information"
+              ? "未找到所请求的信息"
               : undefined
       }
-      title={props.titleOther ? undefined : "Inspect"}
+      title={props.titleOther ? undefined : "详细信息"}
       icon={props.titleOther ? undefined : <ICONS.Inspect size="1.3rem" />}
       titleRight={
         (showToggle || setShow) && (
@@ -62,7 +62,7 @@ export default function InspectSection({
     >
       {show && (
         <MonacoEditor
-          value={json ? JSON.stringify(json, null, 2) : "NO DATA"}
+          value={json ? JSON.stringify(json, null, 2) : "无数据"}
           language="json"
           readOnly
         />

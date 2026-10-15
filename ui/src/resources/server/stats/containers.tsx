@@ -35,7 +35,7 @@ export default function ServerContainerStats({ id }: { id: string }) {
   return (
     <Section
       withBorder
-      title="Containers"
+      title="容器"
       icon={<ICONS.Container size="1.3rem" />}
       titleRight={
         <Group ml={{ sm: "xl" }}>
@@ -59,7 +59,7 @@ export default function ServerContainerStats({ id }: { id: string }) {
             {
               accessorKey: "name",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Name" />
+                <SortableHeader column={column} title="名称" />
               ),
               cell: ({ row }) => (
                 <DockerResourceLink
@@ -78,7 +78,7 @@ export default function ServerContainerStats({ id }: { id: string }) {
             {
               accessorKey: "stats.mem_perc",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Memory" />
+                <SortableHeader column={column} title="内存" />
               ),
               cell: ({ row }) => (
                 <Group wrap="nowrap" gap="xs">
@@ -92,13 +92,13 @@ export default function ServerContainerStats({ id }: { id: string }) {
             {
               accessorKey: "stats.net_io",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Net I/O" />
+                <SortableHeader column={column} title="网络 I/O" />
               ),
             },
             {
               accessorKey: "stats.block_io",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Block I/O" />
+                <SortableHeader column={column} title="磁盘 I/O" />
               ),
             },
             {

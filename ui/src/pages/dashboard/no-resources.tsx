@@ -10,10 +10,10 @@ export default function DashboardNoResources() {
       <Group gap="sm" opacity={0.6}>
         <ICONS.Alert size="1rem" />
         <Text fz="lg">
-          No resources found.{" "}
+          未找到资源。{" "}
           {user.admin
-            ? "To get started, create a server."
-            : "Contact an admin for access to resources."}
+            ? "请先创建一台服务器。"
+            : "请联系管理员获取资源访问权限。"}
         </Text>
       </Group>
     )

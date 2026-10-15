@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useExecute, useRead } from "@/lib/hooks";
 import {
   Button,
@@ -88,7 +89,7 @@ export default function UpdateSwarmNodes({
           close();
           resetForm();
         }}
-        title={`Update Node${nodes.length === 1 ? "" : "s"}: ${nodes.join(", ")}`}
+        title={`更新节点：${nodes.join(", ")}`}
         size="xl"
       >
         {nodes.length === 1 && isPending ? (
@@ -99,16 +100,16 @@ export default function UpdateSwarmNodes({
           <Stack>
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
               <Select
-                label="Role"
+                label="角色"
                 placeholder={
                   (nodes.length === 1 &&
                     currentRole &&
-                    `Current: ${currentRole}`) ||
-                  "Select role"
+                    `当前：${displayLabel(currentRole)}`) ||
+                  "选择角色"
                 }
                 data={[
-                  { value: "worker", label: "Worker" },
-                  { value: "manager", label: "Manager" },
+                  { value: "worker", label: "工作节点" },
+                  { value: "manager", label: "管理节点" },
                 ]}
                 value={role}
                 onChange={setRole}
@@ -116,17 +117,17 @@ export default function UpdateSwarmNodes({
               />
 
               <Select
-                label="Availability"
+                label="可用状态"
                 placeholder={
                   (nodes.length === 1 &&
                     currentAvailability &&
-                    `Current: ${currentAvailability}`) ||
-                  "Select availability"
+                    `当前：${displayLabel(currentAvailability)}`) ||
+                  "选择可用状态"
                 }
                 data={[
-                  { value: "active", label: "Active" },
-                  { value: "pause", label: "Pause" },
-                  { value: "drain", label: "Drain" },
+                  { value: "active", label: "活跃" },
+                  { value: "pause", label: "暂停" },
+                  { value: "drain", label: "排空" },
                 ]}
                 value={availability}
                 onChange={setAvailability}
@@ -134,14 +135,14 @@ export default function UpdateSwarmNodes({
               />
 
               <TagsInput
-                label="Labels to Add. Press enter to add multiple."
+                label="要添加的标签。按回车可添加多个。"
                 placeholder="key=value"
                 value={labelsToAdd}
                 onChange={setLabelsToAdd}
               />
 
               <TagsInput
-                label="Labels to Remove"
+                label="要移除的标签"
                 placeholder="key"
                 data={currentLabels.map(([key, _]) => key)}
                 value={labelsToRemove}
@@ -151,7 +152,7 @@ export default function UpdateSwarmNodes({
               {currentLabels.length > 0 && (
                 <Stack gap="0.25rem" style={{ gridColumn: `span ${tagSpan}` }}>
                   <Text size="sm" fw={500}>
-                    Current Labels
+                    当前标签
                   </Text>
                   <LabelsGroup labels={currentLabels} />
                 </Stack>
@@ -165,10 +166,10 @@ export default function UpdateSwarmNodes({
                   resetForm();
                 }}
               >
-                Cancel
+                取消
               </Button>
               <Button onClick={onSubmit} loading={updatePending}>
-                Update
+                更新
               </Button>
             </Group>
           </Stack>
@@ -182,7 +183,7 @@ export default function UpdateSwarmNodes({
         justify="space-between"
         w={{ base: "100%", xs: 190 }}
       >
-        Update Node{nodes.length === 1 ? "" : "s"}
+        更新节点
       </Button>
     </>
   );

@@ -23,7 +23,7 @@ export default function ServerSystemInfo({
     0,
   );
   return (
-    <Section title="System Info" icon={<ICONS.Info size="1.3rem" />}>
+    <Section title="系统信息" icon={<ICONS.Info size="1.3rem" />}>
       <DataTable
         tableKey="system-info"
         data={
@@ -39,15 +39,15 @@ export default function ServerSystemInfo({
         }
         columns={[
           {
-            header: "Hostname",
+            header: "主机名",
             accessorKey: "host_name",
           },
           {
-            header: "Os",
+            header: "操作系统",
             accessorKey: "os",
           },
           {
-            header: "Kernel",
+            header: "内核",
             accessorKey: "kernel",
           },
           {
@@ -55,22 +55,22 @@ export default function ServerSystemInfo({
             accessorKey: "cpu_brand",
           },
           {
-            header: "Arch",
+            header: "架构",
             accessorKey: "cpu_arch",
           },
           {
-            header: "Core Count",
+            header: "核心数",
             accessorFn: ({ core_count, logical_core_count }) =>
               logical_core_count
-                ? `${logical_core_count} Logical / ${core_count} Physical Core${(core_count || 0) > 1 ? "s" : ""}`
-                : `${core_count} Physical Core${(core_count || 0) > 1 ? "s" : ""}`,
+                ? `${logical_core_count} 逻辑核心 / ${core_count} 物理核心`
+                : `${core_count} 物理核心`,
           },
           {
-            header: "Total Memory",
+            header: "总内存",
             accessorFn: ({ memTotal }) => `${memTotal?.toFixed(2)} GB`,
           },
           {
-            header: "Total Disk Size",
+            header: "磁盘总大小",
             accessorFn: ({ diskTotal }) => `${diskTotal?.toFixed(2)} GB`,
           },
         ]}

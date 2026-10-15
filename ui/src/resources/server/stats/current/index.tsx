@@ -23,12 +23,12 @@ export default function ServerCurrentStats({
     0,
   );
   return (
-    <Section title="Current" icon={<Clock size="1.3rem" />}>
+    <Section title="当前" icon={<Clock size="1.3rem" />}>
       <Group align="stretch">
         <ServerLoadAverage id={id} stats={stats} />
         <Stack w={{ base: "100%", lg: "auto" }}>
           <StatBar
-            title="CPU Usage"
+            title="CPU 使用率"
             icon={<ICONS.Cpu size="1.3rem" />}
             percentage={stats?.cpu_perc}
             warning={server?.config?.cpu_warning}
@@ -39,14 +39,14 @@ export default function ServerCurrentStats({
         </Stack>
         <Stack w={{ base: "100%", lg: "auto" }}>
           <StatBar
-            title="Disk Usage"
+            title="磁盘使用情况"
             icon={<ICONS.Disk size="1.3rem" />}
             description={
               usedDisk &&
               totalDisk && (
                 <>
-                  <b>{usedDisk?.toFixed(1)} GB</b> of{" "}
-                  <b>{totalDisk?.toFixed(1)} GB</b> in use
+                  <b>{usedDisk?.toFixed(1)} GB</b> /{" "}
+                  <b>{totalDisk?.toFixed(1)} GB</b> 已使用
                 </>
               )
             }

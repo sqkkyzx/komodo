@@ -33,7 +33,7 @@ export default function UserGroup() {
     {
       onSuccess: () => {
         inv(["ListUserGroups"]);
-        notifications.show({ message: "Renamed User Group", color: "green" });
+        notifications.show({ message: "用户组已重命名", color: "green" });
       },
     },
   );
@@ -42,7 +42,7 @@ export default function UserGroup() {
     onSuccess: () => {
       inv(["ListUserGroups"]);
       notifications.show({
-        message: "Removed User from User Group",
+        message: "已将用户移出用户组",
         color: "green",
       });
     },
@@ -52,7 +52,7 @@ export default function UserGroup() {
     onSuccess: () => {
       inv(["ListUserGroups"]);
       notifications.show({
-        message: "Toggled User Group 'everyone'",
+        message: "用户组的所有人设置已更新",
         color: "green",
       });
     },
@@ -63,9 +63,9 @@ export default function UserGroup() {
       isPending={isPending}
       error={
         !adminUser?.admin
-          ? "This page is only for admin users."
+          ? "仅管理员可访问此页面。"
           : !group
-            ? "Group could not be found"
+            ? "未找到用户组"
             : undefined
       }
     >
@@ -73,10 +73,7 @@ export default function UserGroup() {
         backTo="/settings"
         breadcrumbs={
           <PageBreadcrumbs
-            items={[
-              { label: "Settings", to: "/settings" },
-              { label: group?.name },
-            ]}
+            items={[{ label: "设置", to: "/settings" }, { label: group?.name }]}
           />
         }
       >
@@ -90,17 +87,14 @@ export default function UserGroup() {
             action={<DeleteUserGroup groupId={groupId} />}
           />
           <DividedChildren px="md">
-            <Text>User Group</Text>
+            <Text>用户组</Text>
             <Text>
-              {group?.everyone && "Everyone"}
+              {group?.everyone && "所有人"}
               {!group?.everyone && (group?.users?.length ?? 0 > 0) && (
-                <>
-                  {(group?.users ?? []).length} User
-                  {(group?.users ?? []).length > 1 ? "s" : ""}
-                </>
+                <>{(group?.users ?? []).length} 位用户</>
               )}
               {!group?.everyone && (group?.users?.length ?? 0) === 0 && (
-                <>No Users</>
+                <>暂无用户</>
               )}
             </Text>
           </DividedChildren>
@@ -108,24 +102,21 @@ export default function UserGroup() {
 
         <Stack mt="lg" gap="xl">
           <Section
-            title="Users"
+            title="用户"
             titleFz="h3"
-           
             icon={<ICONS.User size="1.2rem" />}
             titleRight={
               <Group ml="md">
                 {!group?.everyone && <UserGroupAddUser groupId={groupId} />}
                 <LabelledSwitch
-                  label="Everyone"
+                  label="所有人"
                   checked={group?.everyone}
                   onCheckedChange={(everyone) =>
                     everyoneMutate({ user_group: groupId, everyone })
                   }
                 />
                 {group?.everyone && (
-                  <Text c="dimmed">
-                    All users will inherit the permissions in this group.
-                  </Text>
+                  <Text c="dimmed">所有用户都将继承此用户组的权限。</Text>
                 )}
               </Group>
             }

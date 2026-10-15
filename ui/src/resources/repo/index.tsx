@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { repoStateIntention } from "@/lib/color";
 import { useListItem, useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
@@ -49,26 +50,26 @@ export const RepoComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { intention: "Good", value: summary?.ok ?? 0, title: "Ok" },
+      { intention: "Good", value: summary?.ok ?? 0, title: "正常" },
       {
         intention: "Warning",
         value: (summary?.cloning ?? 0) + (summary?.pulling ?? 0),
-        title: "Pulling",
+        title: "拉取中",
       },
       {
         intention: "Critical",
         value: summary?.failed ?? 0,
-        title: "Failed",
+        title: "失败",
       },
       {
         intention: "Unknown",
         value: summary?.unknown ?? 0,
-        title: "Unknown",
+        title: "未知",
       },
     ];
   },
 
-  Description: () => <>Configure git repositories.</>,
+  Description: () => <>配置 Git 代码仓库。</>,
 
   New: () => <NewResource type="Repo" />,
 
@@ -110,7 +111,7 @@ export const RepoComponents: RequiredResourceComponents<
 
   State: ({ id }) => {
     let state = useRepo(id)?.info.state;
-    return <StatusBadge text={state} intent={repoStateIntention(state)} />;
+    return <StatusBadge text={displayLabel(state)} intent={repoStateIntention(state)} />;
   },
   Info: {
     Target: ({ id }) => {

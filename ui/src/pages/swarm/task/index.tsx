@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import SwarmResourceLink from "@/components/swarm/link";
 import { swarmTaskStateIntention } from "@/lib/color";
 import { useRead, useSetTitle } from "@/lib/hooks";
@@ -34,7 +35,7 @@ export default function SwarmTask() {
   const service = useRead("ListSwarmServices", { swarm: swarmId }).data?.find(
     (service) => service.ID === task?.ServiceID,
   );
-  useSetTitle(`${swarm?.name} | Task | ${task?.ID ?? "Unknown"}`);
+  useSetTitle(`${swarm?.name} | 任务 | ${task?.ID ?? "未知"}`);
 
   const intent = swarmTaskStateIntention(task?.State, task?.DesiredState);
 
@@ -43,21 +44,21 @@ export default function SwarmTask() {
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm task."
+          ? "无法检查集群任务。"
           : !task
-            ? `No swarm task found with given id: ${_task}`
+            ? `未找到以下 ID 的集群任务：${_task}`
             : undefined
       }
     >
       <ResourceSubPage
-        entityTypeName="Swarm Task"
+        entityTypeName="集群任务"
         parentType="Swarm"
         parentId={swarmId}
         name={service?.Name}
         icon={ICONS.SwarmTask}
         intent={intent}
-        state={task?.State}
-        status={`Desired: ${task?.DesiredState}`}
+        state={displayLabel(task?.State)}
+        status={`期望状态：${displayLabel(task?.DesiredState)}`}
         info={
           <>
             <SwarmResourceLink

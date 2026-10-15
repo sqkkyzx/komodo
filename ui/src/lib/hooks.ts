@@ -37,6 +37,7 @@ import { notifications } from "@mantine/notifications";
 import { useDebounce } from "mogh_ui";
 import { useLocalStorage } from "@mantine/hooks";
 import { DockerResourceType } from "@/components/docker";
+import { displayLabel } from "@/lib/l10n";
 
 export function komodo_client() {
   return KomodoClient(KOMODO_BASE_URL, {
@@ -128,7 +129,7 @@ export function useWrite<
     mutationFn: (params: P) => komodo_client().write<T, R>(type, params),
     onError: (e: { result: { error?: string; trace?: string[] } }, ...args) => {
       console.log("Write error:", e);
-      const msg = e.result.error ?? "Unknown error. See console.";
+      const msg = e.result.error ?? "未知错误，请查看控制台。";
       const detail = e.result?.trace
         ?.map((msg) => msg[0].toUpperCase() + msg.slice(1))
         .join(" | ");
@@ -137,8 +138,8 @@ export function useWrite<
         msg_log += detail + " | ";
       }
       notifications.show({
-        title: `Write request ${type} failed`,
-        message: `${msg_log}See console for details`,
+        title: `写入请求 ${displayLabel(type)} 失败`,
+        message: `${msg_log}详情请查看控制台`,
         color: "red",
       });
       config?.onError && config.onError(e, ...args);
@@ -161,7 +162,7 @@ export function useExecute<
     mutationFn: (params: P) => komodo_client().execute<T, R>(type, params),
     onError: (e: { result: { error?: string; trace?: string[] } }, ...args) => {
       console.log("Execute error:", e);
-      const msg = e.result.error ?? "Unknown error. See console.";
+      const msg = e.result.error ?? "未知错误，请查看控制台。";
       const detail = e.result?.trace
         ?.map((msg) => msg[0].toUpperCase() + msg.slice(1))
         .join(" | ");
@@ -170,8 +171,8 @@ export function useExecute<
         msg_log += detail + " | ";
       }
       notifications.show({
-        title: `Execute request ${type} failed`,
-        message: `${msg_log}See console for details`,
+        title: `执行请求 ${displayLabel(type)} 失败`,
+        message: `${msg_log}详情请查看控制台`,
         color: "red",
       });
       config?.onError && config.onError(e, ...args);

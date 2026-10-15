@@ -82,8 +82,8 @@ export default function NewApiKey({ userId }: { userId?: string }) {
         onClose={close}
         title={
           <Text size="lg">
-            {!created && "Create API Key" + (userId ? " for Service User" : "")}
-            {created && "API Key Created"}
+            {!created && (userId ? "为服务用户创建 API 密钥" : "创建 API 密钥")}
+            {created && "API 密钥已创建"}
           </Text>
         }
       >
@@ -91,21 +91,31 @@ export default function NewApiKey({ userId }: { userId?: string }) {
           {!created && (
             <>
               <Group justify="space-between">
-                <Text>Name</Text>
+                <Text>名称</Text>
                 <TextInput
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Optional"
+                  placeholder="可选"
                   w={{ base: 200, lg: 300 }}
                 />
               </Group>
 
               <Group justify="space-between">
-                <Text>Expiry</Text>
+                <Text>有效期</Text>
                 <Select
                   value={expires}
                   onChange={(expires) => expires && setExpires(expires as any)}
-                  data={Object.keys(expiresOptions)}
+                  data={Object.keys(expiresOptions).map((value) => ({
+                    value,
+                    label: (
+                      {
+                        "90 days": "90 天",
+                        "180 days": "180 天",
+                        "1 year": "1 年",
+                        Never: "永不过期",
+                      } as Record<string, string>
+                    )[value],
+                  }))}
                   w={{ base: 200, lg: 300 }}
                 />
               </Group>
@@ -118,7 +128,7 @@ export default function NewApiKey({ userId }: { userId?: string }) {
                   leftSection={<ICONS.Check size="1rem" />}
                   loading={userId ? servicePending : regularPending}
                 >
-                  Create
+                  创建
                 </Button>
               </Group>
             </>
@@ -127,30 +137,29 @@ export default function NewApiKey({ userId }: { userId?: string }) {
           {created && (
             <>
               <Text>
-                Copy the API key and secret.{" "}
-                <b>The secret will not be shown again.</b>
+                请复制 API 密钥和机密。 <b>机密仅显示一次，请妥善保存。</b>
               </Text>
 
               <Group justify="space-between" wrap="nowrap">
-                <Text>Key</Text>
+                <Text>密钥</Text>
                 <CopyText
                   content={created.key}
-                  label="API key"
+                  label="API 密钥"
                   w={{ base: 200, lg: 250 }}
                 />
               </Group>
 
               <Group justify="space-between" wrap="nowrap">
-                <Text>Secret</Text>
+                <Text>机密</Text>
                 <CopyText
                   content={created.secret}
-                  label="API secret"
+                  label="API 机密"
                   w={{ base: 200, lg: 250 }}
                 />
               </Group>
 
               <Group justify="end" onClick={close}>
-                <Button leftSection={<ICONS.Clear />}>Close</Button>
+                <Button leftSection={<ICONS.Clear />}>关闭</Button>
               </Group>
             </>
           )}
@@ -158,7 +167,7 @@ export default function NewApiKey({ userId }: { userId?: string }) {
       </Modal>
 
       <Button leftSection={<ICONS.Create size="1rem" />} onClick={open}>
-        New API Key
+        新建 API 密钥
       </Button>
     </>
   );

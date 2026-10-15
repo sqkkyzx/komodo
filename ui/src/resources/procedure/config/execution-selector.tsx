@@ -3,7 +3,7 @@ import { PROCEDURE_EXECUTIONS } from "./executions";
 import { filterBySplit } from "mogh_ui";
 import { Button, ButtonProps, Combobox, ComboboxProps } from "@mantine/core";
 import { ChevronsUpDown } from "lucide-react";
-import { fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 import { ICONS } from "@/lib/icons";
 import { useSearchCombobox } from "mogh_ui";
 
@@ -29,7 +29,7 @@ export default function ProcedureExecutionSelector({
 
   const { search, setSearch, combobox } = useSearchCombobox();
 
-  const filtered = filterBySplit(executionTypes, search, (item) => item);
+  const filtered = filterBySplit(executionTypes, search, (item) => `${displayLabel(item)} ${item}`);
 
   return (
     <Combobox
@@ -53,7 +53,7 @@ export default function ProcedureExecutionSelector({
           maw={{ base: 200, lg: 300 }}
           {...targetProps}
         >
-          {fmtUpperCamelcase(type)}
+          {displayLabel(type)}
         </Button>
       </Combobox.Target>
       <Combobox.Dropdown>
@@ -61,17 +61,17 @@ export default function ProcedureExecutionSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder="Search"
+          placeholder="搜索"
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
-          {!search && <Combobox.Option value="None">None</Combobox.Option>}
+          {!search && <Combobox.Option value="None">无</Combobox.Option>}
           {filtered.map((type) => (
             <Combobox.Option key={type} value={type}>
-              {fmtUpperCamelcase(type)}
+              {displayLabel(type)}
             </Combobox.Option>
           ))}
           {filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
+            <Combobox.Empty>没有结果。</Combobox.Empty>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

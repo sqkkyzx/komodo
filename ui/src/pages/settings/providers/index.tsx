@@ -55,14 +55,14 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
   const { mutate: updateAccount } = useWrite(`Update${type}Account`, {
     onSuccess: () => {
       inv([`List${type}Accounts`], [`Get${type}Account`]);
-      notifications.show({ message: "Updated account" });
+      notifications.show({ message: "账户已更新" });
     },
   });
 
   return (
     <>
       <Section
-        title={type === "ImageRegistry" ? "Registry Accounts" : "Git Accounts"}
+        title={type === "ImageRegistry" ? "镜像仓库账户" : "Git 账户"}
         icon={
           type === "ImageRegistry" ? (
             <ICONS.Image size="1.3rem" />
@@ -84,7 +84,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
             {
               accessorKey: "domain",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Domain" />
+                <SortableHeader column={column} title="域名" />
               ),
               cell: ({ row }) => {
                 return (
@@ -93,15 +93,15 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
                       className="overflow-ellipsis"
                       onClick={() => {
                         setUpdateMenuData({
-                          title: "Set Domain",
+                          title: "设置域名",
                           value: row.original.domain ?? "",
-                          placeholder: "Input domain, eg. git.komo.do",
+                          placeholder: "输入域名，例如 git.komo.do",
                           titleRight:
                             type === "GitProvider" ? (
                               <Group gap="xs">
-                                <Text c="dimmed">Use HTTPS:</Text>
+                                <Text c="dimmed">使用 HTTPS：</Text>
                                 <Switch
-                                  title="Use HTTPS"
+                                  title="使用 HTTPS"
                                   checked={
                                     (row.original as Types.GitProviderAccount)
                                       .https
@@ -129,9 +129,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
                       w={{ base: 200, lg: 300 }}
                       justify="start"
                     >
-                      {row.original.domain || (
-                        <Text c="dimmed">Set domain</Text>
-                      )}
+                      {row.original.domain || <Text c="dimmed">设置域名</Text>}
                     </Button>
                     <CopyButton content={row.original.domain ?? ""} />
                   </Group>
@@ -141,7 +139,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
             {
               accessorKey: "username",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Username" />
+                <SortableHeader column={column} title="用户名" />
               ),
               cell: ({ row }) => {
                 return (
@@ -150,9 +148,9 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
                       className="overflow-ellipsis"
                       onClick={() => {
                         setUpdateMenuData({
-                          title: "Set Username",
+                          title: "设置用户名",
                           value: row.original.username ?? "",
-                          placeholder: "Input account username",
+                          placeholder: "输入账户用户名",
                           onUpdate: (username) => {
                             if (row.original.username === username) {
                               return;
@@ -168,7 +166,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
                       justify="start"
                     >
                       {row.original.username || (
-                        <Text c="dimmed">Set username</Text>
+                        <Text c="dimmed">设置用户名</Text>
                       )}
                     </Button>
                     <CopyButton content={row.original.username ?? ""} />
@@ -179,7 +177,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
             {
               accessorKey: "token",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Token" />
+                <SortableHeader column={column} title="令牌" />
               ),
               cell: ({ row }) => {
                 return (
@@ -189,9 +187,9 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
                       onClick={(e) => {
                         e.stopPropagation();
                         setUpdateMenuData({
-                          title: "Set Token",
+                          title: "设置令牌",
                           value: row.original.token ?? "",
-                          placeholder: "Input account token",
+                          placeholder: "输入账户令牌",
                           onUpdate: (token) => {
                             if (row.original.token === token) {
                               return;
@@ -207,7 +205,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
                       justify="start"
                     >
                       {"*".repeat(row.original.token?.length || 0) || (
-                        <Text c="dimmed">Set token</Text>
+                        <Text c="dimmed">设置令牌</Text>
                       )}
                     </Button>
                     <CopyButton content={row.original.token ?? ""} />
@@ -216,7 +214,7 @@ function Providers({ type }: { type: "GitProvider" | "ImageRegistry" }) {
               },
             },
             {
-              header: "Delete",
+              header: "删除",
               cell: ({ row }) => (
                 <DeleteProviderAccount
                   type={type}

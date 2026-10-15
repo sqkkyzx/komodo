@@ -29,7 +29,7 @@ export default function NewOnboardingKey() {
   const invalidate = useInvalidate();
   const { mutate, isPending } = useWrite("CreateOnboardingKey", {
     onSuccess: ({ private_key }) => {
-      notifications.show({ message: "Onboarding Key Created" });
+      notifications.show({ message: "注册密钥已创建" });
       invalidate(["ListOnboardingKeys"]);
       setCreated({ private_key });
     },
@@ -65,8 +65,8 @@ export default function NewOnboardingKey() {
         onClose={close}
         title={
           <Text size="lg">
-            {!created && "Create Onboarding Key"}
-            {created && "Onboarding Key Created"}
+            {!created && "创建注册密钥"}
+            {created && "注册密钥已创建"}
           </Text>
         }
         size={size}
@@ -75,31 +75,39 @@ export default function NewOnboardingKey() {
           {!created && (
             <>
               <Group justify="space-between">
-                <Text>Name</Text>
+                <Text>名称</Text>
                 <TextInput
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Optional"
+                  placeholder="可选"
                   w={{ base: 200, lg: 300 }}
                 />
               </Group>
 
               <Group justify="space-between">
-                <Text>Pre-Existing Key</Text>
+                <Text>现有密钥</Text>
                 <PasswordInput
                   value={privateKey}
                   onChange={(e) => setPrivateKey(e.target.value)}
-                  placeholder="Optional"
+                  placeholder="可选"
                   w={{ base: 200, lg: 300 }}
                 />
               </Group>
 
               <Group justify="space-between">
-                <Text>Expiry</Text>
+                <Text>有效期</Text>
                 <Select
                   value={expires}
                   onChange={(expires) => expires && setExpires(expires as any)}
-                  data={Object.keys(expiresOptions)}
+                  data={Object.keys(expiresOptions).map((value) => ({
+                    value,
+                    label: {
+                      "1 day": "1 天",
+                      "7 days": "7 天",
+                      "30 days": "30 天",
+                      Never: "永不过期",
+                    }[value as ExpiresOptions],
+                  }))}
                   w={{ base: 200, lg: 300 }}
                 />
               </Group>
@@ -112,7 +120,7 @@ export default function NewOnboardingKey() {
                   leftSection={<ICONS.Check size="1rem" />}
                   loading={isPending}
                 >
-                  Create
+                  创建
                 </Button>
               </Group>
             </>
@@ -121,17 +129,13 @@ export default function NewOnboardingKey() {
           {created && (
             <>
               <Text size="md" my="sm">
-                Copy the onboarding key below. <b>It won't be shown again</b>.
+                请复制下方的注册密钥。 <b>此密钥仅显示一次</b>。
               </Text>
 
-              <CopyText
-                content={created.private_key}
-                label="private key"
-                w="90%"
-              />
+              <CopyText content={created.private_key} label="私钥" w="90%" />
 
               <Group justify="end" onClick={close}>
-                <Button leftSection={<ICONS.Clear />}>Close</Button>
+                <Button leftSection={<ICONS.Clear />}>关闭</Button>
               </Group>
             </>
           )}
@@ -139,7 +143,7 @@ export default function NewOnboardingKey() {
       </Modal>
 
       <Button leftSection={<ICONS.Create size="1rem" />} onClick={open}>
-        New Onboarding Key
+        新建注册密钥
       </Button>
     </>
   );

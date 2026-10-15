@@ -1,4 +1,4 @@
-import { fmtSnakeCaseToUpperSpaceCase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 import { Select, SelectProps } from "@mantine/core";
 import { Types } from "komodo_client";
 
@@ -21,7 +21,7 @@ export default function PermissionLevelSelector({
       onChange={(value) => value && onChange?.(value as Types.PermissionLevel)}
       data={Object.keys(Types.PermissionLevel).map((level) => ({
         value: level,
-        label: fmtSnakeCaseToUpperSpaceCase(level),
+        label: displayLabel(level),
       }))}
       w={200}
       {...selectProps}

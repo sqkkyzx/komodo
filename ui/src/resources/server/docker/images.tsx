@@ -50,7 +50,7 @@ export default function ServerImages({
           {
             accessorKey: "name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <DockerResourceLink
@@ -59,7 +59,7 @@ export default function ServerImages({
                 name={row.original.name}
                 id={row.original.id}
                 extra={
-                  !row.original.in_use && <Badge color="red">Unused</Badge>
+                  !row.original.in_use && <Badge color="red">未使用</Badge>
                 }
               />
             ),
@@ -73,10 +73,10 @@ export default function ServerImages({
           {
             accessorKey: "size",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Size" />
+              <SortableHeader column={column} title="大小" />
             ),
             cell: ({ row }) =>
-              row.original.size ? fmtSizeBytes(row.original.size) : "Unknown",
+              row.original.size ? fmtSizeBytes(row.original.size) : "未知",
           },
         ]}
       />

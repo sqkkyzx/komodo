@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { useInvalidate, useRead, useWrite } from "@/lib/hooks";
 import { levelSortingFn } from "@/lib/utils";
 import {
@@ -42,7 +43,7 @@ export default function BasePermissionsSection({
   const { mutate: update } = useWrite("UpdatePermissionOnResourceType", {
     onSuccess: () => {
       notifications.show({
-        message: "Updated permissions on target.",
+        message: "目标权限已更新。",
         color: "green",
       });
       if (userTarget.type === "User") {
@@ -68,7 +69,11 @@ export default function BasePermissionsSection({
       item.specific.length !== 0,
   );
 
-  const filtered = filterBySplit(permissions, search, (p) => p.type);
+  const filtered = filterBySplit(
+    permissions,
+    search,
+    (p) => `${p.type} ${resourceLabel(p.type)}`,
+  );
 
   return (
     <Section
@@ -76,13 +81,13 @@ export default function BasePermissionsSection({
       error={
         userTarget.type === "User"
           ? !user
-            ? "No user matching ID"
+            ? "未找到对应 ID 的用户"
             : undefined
           : !group
-            ? "No group matching ID"
+            ? "未找到对应 ID 的用户组"
             : undefined
       }
-      title="Base Permissions on Resource Types"
+      title="资源类型基础权限"
       titleFz="h3"
       actions={
         <Group>
@@ -90,7 +95,7 @@ export default function BasePermissionsSection({
           <LabelledSwitch
             checked={showAll}
             onCheckedChange={setShowAll}
-            label="Show All"
+            label="显示全部"
           />
         </Group>
       }
@@ -103,7 +108,7 @@ export default function BasePermissionsSection({
           {
             accessorKey: "type",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Resource Type" />
+              <SortableHeader column={column} title="资源类型" />
             ),
             cell: ({ row }) => {
               const RC =
@@ -111,7 +116,7 @@ export default function BasePermissionsSection({
               return (
                 <Group gap="sm">
                   <RC.Icon />
-                  <Text>{row.original.type}</Text>
+                  <Text>{resourceLabel(row.original.type)}</Text>
                 </Group>
               );
             },
@@ -121,7 +126,7 @@ export default function BasePermissionsSection({
             sortFn: (a, b) =>
               levelSortingFn(a.original.level, b.original.level),
             header: ({ column }) => (
-              <SortableHeader column={column} title="Level" />
+              <SortableHeader column={column} title="级别" />
             ),
             cell: ({ row }) => (
               <PermissionLevelSelector
@@ -140,7 +145,7 @@ export default function BasePermissionsSection({
             ),
           },
           {
-            header: "Specific",
+            header: "具体权限",
             cell: ({ row }) => {
               return (
                 <SpecificPermissionSelector

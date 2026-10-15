@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { ReactNode } from "react";
 import { useServerDockerSearch } from ".";
 import { useDockerSelectionState, useRead } from "@/lib/hooks";
@@ -65,7 +66,7 @@ export default function ServerNetworks({
           {
             accessorKey: "name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <div className="flex items-center gap-2">
@@ -77,9 +78,9 @@ export default function ServerNetworks({
                     ["none", "host", "bridge"].includes(
                       row.original.name ?? "",
                     ) ? (
-                      <Badge>System</Badge>
+                      <Badge>系统</Badge>
                     ) : (
-                      !row.original.in_use && <Badge color="red">Unused</Badge>
+                      !row.original.in_use && <Badge color="red">未使用</Badge>
                     )
                   }
                 />
@@ -89,25 +90,27 @@ export default function ServerNetworks({
           {
             accessorKey: "driver",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Driver" />
+              <SortableHeader column={column} title="驱动" />
             ),
           },
           {
             accessorKey: "scope",
+            cell: ({ row }) => displayLabel(row.original.scope),
             header: ({ column }) => (
-              <SortableHeader column={column} title="Scope" />
+              <SortableHeader column={column} title="作用域" />
             ),
           },
           {
             accessorKey: "attachable",
+            cell: ({ row }) => row.original.attachable ? "是" : "否",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Attachable" />
+              <SortableHeader column={column} title="允许连接" />
             ),
           },
           {
             accessorKey: "ipam_driver",
             header: ({ column }) => (
-              <SortableHeader column={column} title="IPAM Driver" />
+              <SortableHeader column={column} title="IPAM 驱动" />
             ),
           },
         ]}

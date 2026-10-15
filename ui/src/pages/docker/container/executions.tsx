@@ -36,13 +36,13 @@ const DestroyContainer = ({
   return (
     <ConfirmModalWithDisable
       confirmText={containerName}
-      title="Destroy"
+      title="销毁"
       icon={<Trash size="1rem" />}
       onConfirm={() => destroy({ server: serverId, container: containerName })}
       disabled={isPending}
       loading={isPending || destroying}
     >
-      Destroy
+      销毁
     </ConfirmModalWithDisable>
   );
 };
@@ -76,7 +76,7 @@ const RestartContainer = ({
       disabled={restartPending}
       loading={restartPending || !!action_state?.restarting_containers}
     >
-      Restart
+      重启
     </ConfirmModalWithDisable>
   );
 };
@@ -92,7 +92,8 @@ const StartStopContainer = ({
   const state = container?.state;
   const { mutate: start, isPending: startPending } =
     useExecute("StartContainer");
-  const { mutateAsync: stop, isPending: stopPending } = useExecute("StopContainer");
+  const { mutateAsync: stop, isPending: stopPending } =
+    useExecute("StopContainer");
   const action_state = useRead(
     "GetServerActionState",
     { server: serverId },
@@ -111,7 +112,7 @@ const StartStopContainer = ({
         disabled={startPending}
         loading={startPending || !!action_state?.starting_containers}
       >
-        Start
+        启动
       </ConfirmButton>
     );
   }
@@ -124,7 +125,7 @@ const StartStopContainer = ({
         disabled={stopPending}
         loading={stopPending || !!action_state?.stopping_containers}
       >
-        Stop
+        停止
       </ConfirmModalWithDisable>
     );
   }
@@ -161,7 +162,7 @@ const PauseUnpauseContainer = ({
         disabled={unpausePending}
         loading={unpausePending || !!action_state?.unpausing_containers}
       >
-        Unpause
+        恢复
       </ConfirmButton>
     );
   }
@@ -174,7 +175,7 @@ const PauseUnpauseContainer = ({
         disabled={pausePending}
         loading={pausePending || !!action_state?.pausing_containers}
       >
-        Pause
+        暂停
       </ConfirmModalWithDisable>
     );
   }

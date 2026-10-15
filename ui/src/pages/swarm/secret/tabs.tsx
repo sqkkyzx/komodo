@@ -43,18 +43,22 @@ export default function SwarmSecretTabs({
     () => [
       {
         value: "Edit",
+        label: "编辑",
         icon: ICONS.Edit,
       },
       {
         value: "Services",
+        label: "服务",
         icon: ICONS.SwarmService,
       },
       {
         value: "Tasks",
+        label: "任务",
         icon: ICONS.SwarmTask,
       },
       {
         value: "Inspect",
+        label: "检查",
         icon: ICONS.Inspect,
         disabled: !specificInspect,
       },

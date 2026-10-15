@@ -6,7 +6,7 @@ import { ResourceComponents, UsableResource } from "@/resources";
 import { notifications } from "@mantine/notifications";
 import { Badge, Group, Text } from "@mantine/core";
 import ResourceName from "@/resources/name";
-import { fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 
 const wsAtom = atom<{
   ws: WebSocket | undefined;
@@ -123,8 +123,8 @@ function onUpdate(
     notifications.show({
       title: (
         <Group gap="sm">
-          <Text>{fmtUpperCamelcase(update.operation)}</Text>
-          <Badge color={color}>{state}</Badge>
+          <Text>{displayLabel(update.operation)}</Text>
+          <Badge color={color}>{displayLabel(state)}</Badge>
         </Group>
       ),
       message: RC ? (
@@ -133,7 +133,7 @@ function onUpdate(
           id={update.target.id}
         />
       ) : (
-        <Text>System</Text>
+        <Text>系统</Text>
       ),
       color,
     });

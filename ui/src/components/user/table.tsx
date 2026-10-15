@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useUser } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
 import { ConfirmButton } from "mogh_ui";
@@ -32,23 +33,35 @@ export default function UserTable({
     Types.User,
     "User" | "Admin" | "Super Admin"
   >[] = [
-    { header: "Username", accessorKey: "username" },
+    { header: "用户名", accessorKey: "username" },
     {
-      header: "Type",
+      header: "类型",
       accessorKey: "config.type",
-      cell: ({ row }) => <Badge>{row.original.config.type}</Badge>,
+      cell: ({ row }) => (
+        <Badge>
+          {row.original.config.type === "Service"
+            ? "服务用户"
+            : displayLabel(row.original.config.type)}
+        </Badge>
+      ),
     },
     {
-      header: "Level",
+      header: "级别",
       accessorFn: (user) =>
         user.admin ? (user.super_admin ? "Super Admin" : "Admin") : "User",
+      cell: ({ row }) =>
+        row.original.admin
+          ? row.original.super_admin
+            ? "超级管理员"
+            : "管理员"
+          : "用户",
     },
     {
-      header: "Enabled",
+      header: "已启用",
       cell: ({ row }) => {
         return (
           <StatusBadge
-            text={row.original.enabled ? "Enabled" : "Disabled"}
+            text={row.original.enabled ? "已启用" : "已禁用"}
             intent={row.original.enabled ? "Good" : "Critical"}
           />
         );
@@ -58,7 +71,7 @@ export default function UserTable({
 
   if (onUserRemove) {
     columns.push({
-      header: "Remove",
+      header: "移除",
       cell: ({ row }) => (
         <ConfirmButton
           variant="filled"
@@ -69,7 +82,7 @@ export default function UserTable({
             onUserRemove(row.original._id?.$oid!);
           }}
         >
-          Remove
+          移除
         </ConfirmButton>
       ),
     });
@@ -77,7 +90,7 @@ export default function UserTable({
 
   if (onUserDelete) {
     columns.push({
-      header: "Delete",
+      header: "删除",
       cell: ({ row }) => (
         <ConfirmModal
           icon={<ICONS.Delete size="1rem" />}
@@ -90,7 +103,7 @@ export default function UserTable({
           }
           confirmProps={{ variant: "filled", color: "red" }}
         >
-          Delete
+          删除
         </ConfirmModal>
       ),
     });

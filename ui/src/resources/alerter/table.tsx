@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useResourceSelectionState } from "@/lib/hooks";
 import { DataTable, SortableHeader } from "mogh_ui";
 import { Badge, BoxProps } from "@mantine/core";
@@ -46,7 +47,7 @@ export default function AlerterTable({
           id: "Name",
           accessorKey: "name",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           cell: ({ row }) => (
             <ResourceLink type="Alerter" id={row.original.id} />
@@ -56,27 +57,27 @@ export default function AlerterTable({
           id: "Type",
           accessorKey: "info.endpoint_type",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Type" />
+            <SortableHeader column={column} title="类型" />
           ),
           cell: ({ row }) => (
-            <Badge size="lg">{row.original.info.endpoint_type}</Badge>
+            <Badge size="lg">{displayLabel(row.original.info.endpoint_type)}</Badge>
           ),
         },
         {
           id: "Enabled",
           accessorKey: "info.enabled",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Enabled" />
+            <SortableHeader column={column} title="已启用" />
           ),
           cell: ({ row }) => (
             <StatusBadge
-              text={row.original.info.enabled ? "Enabled" : "Disabled"}
+              text={displayLabel(row.original.info.enabled ? "已启用" : "已禁用")}
               intent={row.original.info.enabled ? "Good" : "Critical"}
             />
           ),
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

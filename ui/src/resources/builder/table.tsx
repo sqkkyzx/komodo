@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useResourceSelectionState } from "@/lib/hooks";
 import { DataTable, SortableHeader } from "mogh_ui";
 import { BoxProps } from "@mantine/core";
@@ -46,7 +47,7 @@ export default function BuilderTable({
           id: "Name",
           accessorKey: "name",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           cell: ({ row }) => (
             <ResourceLink type="Builder" id={row.original.id} />
@@ -55,20 +56,21 @@ export default function BuilderTable({
         {
           id: "Provider",
           accessorKey: "info.builder_type",
+          cell: ({ row }) => displayLabel(row.original.info.builder_type),
           header: ({ column }) => (
-            <SortableHeader column={column} title="Provider" />
+            <SortableHeader column={column} title="提供方" />
           ),
         },
         {
           id: "InstanceType",
           accessorKey: "info.instance_type",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Instance Type" />
+            <SortableHeader column={column} title="实例类型" />
           ),
           cell: ({ row }) => <BuilderInstanceType id={row.original.id} />,
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

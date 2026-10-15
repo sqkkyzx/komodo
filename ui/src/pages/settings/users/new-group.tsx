@@ -9,20 +9,20 @@ export default function NewUserGroup() {
   const { mutateAsync: create, isPending } = useWrite("CreateUserGroup", {
     onSuccess: () => {
       inv(["ListUserGroups"]);
-      notifications.show({ message: "Created User Group", color: "green" });
+      notifications.show({ message: "用户组已创建", color: "green" });
     },
   });
   const [name, setName] = useState("");
   return (
     <CreateModal
-      entityType="User Group"
+      entityType="用户组"
       onConfirm={() => create({ name }).then(() => true)}
       loading={isPending}
       configSection={() => (
         <>
           <TextInput
             autoFocus
-            placeholder="group-name"
+            placeholder="用户组名称"
             value={name}
             onChange={(e) => setName(e.target.value)}
             // onKeyDown={(e) => {
@@ -33,7 +33,7 @@ export default function NewUserGroup() {
             //     create({});
             //   }
             // }}
-            error={!name.trim() && "Enter name"}
+            error={!name.trim() && "请输入名称"}
           />
         </>
       )}

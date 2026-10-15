@@ -24,7 +24,7 @@ export default function SwarmConfigs({
   const filtered = filterBySplit(
     configs,
     search,
-    (config) => config.Name ?? config.ID ?? "Unknown",
+    (config) => config.Name ?? config.ID ?? "未知",
   );
 
   return (
@@ -44,7 +44,7 @@ export default function SwarmConfigs({
           {
             accessorKey: "Name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <SwarmResourceLink
@@ -55,7 +55,7 @@ export default function SwarmConfigs({
                 extra={
                   !row.original.InUse && (
                     <Badge variant="filled" color="red">
-                      Unused
+                      未使用
                     </Badge>
                   )
                 }
@@ -67,18 +67,18 @@ export default function SwarmConfigs({
             header: ({ column }) => (
               <SortableHeader column={column} title="ID" />
             ),
-            cell: ({ row }) => row.original.ID ?? "Unknown",
+            cell: ({ row }) => row.original.ID ?? "未知",
           },
           {
             accessorKey: "UpdatedAt",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Updated" />
+              <SortableHeader column={column} title="更新时间" />
             ),
           },
           {
             accessorKey: "CreatedAt",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Created" />
+              <SortableHeader column={column} title="创建时间" />
             ),
           },
         ]}

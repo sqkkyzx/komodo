@@ -1,4 +1,5 @@
 import { useRead } from "@/lib/hooks";
+import { displayLabel } from "@/lib/l10n";
 import { ConfigItem } from "mogh_ui";
 import { Select, TextInput } from "@mantine/core";
 import { useState } from "react";
@@ -36,12 +37,12 @@ export default function DeploymentNetworkSelector({
 
   return (
     <ConfigItem
-      label="Network Mode"
-      description="Choose the --network attached to container"
+      label="网络模式"
+      description="选择容器连接的 --network"
     >
       {customMode && (
         <TextInput
-          placeholder="Input custom network name"
+          placeholder="输入自定义网络名称"
           value={selected}
           onChange={(e) => onSelect(e.target.value)}
           className="max-w-[75%] lg:max-w-[400px]"
@@ -66,7 +67,10 @@ export default function DeploymentNetworkSelector({
             }
           }}
           disabled={disabled}
-          data={networks}
+          data={networks.map((value) => ({
+            value,
+            label: value === "Custom" ? displayLabel(value) : value,
+          }))}
           w={{ base: "100%", xs: "fit-content" }}
           searchable
         />

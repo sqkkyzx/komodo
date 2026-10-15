@@ -60,7 +60,7 @@ export default function DeploymentConfig({
       groups={{
         "": [
           {
-            label: "Swarm",
+            label: "集群",
             labelHidden: true,
             hidden: !swarmsExist || !!currServerId,
             fields: {
@@ -70,7 +70,7 @@ export default function DeploymentConfig({
                     label={
                       swarm_id ? (
                         <Group fz="h3" fw="bold">
-                          Swarm:
+                          集群：
                           <ResourceLink
                             type="Swarm"
                             id={swarm_id}
@@ -79,10 +79,10 @@ export default function DeploymentConfig({
                           />
                         </Group>
                       ) : (
-                        "Select Swarm"
+                        "选择集群"
                       )
                     }
-                    description="Select the Swarm to deploy on."
+                    description="选择用于部署的集群。"
                   >
                     <ResourceSelector
                       type="Swarm"
@@ -97,7 +97,7 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Server",
+            label: "服务器",
             labelHidden: true,
             hidden: swarmsExist && !!currSwarmId,
             fields: {
@@ -107,7 +107,7 @@ export default function DeploymentConfig({
                     label={
                       server_id ? (
                         <Group fz="h3" fw="bold">
-                          Server:
+                          服务器：
                           <ResourceLink
                             type="Server"
                             id={server_id}
@@ -116,10 +116,10 @@ export default function DeploymentConfig({
                           />
                         </Group>
                       ) : (
-                        "Select Server"
+                        "选择服务器"
                       )
                     }
-                    description="Select the Server to deploy on."
+                    description="选择用于部署的服务器。"
                   >
                     <ResourceSelector
                       type="Server"
@@ -139,7 +139,7 @@ export default function DeploymentConfig({
                 ? "Build"
                 : "Image",
             description:
-              "Either pass a docker image directly, or choose a Build to deploy",
+              "直接指定 Docker 镜像，或选择要部署的构建",
             fields: {
               image: (value, set) => (
                 <DeploymentImageConfig
@@ -169,11 +169,11 @@ export default function DeploymentConfig({
                     }
                     disabled={disabled}
                     placeholder={
-                      image?.type === "Build" ? "Same as Build" : undefined
+                      image?.type === "Build" ? "与构建相同" : undefined
                     }
                     description={
                       image?.type === "Build"
-                        ? "Select an alternate account used to log in to the provider"
+                        ? "选择其他账户登录镜像提供方"
                         : undefined
                     }
                   />
@@ -181,12 +181,12 @@ export default function DeploymentConfig({
               },
               redeploy_on_build: (update.image?.type ?? config.image?.type) ===
                 "Build" && {
-                description: "Automatically redeploy when the image is built.",
+                description: "镜像构建完成后自动重新部署。",
               },
             },
           },
           {
-            label: "Network",
+            label: "网络",
             labelHidden: true,
             fields: {
               network: (value, set) => (
@@ -202,8 +202,8 @@ export default function DeploymentConfig({
                 !hidePorts &&
                 ((ports, set) => (
                   <ConfigItem
-                    label="Ports"
-                    description="Configure port mappings."
+                    label="端口"
+                    description="配置端口映射。"
                   >
                     <MonacoEditor
                       value={ports || "  # 3000:3000\n"}
@@ -215,20 +215,20 @@ export default function DeploymentConfig({
                 )),
               links: (values, set) => (
                 <ConfigList
-                  label="Links"
-                  description="Add quick links in the resource header"
+                  label="链接"
+                  description="在资源页顶部添加快捷链接"
                   field="links"
                   values={values ?? []}
                   set={set}
                   disabled={disabled}
-                  placeholder="Input link"
+                  placeholder="输入链接"
                 />
               ),
             },
           },
           {
-            label: "Environment",
-            description: "Pass these variables to the container",
+            label: "环境变量",
+            description: "将这些变量传入容器",
             fields: {
               environment: (env, set) => (
                 <Stack>
@@ -247,8 +247,8 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Volumes",
-            description: "Configure the volume bindings.",
+            label: "卷",
+            description: "配置卷挂载。",
             fields: {
               volumes: (volumes, set) => (
                 <MonacoEditor
@@ -261,7 +261,7 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Restart",
+            label: "重启",
             hidden: !!currSwarmId,
             labelHidden: true,
             fields: {
@@ -275,14 +275,14 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Auto Update",
+            label: "自动更新",
             hidden: (update.image ?? config.image)?.type === "Build",
             fields: {
               poll_for_updates: (poll, set) => {
                 return (
                   <ConfigSwitch
-                    label="Poll for Updates"
-                    description="Check for updates to the image during Global Auto Update."
+                    label="检查更新"
+                    description="在全局自动更新时检查镜像更新。"
                     value={autoUpdate || poll}
                     onCheckedChange={(poll_for_updates) =>
                       set({ poll_for_updates })
@@ -292,34 +292,34 @@ export default function DeploymentConfig({
                 );
               },
               auto_update: {
-                description: "Trigger a redeploy if a newer image is found.",
+                description: "发现新镜像时触发重新部署。",
               },
             },
           },
         ],
         advanced: [
           {
-            label: "Custom Name",
+            label: "自定义名称",
             labelHidden: true,
             fields: {
               custom_name: {
-                placeholder: `Custom ${currServerId ? "service" : "container"} name`,
+                placeholder: `自定义${currServerId ? "服务" : "容器"}名称`,
                 description: currSwarmId
-                  ? "Optionally set a custom service name, if different from the Deployment name."
-                  : "Optionally set a custom container name, if different from the Deployment name.",
+                  ? "可选。设置与部署名称不同的自定义服务名称。"
+                  : "可选。设置与部署名称不同的自定义容器名称。",
               },
             },
           },
           {
-            label: "Command",
+            label: "命令",
             labelHidden: true,
             fields: {
               command: (value, set) => (
                 <ConfigItem
-                  label="Command"
+                  label="命令"
                   description={
                     <Group>
-                      <Text>Replace the CMD, or extend the ENTRYPOINT.</Text>
+                      <Text>替换 CMD，或扩展 ENTRYPOINT。</Text>
                       <Link
                         to={
                           currSwarmId
@@ -328,7 +328,7 @@ export default function DeploymentConfig({
                         }
                         target="_blank"
                       >
-                        See docker docs.
+                        查看 Docker 文档。
                       </Link>
                     </Group>
                   }
@@ -344,8 +344,8 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Labels",
-            description: "Attach --labels to the container.",
+            label: "标签",
+            description: "通过 --labels 为容器添加标签。",
             fields: {
               labels: (labels, set) => (
                 <MonacoEditor
@@ -358,16 +358,16 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Extra Args",
+            label: "额外参数",
             labelHidden: true,
             fields: {
               extra_args: (value, set) => (
                 <ConfigItem
-                  label="Extra Args"
+                  label="额外参数"
                   description={
                     <div className="flex flex-row flex-wrap gap-2">
                       <div>
-                        Pass extra arguments to '
+                        传递额外参数给 '
                         {currSwarmId ? "docker service create" : "docker run"}
                         '.
                       </div>
@@ -380,7 +380,7 @@ export default function DeploymentConfig({
                         target="_blank"
                         className="text-primary"
                       >
-                        See docker docs.
+                        查看 Docker 文档。
                       </Link>
                     </div>
                   }
@@ -411,10 +411,10 @@ export default function DeploymentConfig({
             },
           },
           {
-            label: "Termination",
+            label: "终止",
             hidden: !!currSwarmId,
             description:
-              "Configure the signals used to 'docker stop' the container. Options are SIGTERM, SIGQUIT, SIGINT, and SIGHUP.",
+              "配置 docker stop 停止容器时使用的信号。可选 SIGTERM、SIGQUIT、SIGINT 和 SIGHUP。",
             fields: {
               termination_signal: (value, set) => (
                 <TerminationSignal arg={value} set={set} disabled={disabled} />
@@ -424,8 +424,8 @@ export default function DeploymentConfig({
               ),
               term_signal_labels: (value, set) => (
                 <ConfigItem
-                  label="Termination Signal Labels"
-                  description="Choose between multiple signals when stopping"
+                  label="终止信号标签"
+                  description="停止时可选择不同信号"
                 >
                   <MonacoEditor
                     value={value || DEFAULT_TERM_SIGNAL_LABELS}

@@ -22,7 +22,7 @@ export interface HashCompareProps extends HoverCardProps {
 export default function HashCompare({
   lastHash,
   lastMessage,
-  lastLabel = "last",
+  lastLabel = "上次",
   latestHash,
   latestMessage,
   ...props
@@ -45,14 +45,14 @@ export default function HashCompare({
             cursor: "pointer",
           }}
         >
-          {lastHash ? lastLabel : "latest"}: {lastHash || latestHash}
+          {lastHash ? lastLabel : "最新"}: {lastHash || latestHash}
         </Box>
       </HoverCard.Target>
       <HoverCard.Dropdown>
         <Stack>
           <Stack gap="xs">
             <Group gap="xs">
-              <Badge color="accent.9">message</Badge>
+              <Badge color="accent.9">提交说明</Badge>
               <Text c="dimmed">{lastHash}</Text>
             </Group>
             <Code maw="calc(100vh - 150px)" style={{ overflow: "auto" }}>
@@ -63,7 +63,7 @@ export default function HashCompare({
             <Stack gap="xs">
               <Group gap="xs">
                 <Badge style={{ borderColor: "var(--mantine-color-yellow-7)" }}>
-                  latest
+                  最新
                 </Badge>
                 <Text c="dimmed">{latestHash}</Text>
               </Group>

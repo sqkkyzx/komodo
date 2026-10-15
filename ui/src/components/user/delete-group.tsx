@@ -15,7 +15,7 @@ export default function DeleteUserGroup({ group }: { group: Types.UserGroup }) {
         ["GetUserGroup", { user_group: group._id?.$oid! }],
       );
       notifications.show({
-        message: `Deleted User Group ${group.name}`,
+        message: `用户组 ${group.name} 已删除`,
         color: "green",
       });
       nav("/settings");
@@ -30,7 +30,7 @@ export default function DeleteUserGroup({ group }: { group: Types.UserGroup }) {
       loading={isPending}
       confirmProps={{ variant: "filled", color: "red" }}
     >
-      Delete
+      删除
     </ConfirmModal>
   );
 }

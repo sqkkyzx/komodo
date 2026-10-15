@@ -89,7 +89,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match procedures"
+          title="匹配流程"
           value={
             params.pattern ||
             "# Match procedures by name, id, wildcard, or \\regex\\.\n"
@@ -102,7 +102,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -123,7 +123,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           disabled={disabled}
         />
         <TextUpdateModal
-          title="Action Arguments (JSON)"
+          title="操作参数（JSON）"
           value={JSON.stringify(params.args ?? {}, undefined, 2)}
           onUpdate={(args) =>
             setParams({ action: params.action, args: JSON.parse(args) })
@@ -140,7 +140,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match actions"
+          title="匹配操作"
           value={
             params.pattern ||
             "# Match actions by name, id, wildcard, or \\regex\\.\n"
@@ -153,7 +153,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -179,7 +179,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match builds"
+          title="匹配构建"
           value={
             params.pattern ||
             "# Match builds by name, id, wildcard, or \\regex\\.\n"
@@ -192,7 +192,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -231,7 +231,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match deployments"
+          title="匹配部署"
           value={
             params.pattern ||
             "# Match deployments by name, id, wildcard, or \\regex\\.\n"
@@ -244,7 +244,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -335,7 +335,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match deployments"
+          title="匹配部署"
           value={
             params.pattern ||
             "# Match deployments by name, id, wildcard, or \\regex\\.\n"
@@ -348,7 +348,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -378,7 +378,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -395,7 +395,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match stacks"
+          title="匹配应用栈"
           value={
             params.pattern ||
             "# Match stacks by name, id, wildcard, or \\regex\\.\n"
@@ -408,7 +408,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -433,7 +433,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match stacks"
+          title="匹配应用栈"
           value={
             params.pattern ||
             "# Match stacks by name, id, wildcard, or \\regex\\.\n"
@@ -446,7 +446,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -475,7 +475,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -492,7 +492,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match stacks"
+          title="匹配应用栈"
           value={
             params.pattern ||
             "# Match stacks by name, id, wildcard, or \\regex\\.\n"
@@ -505,7 +505,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -534,7 +534,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -566,7 +566,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -598,7 +598,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -630,7 +630,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -662,7 +662,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -694,7 +694,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           />
           <MultiSelect
             leftSection={<ICONS.Service size="1rem" />}
-            placeholder={params.services?.length ? undefined : "All services"}
+            placeholder={params.services?.length ? undefined : "全部服务"}
             value={params.services}
             data={allServices}
             onChange={(services) => setParams({ ...params, services })}
@@ -711,7 +711,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match stacks"
+          title="匹配应用栈"
           value={
             params.pattern ||
             "# Match stacks by name, id, wildcard, or \\regex\\.\n"
@@ -724,7 +724,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -836,19 +836,19 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
       return (
         <>
           <Button disabled={disabled} onClick={open}>
-            Configure
+            配置
           </Button>
 
           <Modal
             opened={opened}
             onClose={close}
-            title="Run Stack Service"
+            title="运行应用栈服务"
             size="lg"
           >
             <Stack gap="lg">
               <SimpleGrid cols={{ base: 1, sm: 2 }}>
                 <Stack gap="0">
-                  <Text>Stack</Text>
+                  <Text>应用栈</Text>
                   <ResourceSelector
                     type="Stack"
                     selected={stack}
@@ -860,7 +860,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
                 </Stack>
 
                 <Stack gap="0">
-                  <Text>Service</Text>
+                  <Text>服务</Text>
                   <StackServiceSelector
                     stackId={stack}
                     selected={service}
@@ -873,9 +873,9 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
               </SimpleGrid>
 
               <Stack gap="0">
-                <Text>Command</Text>
+                <Text>命令</Text>
                 <TextInput
-                  placeholder="Enter command (Optional)"
+                  placeholder="输入命令（可选）"
                   value={commandText}
                   onChange={(e) => setCommand(e.target.value)}
                   disabled={disabled}
@@ -884,18 +884,18 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
 
               <SimpleGrid cols={{ base: 1, sm: 2 }}>
                 <Stack gap="0">
-                  <Text>Working Directory</Text>
+                  <Text>工作目录</Text>
                   <TextInput
-                    placeholder="/work/dir (Optional)"
+                    placeholder="/work/dir（可选）"
                     value={workdir}
                     onChange={(e) => setWorkdir(e.target.value)}
                     disabled={disabled}
                   />
                 </Stack>
                 <Stack gap="0">
-                  <Text>User</Text>
+                  <Text>用户</Text>
                   <TextInput
-                    placeholder="uid:gid or user (Optional)"
+                    placeholder="uid:gid 或用户名（可选）"
                     value={user}
                     onChange={(e) => setUser(e.target.value)}
                     disabled={disabled}
@@ -904,9 +904,9 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
               </SimpleGrid>
 
               <Stack gap="0">
-                <Text>Entrypoint</Text>
+                <Text>入口命令</Text>
                 <TextInput
-                  placeholder="Custom entrypoint (Optional)"
+                  placeholder="自定义入口命令（可选）"
                   value={entrypoint}
                   onChange={(e) => setEntrypoint(e.target.value)}
                   disabled={disabled}
@@ -914,7 +914,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
               </Stack>
 
               <Stack gap="0">
-                <Text>Extra Env</Text>
+                <Text>额外环境变量</Text>
                 <MonacoEditor
                   value={envText}
                   onValueChange={setEnvText}
@@ -924,7 +924,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
               </Stack>
 
               <Stack gap="0">
-                <Text>Options</Text>
+                <Text>选项</Text>
                 <SimpleGrid
                   cols={{ base: 1, sm: 2 }}
                   className="accent-hover-light"
@@ -933,7 +933,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
                   style={{ placeItems: "center" }}
                 >
                   <EnableSwitch
-                    label="No TTY"
+                    label="不分配 TTY"
                     checked={no_tty}
                     onCheckedChange={setNoTty}
                     disabled={disabled}
@@ -943,7 +943,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
                     }}
                   />
                   <EnableSwitch
-                    label="No Dependencies"
+                    label="不启动依赖"
                     checked={no_deps}
                     onCheckedChange={setNoDeps}
                     disabled={disabled}
@@ -953,7 +953,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
                     }}
                   />
                   <EnableSwitch
-                    label="Detach"
+                    label="后台运行"
                     checked={detach}
                     onCheckedChange={setDetach}
                     disabled={disabled}
@@ -963,7 +963,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
                     }}
                   />
                   <EnableSwitch
-                    label="Service Ports"
+                    label="服务端口"
                     checked={service_ports}
                     onCheckedChange={setServicePorts}
                     disabled={disabled}
@@ -973,7 +973,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
                     }}
                   />
                   <EnableSwitch
-                    label="Pull Image"
+                    label="拉取镜像"
                     checked={pull}
                     onCheckedChange={setPull}
                     disabled={disabled}
@@ -987,7 +987,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
 
               {!disabled && (
                 <Button onClick={onConfirm} leftSection={<CheckCircle />}>
-                  Confirm
+                  确认
                 </Button>
               )}
             </Stack>
@@ -1013,7 +1013,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match repos"
+          title="匹配代码仓库"
           value={
             params.pattern ||
             "# Match repos by name, id, wildcard, or \\regex\\.\n"
@@ -1026,7 +1026,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -1051,7 +1051,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match repos"
+          title="匹配代码仓库"
           value={
             params.pattern ||
             "# Match repos by name, id, wildcard, or \\regex\\.\n"
@@ -1064,7 +1064,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -1089,7 +1089,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     Component: ({ params, setParams, disabled }) => (
       <Group>
         <TextUpdateModal
-          title="Match repos"
+          title="匹配代码仓库"
           value={
             params.pattern ||
             "# Match repos by name, id, wildcard, or \\regex\\.\n"
@@ -1102,7 +1102,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           monacoLanguage="string_list"
         />
         <TagMultiSelector
-          title="Match Tags"
+          title="匹配标签"
           value={params.tags ?? []}
           onChange={(tags) => setParams({ ...params, tags })}
           disabled={disabled}
@@ -1434,7 +1434,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
         }
       >
         <Switch checked={params.skip_auto_update} disabled={disabled} />
-        Skip redeploy
+        跳过重新部署
       </Group>
     ),
   },
@@ -1453,7 +1453,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
           }
         }}
       >
-        Force:
+        强制：
         <Switch checked={params.force} disabled={disabled} />
       </Group>
     ),
@@ -1463,9 +1463,9 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
     params: { message: "" },
     Component: ({ params, setParams, disabled }) => (
       <TextUpdateModal
-        title="Alert message"
+        title="告警内容"
         value={params.message}
-        placeholder="Configure custom alert message"
+        placeholder="配置自定义告警内容"
         onUpdate={(message) => setParams({ message })}
         disabled={disabled}
         useMonaco
@@ -1486,7 +1486,7 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
       const durationMs = Number(internal);
       return (
         <TextInput
-          placeholder="Duration in milliseconds"
+          placeholder="时长（毫秒）"
           value={internal}
           onChange={(e) => setInternal(e.target.value)}
           onBlur={() => {
@@ -1495,13 +1495,13 @@ export const PROCEDURE_EXECUTIONS: ProcedureExecutions = {
               setParams({ duration_ms });
             } else {
               notifications.show({
-                message: "Duration must be valid number",
+                message: "时长必须为有效数字",
                 color: "red",
               });
             }
           }}
           disabled={disabled}
-          error={!durationMs ? "Duration must be a valid number" : undefined}
+          error={!durationMs ? "时长必须为有效数字" : undefined}
         />
       );
     },

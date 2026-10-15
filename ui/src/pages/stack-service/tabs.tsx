@@ -65,21 +65,25 @@ export default function StackServiceTabs({
     () => [
       {
         value: "Tasks",
+        label: "任务",
         hidden: !swarmService,
         icon: ICONS.SwarmTask,
       },
       {
         value: "Log",
+        label: "日志",
         disabled: logDisabled,
         icon: ICONS.Log,
       },
       {
         value: "Inspect",
+        label: "检查",
         disabled: inspectDisabled,
         icon: ICONS.Inspect,
       },
       {
         value: "Terminals",
+        label: "终端",
         disabled: terminalDisabled,
         hidden: !container,
         icon: ICONS.Terminal,

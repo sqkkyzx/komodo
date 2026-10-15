@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { deploymentStateIntention } from "@/lib/color";
 import { useListItem, useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
@@ -81,30 +82,30 @@ export const DeploymentComponents: RequiredResourceComponents<
     const [running, stopped, unhealthy, unknown] = all;
     return [
       all.every((item) => item === 0) && {
-        title: "Not Deployed",
+        title: "未部署",
         intention: "Neutral",
         value: summary?.not_deployed ?? 0,
       },
-      { intention: "Good", value: running, title: "Running" },
+      { intention: "Good", value: running, title: "运行中" },
       {
-        title: "Stopped",
+        title: "已停止",
         intention: "Warning",
         value: stopped,
       },
       {
-        title: "Unhealthy",
+        title: "不健康",
         intention: "Critical",
         value: unhealthy,
       },
       {
-        title: "Unknown",
+        title: "未知",
         intention: "Unknown",
         value: unknown,
       },
     ];
   },
 
-  Description: () => <>Deploy individual containers and swarm services.</>,
+  Description: () => <>部署独立容器和集群服务。</>,
 
   New: (props) => <NewResourceWithDeployTarget type="Deployment" {...props} />,
 
@@ -158,7 +159,7 @@ export const DeploymentComponents: RequiredResourceComponents<
     let info = useDeployment(id)?.info;
     return (
       <StatusBadge
-        text={info?.state}
+        text={displayLabel(info?.state)}
         intent={deploymentStateIntention(info?.state, info?.update_available)}
       />
     );
@@ -175,7 +176,7 @@ export const DeploymentComponents: RequiredResourceComponents<
       ) : (
         <Group gap="xs">
           <ICONS.Server size="1rem" />
-          <Text>Unknown</Text>
+          <Text>未知</Text>
         </Group>
       );
     },
@@ -195,7 +196,7 @@ export const DeploymentComponents: RequiredResourceComponents<
                     { type: "Image" }
                   >
                 )?.params.image
-              : info?.image.split("@")[0] || "N/A"}
+              : info?.image.split("@")[0] || "不适用"}
           </Text>
         </Group>
       );

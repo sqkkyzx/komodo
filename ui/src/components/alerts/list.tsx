@@ -45,7 +45,7 @@ export default function AlertList({
             to={showAllLink}
             fullWidth
           >
-            Show All
+            显示全部
           </Button>
         )}
       </Stack>

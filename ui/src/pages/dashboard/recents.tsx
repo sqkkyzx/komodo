@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import {
   Box,
   Flex,
@@ -65,7 +66,7 @@ function RecentRow({ type }: { type: UsableResource }) {
     return;
   }
 
-  const name = type === "ResourceSync" ? "Resource Sync" : type;
+  const name = resourceLabel(type);
 
   const children = (
     <>
@@ -80,7 +81,7 @@ function RecentRow({ type }: { type: UsableResource }) {
       <Stack w="100%" px="lg" py="md">
         <Flex align="center" gap="xs" opacity={0.6}>
           <History size="1.2rem" />
-          Recently Viewed
+          最近访问
         </Flex>
         <SimpleGrid cols={{ base: 1, lg: 2, xl2: 3, xl4: 4 }}>
           {ids.map((id, i) => (

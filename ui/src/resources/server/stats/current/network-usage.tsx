@@ -9,14 +9,14 @@ export default function ServerNetworkUsage({
   stats: Types.SystemStats | undefined;
 }) {
   return (
-    <InfoCard title="Network Usage" w={{ base: "100%", lg: 300 }} gap="xs">
+    <InfoCard title="网络使用情况" w={{ base: "100%", lg: 300 }} gap="xs">
       <Stack gap="0">
         <Group justify="space-between">
-          <Text>Ingress</Text>
+          <Text>入站</Text>
           <Text>{fmtRateBytes(stats?.network_ingress_bytes ?? 0)}</Text>
         </Group>
         <Group justify="space-between">
-          <Text>Egress</Text>
+          <Text>出站</Text>
           <Text>{fmtRateBytes(stats?.network_egress_bytes ?? 0)}</Text>
         </Group>
       </Stack>

@@ -27,7 +27,7 @@ export default function TagsFilter() {
         />
 
         <TagSelector
-          title="Tag Filter"
+          title="标签筛选"
           tags={otherTags}
           onSelect={(tagId) => add_tag(tagId)}
           shiftKey="T"
@@ -36,7 +36,7 @@ export default function TagsFilter() {
       </Group>
       <Stack hiddenFrom="xs" w="100%">
         <TagSelector
-          title="Tag Filter"
+          title="标签筛选"
           tags={otherTags}
           onSelect={(tagId) => add_tag(tagId)}
           shiftKey="T"

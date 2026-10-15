@@ -26,7 +26,7 @@ export default function ServerProcesses({ id }: { id: string }) {
   return (
     <Section
       withBorder
-      title="Processes"
+      title="进程"
       icon={<ICONS.Process size="1.3rem" />}
       titleRight={
         <Group ml={{ sm: "xl" }}>
@@ -49,11 +49,11 @@ export default function ServerProcesses({ id }: { id: string }) {
           data={filtered ?? []}
           columns={[
             {
-              header: "Name",
+              header: "名称",
               accessorKey: "name",
             },
             {
-              header: "Exe",
+              header: "可执行文件",
               accessorKey: "exe",
               cell: ({ row }) => (
                 <div className="overflow-hidden overflow-ellipsis">
@@ -71,7 +71,7 @@ export default function ServerProcesses({ id }: { id: string }) {
             {
               accessorKey: "mem_mb",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Memory" sortDescFirst />
+                <SortableHeader column={column} title="内存" sortDescFirst />
               ),
               cell: ({ row }) => (
                 <>

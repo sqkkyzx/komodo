@@ -34,8 +34,8 @@ export default function ResourceSyncInfo({
       onSuccess: (res) => {
         notifications.show({
           message: res.success
-            ? "Contents written."
-            : "Failed to write contents.",
+            ? "已写入文件内容。"
+            : "写入文件内容失败。",
           color: res.success ? "green" : "red",
         });
       },
@@ -70,7 +70,7 @@ export default function ResourceSyncInfo({
             {/* HEADER */}
             <Group justify="between">
               <Group ff="monospace">
-                <Text c="dimmed">Path:</Text>
+                <Text c="dimmed">路径：</Text>
                 {error.path}
               </Group>
 
@@ -89,7 +89,7 @@ export default function ResourceSyncInfo({
                     }
                   }}
                 >
-                  Initialize File
+                  初始化文件
                 </ConfirmButton>
               )}
             </Group>
@@ -142,12 +142,12 @@ export default function ResourceSyncInfo({
                 <DividedChildren ff="monospace">
                   {content.resource_path && (
                     <Group gap="xs">
-                      <Text c="dimmed">Folder:</Text>
+                      <Text c="dimmed">文件夹：</Text>
                       {content.resource_path}
                     </Group>
                   )}
                   <Group gap="xs">
-                    <Text c="dimmed">File:</Text>
+                    <Text c="dimmed">文件：</Text>
                     {content.path}
                   </Group>
                 </DividedChildren>
@@ -165,7 +165,7 @@ export default function ResourceSyncInfo({
                           setEdits({ ...edits, [keyPath]: undefined });
                         }}
                       >
-                        Reset
+                        重置
                       </Button>
                       <ConfirmUpdate
                         original={{ contents: content.contents }}

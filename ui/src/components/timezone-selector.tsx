@@ -14,7 +14,7 @@ export default function TimezoneSelector({
   disabled,
   ...selectProps
 }: TimezoneSelectorProps) {
-  const coreTz = useRead("GetCoreInfo", {}).data?.timezone || "Core TZ";
+  const coreTz = useRead("GetCoreInfo", {}).data?.timezone || "Core 时区";
   return (
     <Select
       w={{ base: "85%", lg: 400 }}
@@ -25,7 +25,7 @@ export default function TimezoneSelector({
         onChange(tz as Types.IanaTimezone);
       }}
       data={[
-        { value: "", label: `Default (${coreTz})` },
+        { value: "", label: `默认（${coreTz}）` },
         ...Object.values(Types.IanaTimezone).map((tz) => ({
           value: tz,
           label: `${tz} (${fmtUtcOffset(tz)})`,

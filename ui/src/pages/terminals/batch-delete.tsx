@@ -13,7 +13,7 @@ export default function BatchDeleteAllTerminals({
   const { mutate, isPending } = useWrite("BatchDeleteAllTerminals", {
     onSuccess: () => {
       refetch();
-      notifications.show({ message: "Deleted All Terminals" });
+      notifications.show({ message: "所有终端已删除" });
     },
   });
   const { tags } = useTags();
@@ -26,7 +26,7 @@ export default function BatchDeleteAllTerminals({
       loading={isPending}
       confirmProps={{ variant: "filled", color: "red" }}
     >
-      Delete All
+      全部删除
     </ConfirmButton>
   );
 }

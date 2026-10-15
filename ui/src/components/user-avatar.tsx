@@ -31,7 +31,7 @@ export default function UserAvatar({
     ) : (
       <img
         src={user.avatar}
-        alt="avatar"
+        alt="头像"
         style={{ width: iconSize, height: iconSize }}
         color={dimmed ? "var(--mantine-color-dimmed-7)" : undefined}
       />
@@ -45,7 +45,7 @@ export default function UserAvatar({
     <Group gap="xs" wrap="nowrap" {...groupProps}>
       {avatar}
       <Text fz={{ base: "sm", lg: "md" }} {...textProps}>
-        {user?.username ?? "Unknown"}
+        {user?.username ?? "未知"}
       </Text>
     </Group>
   );

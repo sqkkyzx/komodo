@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { ReactNode } from "react";
 import { useServerDockerSearch } from ".";
 import { useDockerSelectionState, useRead } from "@/lib/hooks";
@@ -50,7 +51,7 @@ export default function ServerVolumes({
           {
             accessorKey: "name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <DockerResourceLink
@@ -58,7 +59,7 @@ export default function ServerVolumes({
                 serverId={id}
                 name={row.original.name}
                 extra={
-                  !row.original.in_use && <Badge color="red">Unused</Badge>
+                  !row.original.in_use && <Badge color="red">未使用</Badge>
                 }
               />
             ),
@@ -66,13 +67,14 @@ export default function ServerVolumes({
           {
             accessorKey: "driver",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Driver" />
+              <SortableHeader column={column} title="驱动" />
             ),
           },
           {
             accessorKey: "scope",
+            cell: ({ row }) => displayLabel(row.original.scope),
             header: ({ column }) => (
-              <SortableHeader column={column} title="Scope" />
+              <SortableHeader column={column} title="作用域" />
             ),
           },
         ]}

@@ -81,7 +81,7 @@ const Topbar = ({
           <OmniSearch />
         </Box>
         <TopbarLink to="/docs">API</TopbarLink>
-        <TopbarLink to="https://komo.do/docs/intro">Docs</TopbarLink>
+        <TopbarLink to="https://komo.do/docs/intro">文档</TopbarLink>
         {version && (
           <TopbarLink to="https://github.com/moghtech/komodo/releases">
             v{version}

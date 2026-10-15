@@ -32,8 +32,8 @@ export default function BuildInfo({
     onSuccess: (res) => {
       notifications.show({
         message: res.success
-          ? "Contents written."
-          : "Failed to write contents.",
+          ? "已写入文件内容。"
+          : "写入文件内容失败。",
         color: res.success ? "green" : "red",
       });
     },
@@ -70,7 +70,7 @@ export default function BuildInfo({
           {/* HEADER */}
           <Group justify="between">
             <Group ff="monospace">
-              <Text c="dimmed">Path:</Text>
+              <Text c="dimmed">路径：</Text>
               {remotePath}
             </Group>
 
@@ -87,7 +87,7 @@ export default function BuildInfo({
                   }
                 }}
               >
-                Initialize File
+                初始化文件
               </ConfirmButton>
             )}
           </Group>
@@ -129,9 +129,9 @@ export default function BuildInfo({
             {/* PATH */}
             {remotePath && (
               <Group ff="monospace">
-                <Text c="dimmed">File:</Text>
+                <Text c="dimmed">文件：</Text>
                 {remotePath}
-                <CopyButton label="file path" content={remotePath} />
+                <CopyButton label="文件路径" content={remotePath} />
               </Group>
             )}
 
@@ -148,7 +148,7 @@ export default function BuildInfo({
                       setEdits({ contents: undefined });
                     }}
                   >
-                    Reset
+                    重置
                   </Button>
                   <ConfirmUpdate
                     original={{ contents: remoteContents }}
@@ -188,7 +188,7 @@ export default function BuildInfo({
 
       {lastBuild && lastBuild.logs.length > 0 && (
         <Code fz="lg" fw="bold" w="fit-content">
-          Last Build Logs
+          上次构建日志
         </Code>
       )}
       {lastBuild &&
@@ -200,7 +200,7 @@ export default function BuildInfo({
             description={
               <Group c="dimmed" gap="xs">
                 <Text>
-                  Stage {i + 1} of {lastBuild.logs.length}
+                  阶段 {i + 1} / {lastBuild.logs.length}
                 </Text>
                 <Text>|</Text>
                 <Clock size="1rem" />
@@ -212,7 +212,7 @@ export default function BuildInfo({
           >
             {log.command && (
               <Stack className="bordered-light" bdrs="md" p="md">
-                <Text fw="bold">command</Text>
+                <Text fw="bold">命令</Text>
                 <Code
                   fz="sm"
                   mah={500}
@@ -226,7 +226,7 @@ export default function BuildInfo({
             )}
             {log.stdout && (
               <Stack className="bordered-light" bdrs="md" p="md">
-                <Text fw="bold">stdout</Text>
+                <Text fw="bold">标准输出</Text>
                 <Code
                   component="pre"
                   fz="sm"
@@ -240,7 +240,7 @@ export default function BuildInfo({
             )}
             {log.stderr && (
               <Stack className="bordered-light" bdrs="md" p="md">
-                <Text fw="bold">stderr</Text>
+                <Text fw="bold">标准错误</Text>
                 <Code
                   component="pre"
                   fz="sm"

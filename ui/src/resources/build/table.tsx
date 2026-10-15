@@ -47,7 +47,7 @@ export default function BuildTable({
       columns={[
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           id: "Name",
           accessorKey: "name",
@@ -55,26 +55,26 @@ export default function BuildTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Source" />
+            <SortableHeader column={column} title="来源" />
           ),
           id: "Source",
           accessorKey: "info.repo",
           cell: ({ row }) => <FileSource info={row.original.info} />,
         },
         {
-          header: "Version",
+          header: "版本",
           accessorFn: ({ info }) => fmtVersion(info.version),
         },
         {
           id: "State",
           accessorKey: "info.state",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => <BuildComponents.State id={row.original.id} />,
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

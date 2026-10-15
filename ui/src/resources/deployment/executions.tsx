@@ -78,7 +78,7 @@ export function DeployDeployment({ id }: DeploymentId) {
           ) : undefined
         }
       >
-        Redeploy
+        重新部署
       </ConfirmModalWithDisable>
     );
   } else {
@@ -89,7 +89,7 @@ export function DeployDeployment({ id }: DeploymentId) {
         disabled={pending}
         loading={pending}
       >
-        Deploy
+        部署
       </ConfirmButton>
     );
   }
@@ -147,7 +147,7 @@ export function DestroyDeployment({ id }: DeploymentId) {
         ) : undefined
       }
     >
-      Destroy
+      销毁
     </ConfirmModalWithDisable>
   );
 }
@@ -175,7 +175,7 @@ export function PullDeployment({ id }: DeploymentId) {
       disabled={pullPending}
       loading={pullPending || action_state?.pulling}
     >
-      Pull Image
+      拉取镜像
     </ConfirmButton>
   );
 }
@@ -209,7 +209,7 @@ export function RestartDeployment({ id }: DeploymentId) {
       disabled={restartPending}
       loading={restartPending || action_state?.restarting}
     >
-      Restart
+      重启
     </ConfirmModalWithDisable>
   );
 }
@@ -239,7 +239,7 @@ export function StartStopDeployment({ id }: DeploymentId) {
         disabled={startPending}
         loading={startPending || action_state?.starting}
       >
-        Start
+        启动
       </ConfirmButton>
     );
   }
@@ -296,7 +296,7 @@ function StopDeployment({ id }: DeploymentId) {
         ) : undefined
       }
     >
-      Stop
+      停止
     </ConfirmModalWithDisable>
   );
 }
@@ -314,7 +314,7 @@ function TermSignalSelector({
   return (
     <Stack>
       <Group justify="flex-end">
-        <Text c="dimmed">Termination</Text>
+        <Text c="dimmed">终止</Text>
       </Group>
       <Group justify="flex-end">
         <Text c="dimmed">{label}</Text>
@@ -359,7 +359,7 @@ export function PauseUnpauseDeployment({ id }: DeploymentId) {
         disabled={unpausePending}
         loading={unpausePending || action_state?.unpausing}
       >
-        Unpause
+        恢复
       </ConfirmButton>
     );
   }
@@ -372,7 +372,7 @@ export function PauseUnpauseDeployment({ id }: DeploymentId) {
         disabled={pausePending}
         loading={pausePending || action_state?.pausing}
       >
-        Pause
+        暂停
       </ConfirmModalWithDisable>
     );
   }

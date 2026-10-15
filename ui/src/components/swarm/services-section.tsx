@@ -28,13 +28,13 @@ export default function SwarmServicesSection({
   const filtered = filterBySplit(
     services,
     _search[0],
-    (service) => service.Name ?? service.ID ?? "Unknown",
+    (service) => service.Name ?? service.ID ?? "未知",
   );
 
   return (
     <Section
       titleOther={titleOther}
-      title={!titleOther ? "Services" : undefined}
+      title={!titleOther ? "服务" : undefined}
       icon={!titleOther ? <ICONS.SwarmService size="1.3rem" /> : undefined}
       actions={
         _search || setShow ? (
@@ -56,7 +56,7 @@ export default function SwarmServicesSection({
             {
               accessorKey: "Name",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Name" />
+                <SortableHeader column={column} title="名称" />
               ),
               cell: ({ row }) => (
                 <SwarmResourceLink
@@ -72,27 +72,27 @@ export default function SwarmServicesSection({
               header: ({ column }) => (
                 <SortableHeader column={column} title="ID" />
               ),
-              cell: ({ row }) => row.original.ID ?? "Unknown",
+              cell: ({ row }) => row.original.ID ?? "未知",
             },
             {
               accessorKey: "UpdatedAt",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Updated" />
+                <SortableHeader column={column} title="更新时间" />
               ),
               cell: ({ row }) =>
                 row.original.UpdatedAt
                   ? new Date(row.original.UpdatedAt).toLocaleString()
-                  : "Unknown",
+                  : "未知",
             },
             {
               accessorKey: "CreatedAt",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Created" />
+                <SortableHeader column={column} title="创建时间" />
               ),
               cell: ({ row }) =>
                 row.original.CreatedAt
                   ? new Date(row.original.CreatedAt).toLocaleString()
-                  : "Unknown",
+                  : "未知",
             },
           ]}
         />

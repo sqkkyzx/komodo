@@ -31,37 +31,44 @@ export default function Settings() {
         tabs={[
           {
             value: "Variables",
+            label: "变量",
             content: <SettingsVariables />,
             icon: ICONS.Variable,
           },
           {
             value: "Tags",
+            label: "标签",
             content: <SettingsTags />,
             icon: ICONS.Tag,
           },
           {
             value: "Builders",
+            label: "构建器",
             content: <Resources _type="Builder" />,
             icon: ICONS.Builder,
           },
           {
             value: "Alerters",
+            label: "告警器",
             content: <Resources _type="Alerter" />,
             icon: ICONS.Alerter,
           },
           {
             value: "Providers",
+            label: "提供商",
             content: <SettingsProviders />,
             icon: ICONS.Provider,
           },
           {
             value: "Users",
+            label: "用户",
             content: <SettingsUsers />,
             icon: ICONS.User,
             hidden: !user?.admin,
           },
           {
             value: "Onboarding",
+            label: "服务器注册",
             content: <SettingsOnboardingKeys />,
             icon: ICONS.OnboardingKey,
           },

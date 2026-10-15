@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import {
   usePermissions,
   useRead,
@@ -146,7 +147,7 @@ export default function StackConfig({
 
   const swarmServerGroup: ConfigGroupArgs<Types.StackConfig>[] = [
     {
-      label: "Swarm",
+      label: "集群",
       labelHidden: true,
       hidden: !swarmsExist || !!currServerId,
       fields: {
@@ -156,7 +157,7 @@ export default function StackConfig({
               label={
                 swarm_id ? (
                   <Group fz="h3" fw="bold">
-                    Swarm:
+                    集群：
                     <ResourceLink
                       type="Swarm"
                       id={swarm_id}
@@ -165,10 +166,10 @@ export default function StackConfig({
                     />
                   </Group>
                 ) : (
-                  "Select Swarm"
+                  "选择集群"
                 )
               }
-              description="Select the Swarm to deploy on."
+              description="选择用于部署的集群。"
             >
               <ResourceSelector
                 type="Swarm"
@@ -183,7 +184,7 @@ export default function StackConfig({
       },
     },
     {
-      label: "Server",
+      label: "服务器",
       labelHidden: true,
       hidden: swarmsExist && !!currSwarmId,
       fields: {
@@ -193,7 +194,7 @@ export default function StackConfig({
               label={
                 server_id ? (
                   <Group fz="h3" fw="bold">
-                    Server:
+                    服务器：
                     <ResourceLink
                       type="Server"
                       id={server_id}
@@ -202,10 +203,10 @@ export default function StackConfig({
                     />
                   </Group>
                 ) : (
-                  "Select Server"
+                  "选择服务器"
                 )
               }
-              description="Select the Server to deploy on."
+              description="选择用于部署的服务器。"
             >
               <ResourceSelector
                 type="Server"
@@ -222,22 +223,22 @@ export default function StackConfig({
   ];
 
   const chooseMode: ConfigGroupArgs<Types.StackConfig> = {
-    label: "Choose Mode",
+    label: "选择模式",
     labelHidden: true,
     fields: {
       server_id: () => {
         return (
           <ConfigItem
-            label="Choose Mode"
-            description="Will the file contents be defined in UI, stored on the server, or pulled from a git repo?"
+            label="选择模式"
+            description="选择在界面中编辑文件、使用服务器上的文件，或从 Git 仓库拉取。"
           >
             <Select
               w="fit-content"
-              placeholder="Choose Mode"
+              placeholder="选择模式"
               value={mode}
               onChange={(mode) => mode && setMode(mode as StackMode)}
               disabled={disabled}
-              data={STACK_MODES}
+              data={STACK_MODES.map((value) => ({ value, label: displayLabel(value) }))}
             />
           </ConfigItem>
         );
@@ -246,8 +247,8 @@ export default function StackConfig({
   };
 
   const environment: ConfigGroupArgs<Types.StackConfig> = {
-    label: "Environment",
-    description: `Pass these variables to the docker ${currSwarmId ? "stack" : "compose"} command`,
+    label: "环境变量",
+    description: `将这些变量传入 docker ${currSwarmId ? "stack" : "compose"} 命令`,
     actions: (
       <ShowHideButton
         show={show.env}
@@ -269,7 +270,7 @@ export default function StackConfig({
       ),
       env_file_path: {
         description:
-          "The path to write the file to, relative to the 'Run Directory'.",
+          "要写入的文件路径，相对于“运行目录”。",
         placeholder: ".env",
       },
       additional_env_files:
@@ -279,7 +280,7 @@ export default function StackConfig({
             typeof v === "string" ? { path: v, track: true } : v,
           );
           return (
-            <ConfigItem label="Additional Env Files">
+            <ConfigItem label="额外环境文件">
               <Stack>
                 {files.map((file: any, i: number) => (
                   <Group key={i}>
@@ -304,7 +305,7 @@ export default function StackConfig({
                     />
                     <Group>
                       <EnableSwitch
-                        label="Track"
+                        label="跟踪"
                         checked={file.track ?? true}
                         onCheckedChange={(track) => {
                           set({
@@ -346,13 +347,11 @@ export default function StackConfig({
                     leftSection={<ICONS.Add size="1rem" />}
                     w={{ base: "85%", lg: 400 }}
                   >
-                    Add Env File
+                    添加环境文件
                   </Button>
                 )}
                 <Text c="dimmed" fz="sm">
-                  Add additional env files to pass with '--env-file'. Relative
-                  to the 'Run Directory'. Uncheck 'Track' for externally managed
-                  files (e.g., sops decrypted).
+                  添加通过 --env-file 传入的额外环境文件，路径相对于“运行目录”。外部管理的文件（如通过 sops 解密的文件）请取消“跟踪”。
                 </Text>
               </Stack>
             </ConfigItem>
@@ -362,13 +361,13 @@ export default function StackConfig({
   };
 
   const configFiles: ConfigGroupArgs<Types.StackConfig> = {
-    label: "Config Files",
+    label: "配置文件",
     labelHidden: true,
     fields: {
       config_files: (value, set) => (
         <ConfigItem
-          label="Config Files"
-          description="Add other config files to associate with the Stack, and edit in the UI. Relative to 'Run Directory'."
+          label="配置文件"
+          description="添加应用栈关联的其他配置文件，并在界面中编辑。路径相对于“运行目录”。"
         >
           <StackConfigFiles
             id={id}
@@ -385,14 +384,14 @@ export default function StackConfig({
 
   const generalCommon: ConfigGroupArgs<Types.StackConfig>[] = [
     {
-      label: "Auto Update",
+      label: "自动更新",
       labelHidden: true,
       fields: {
         poll_for_updates: (poll, set) => {
           return (
             <ConfigSwitch
-              label="Poll for Updates"
-              description="Check for updates to the image during Global Auto Update."
+              label="检查更新"
+              description="在全局自动更新时检查镜像更新。"
               value={auto_update || poll}
               onCheckedChange={(poll_for_updates) => set({ poll_for_updates })}
               disabled={disabled || auto_update}
@@ -402,13 +401,13 @@ export default function StackConfig({
         auto_update_skip_services: (values, set) =>
           autoOrPollUpdates && (
             <ConfigItem
-              label="Ignore Services During Auto Update"
-              description="Services listed here are skipped only during Global Auto Update checks. Manual checks still include all services."
+              label="自动更新时忽略服务"
+              description="仅在全局自动更新检查时跳过这些服务，手动检查仍包含全部服务。"
             >
               <MultiSelect
                 leftSection={<ICONS.Service size="1rem" />}
                 placeholder={
-                  values?.length ? "Add services" : "Select services"
+                  values?.length ? "添加服务" : "选择服务"
                 }
                 value={values}
                 data={allServices}
@@ -423,13 +422,13 @@ export default function StackConfig({
             </ConfigItem>
           ),
         auto_update: {
-          description: "Trigger a redeploy if a newer image is found.",
+          description: "发现新镜像时触发重新部署。",
         },
         auto_update_all_services: (value, set) => {
           return (
             <ConfigSwitch
-              label="Full Stack Auto Update"
-              description="Always redeploy full stack instead of just specific services with update."
+              label="完整应用栈自动更新"
+              description="始终重新部署整个应用栈，而非仅部署有更新的服务。"
               value={value}
               onCheckedChange={(auto_update_all_services) =>
                 set({ auto_update_all_services })
@@ -441,19 +440,19 @@ export default function StackConfig({
       },
     },
     {
-      label: "Links",
+      label: "链接",
       labelHidden: true,
       fields: {
         links: (values, set) => (
           <ConfigList
-            label="Links"
-            addLabel="Add Link"
-            description="Add quick links in the resource header"
+            label="链接"
+            addLabel="添加链接"
+            description="在资源页顶部添加快捷链接"
             field="links"
             values={values ?? []}
             set={set}
             disabled={disabled}
-            placeholder="Input link"
+            placeholder="输入链接"
           />
         ),
       },
@@ -462,24 +461,24 @@ export default function StackConfig({
 
   const advanced: ConfigGroupArgs<Types.StackConfig>[] = [
     {
-      label: "Project Name",
+      label: "项目名称",
       labelHidden: true,
       fields: {
         project_name: {
-          placeholder: "Compose project name",
+          placeholder: "Compose 项目名称",
           description:
-            "Optionally set a different compose project name. If importing existing stack, this should match the compose project name on your host.",
+            "可选。设置其他 Compose 项目名称。导入现有应用栈时，需与主机上的 Compose 项目名称一致。",
         },
       },
     },
     {
-      label: "Pre Deploy",
+      label: "部署前操作",
       labelHidden: true,
       fields: {
         pre_deploy: (value, set) => (
           <ConfigItem
-            label="Pre Deploy"
-            description="Execute a shell command before running docker compose up. The 'path' is relative to the Run Directory"
+            label="部署前操作"
+            description="运行 docker compose up 前执行 Shell 命令。path 相对于运行目录"
           >
             <SystemCommand
               value={value}
@@ -491,13 +490,13 @@ export default function StackConfig({
       },
     },
     {
-      label: "Post Deploy",
+      label: "部署后操作",
       labelHidden: true,
       fields: {
         post_deploy: (value, set) => (
           <ConfigItem
-            label="Post Deploy"
-            description="Execute a shell command after running docker compose up. The 'path' is relative to the Run Directory"
+            label="部署后操作"
+            description="运行 docker compose up 后执行 Shell 命令。path 相对于运行目录"
           >
             <SystemCommand
               value={value}
@@ -509,8 +508,8 @@ export default function StackConfig({
       },
     },
     {
-      label: "Wrapper",
-      description: "Optional wrapper for secrets management tools.",
+      label: "命令包装器",
+      description: "可选。为密钥管理工具配置命令包装器。",
       fields: {
         compose_cmd_wrapper: (value, set) => (
           <MonacoEditor
@@ -533,12 +532,12 @@ export default function StackConfig({
           );
           return (
             <ConfigItem
-              label="Apply To"
-              description={`Select which docker ${currSwarmId ? "stack" : "compose"} subcommands to wrap.`}
+              label="应用范围"
+              description={`选择需要包装的 docker ${currSwarmId ? "stack" : "compose"} 子命令。`}
             >
               <MultiSelect
                 placeholder={
-                  filtered.length ? "Add commands" : "Select commands"
+                  filtered.length ? "添加命令" : "选择命令"
                 }
                 value={filtered}
                 data={commands}
@@ -555,16 +554,16 @@ export default function StackConfig({
       },
     },
     {
-      label: "Extra Args",
+      label: "额外参数",
       labelHidden: true,
       fields: {
         extra_args: (value, set) => (
           <ConfigItem
-            label="Extra Args"
+            label="额外参数"
             description={
               <Group gap="xs">
                 <Text>
-                  Pass extra arguments to docker '
+                  传递额外参数给 docker '
                   {currSwarmId ? "stack deploy" : "compose up"}
                   '.
                 </Text>
@@ -579,7 +578,7 @@ export default function StackConfig({
                   }
                   target="_blank"
                 >
-                  See docker docs.
+                  查看 Docker 文档。
                 </Text>
               </Group>
             }
@@ -610,17 +609,17 @@ export default function StackConfig({
       },
     },
     {
-      label: "Ignore Services",
+      label: "忽略服务",
       labelHidden: true,
       fields: {
         ignore_services: (values, set) => (
           <ConfigItem
-            label="Ignore Services"
-            description="If your compose file has init services that exit early, ignore them here so your stack will report the correct health."
+            label="忽略服务"
+            description="若 Compose 文件中的初始化服务会提前退出，可在此忽略它们，以正确显示应用栈健康状态。"
           >
             <MultiSelect
               leftSection={<ICONS.Service size="1rem" />}
-              placeholder={values?.length ? "Add services" : "Select services"}
+              placeholder={values?.length ? "添加服务" : "选择服务"}
               value={values}
               data={allServices}
               onChange={(ignore_services) => set({ ignore_services })}
@@ -634,13 +633,13 @@ export default function StackConfig({
       },
     },
     {
-      label: "Pull Images",
+      label: "拉取镜像",
       labelHidden: true,
       fields: {
         registry_provider: (provider, set) => {
           return (
             <ProviderSelectorConfig
-              description="Login to a registry for private image access."
+              description="登录镜像仓库以访问私有镜像。"
               accountType="docker"
               selected={provider}
               disabled={disabled}
@@ -663,33 +662,33 @@ export default function StackConfig({
               selected={value}
               onSelect={(registry_account) => set({ registry_account })}
               disabled={disabled}
-              placeholder="None"
+              placeholder="无"
             />
           );
         },
         auto_pull: {
-          label: "Pre Pull Images",
+          label: "部署前拉取镜像",
           hidden: !!currSwarmId,
           description:
-            "Ensure 'docker compose pull' is run before redeploying the Stack. Otherwise, use 'pull_policy' in docker compose file.",
+            "重新部署应用栈前运行 docker compose pull。也可在 Compose 文件中设置 pull_policy。",
         },
       },
     },
     {
-      label: "Build Images",
+      label: "构建镜像",
       hidden: !!currSwarmId,
       labelHidden: true,
       fields: {
         run_build: {
-          label: "Pre Build Images",
+          label: "部署前构建镜像",
           description:
-            "Ensure 'docker compose build' is run before redeploying the Stack. Otherwise, can use '--build' as an Extra Arg.",
+            "重新部署应用栈前运行 docker compose build。也可将 --build 添加为额外参数。",
         },
         build_extra_args: (value, set) =>
           runBuild && (
             <ConfigItem
-              label="Build Extra Args"
-              description="Add extra args inserted after 'docker compose build'"
+              label="构建额外参数"
+              description="添加在 docker compose build 后的额外参数"
             >
               {!disabled && (
                 <AddExtraArg
@@ -719,14 +718,14 @@ export default function StackConfig({
       },
     },
     {
-      label: "Destroy",
+      label: "销毁",
       labelHidden: true,
       fields: {
         destroy_before_deploy: {
-          label: "Destroy Before Deploy",
-          description: `Ensure '${
+          label: "部署前销毁",
+          description: `重新部署应用栈前运行 ${
             currSwarmId ? "docker stack rm" : "docker compose down"
-          }' is run before redeploying the Stack.`,
+          }。`,
         },
       },
     },
@@ -741,18 +740,18 @@ export default function StackConfig({
       "": [
         ...swarmServerGroup,
         {
-          label: "Files",
+          label: "文件",
           labelHidden: true,
           fields: {
             run_directory: {
-              label: "Run Directory",
-              description: `Set the working directory when running the 'compose up' command. Can be absolute path, or relative to $PERIPHERY_STACK_DIR/${stack.name}`,
+              label: "运行目录",
+              description: `设置运行 compose up 命令时的工作目录。可使用绝对路径，或相对于 $PERIPHERY_STACK_DIR/${stack.name} 的路径`,
               placeholder: "/path/to/folder",
             },
             file_paths: (value, set) => (
               <ConfigList
-                label="File Paths"
-                description="Add files to include using 'docker compose -f'. If empty, uses 'compose.yaml'. Relative to 'Run Directory'."
+                label="文件路径"
+                description="添加通过 docker compose -f 使用的文件。留空时使用 compose.yaml。路径相对于“运行目录”。"
                 field="file_paths"
                 values={value ?? []}
                 set={set}
@@ -774,7 +773,7 @@ export default function StackConfig({
       "": [
         ...swarmServerGroup,
         {
-          label: "Source",
+          label: "来源",
           labelHidden: true,
           fields: {
             linked_repo: (linkedRepo, set) => (
@@ -811,36 +810,35 @@ export default function StackConfig({
                         selected={value}
                         onSelect={(git_account) => set({ git_account })}
                         disabled={disabled}
-                        placeholder="None"
+                        placeholder="无"
                       />
                     );
                   },
                   repo: {
-                    placeholder: "Enter repo",
+                    placeholder: "输入代码仓库",
                     description:
-                      "The repo path on the provider. {namespace}/{repo_name}",
+                      "代码托管平台上的仓库路径：{namespace}/{repo_name}",
                   },
                   branch: {
-                    placeholder: "Enter branch",
+                    placeholder: "输入分支",
                     description:
-                      "Select a custom branch, or default to 'main'.",
+                      "选择自定义分支，默认为 main。",
                   },
                   commit: {
-                    label: "Commit Hash",
-                    placeholder: "Input commit hash",
+                    label: "提交哈希",
+                    placeholder: "输入提交哈希",
                     description:
-                      "Optional. Switch to a specific commit hash after cloning the branch.",
+                      "可选。克隆分支后切换到指定提交。",
                   },
                   clone_path: {
                     placeholder: "/clone/path/on/host",
                     description: (
                       <Stack gap="0">
                         <Text component="span">
-                          Explicitly specify the folder on the host to clone the
-                          repo in.
+                          指定主机上用于克隆代码仓库的文件夹。
                         </Text>
                         <Text component="span">
-                          If <b>relative</b> (no leading '/'), relative to{" "}
+                          若为 <b>相对路径</b> （不以 / 开头），则相对于{" "}
                           {"$root_directory/stacks/" + stack.name}
                         </Text>
                       </Stack>
@@ -850,27 +848,27 @@ export default function StackConfig({
               : {}),
             reclone: {
               description:
-                "Delete the repo folder and clone it again, instead of using 'git pull'.",
+                "删除代码仓库目录并重新克隆，代替执行 git pull。",
             },
           },
         },
         {
-          label: "Files",
+          label: "文件",
           labelHidden: true,
           fields: {
             run_directory: {
               description: (
                 <>
-                  Set the working directory when running the compose up command,
-                  <b>relative to the root of the repo.</b>
+                  设置运行 compose up 命令时的工作目录，
+                  <b>相对于代码仓库根目录。</b>
                 </>
               ),
               placeholder: "path/to/folder",
             },
             file_paths: (value, set) => (
               <ConfigList
-                label="File Paths"
-                description="Add files to include using 'docker compose -f'. If empty, uses 'compose.yaml'. Relative to 'Run Directory'."
+                label="文件路径"
+                description="添加通过 docker compose -f 使用的文件。留空时使用 compose.yaml。路径相对于“运行目录”。"
                 field="file_paths"
                 values={value ?? []}
                 set={set}
@@ -884,8 +882,8 @@ export default function StackConfig({
         configFiles,
         ...generalCommon,
         {
-          label: "Webhooks",
-          description: `Copy the webhook given here, and configure your ${webhookIntegration}-style repo provider to send webhooks to Komodo`,
+          label: "Webhook",
+          description: `复制此处的 Webhook 地址，并在兼容 ${webhookIntegration} 的代码托管平台中配置向 Komodo 发送 Webhook`,
           actions: (
             <ShowHideButton
               show={show.webhooks}
@@ -899,8 +897,8 @@ export default function StackConfig({
                 return null;
               }
               return (
-                <ConfigItem label="Configure Branch">
-                  <Text>Must configure Branch before webhooks will work.</Text>
+                <ConfigItem label="配置分支">
+                  <Text>需先配置分支，Webhook 才能生效。</Text>
                 </ConfigItem>
               );
             },
@@ -910,20 +908,20 @@ export default function StackConfig({
             ["Deploy" as any]: () =>
               (update.branch ?? config.branch) && (
                 <CopyWebhookUrl
-                  label="Webhook URL - Deploy"
+                  label="Webhook 地址 - 部署"
                   integration={webhookIntegration}
                   path={`/stack/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/deploy`}
                 />
               ),
             webhook_force_deploy: {
               description:
-                "Usually the Stack won't deploy unless there are changes to the files. Use this to force deploy.",
+                "通常仅在文件发生变化时部署应用栈。启用此项可强制部署。",
             },
             webhook_enabled: true,
             webhook_secret: {
               description:
-                "Provide a custom webhook secret for this resource, or use the global default.",
-              placeholder: "Input custom secret",
+                "为此资源设置自定义 Webhook 密钥，或使用全局默认值。",
+              placeholder: "输入自定义密钥",
             },
           },
         },
@@ -935,8 +933,8 @@ export default function StackConfig({
       "": [
         ...swarmServerGroup,
         {
-          label: "Compose File",
-          description: "Manage the compose file contents here.",
+          label: "Compose 文件",
+          description: "在此管理 Compose 文件内容。",
           actions: (
             <ShowHideButton
               show={show.file}

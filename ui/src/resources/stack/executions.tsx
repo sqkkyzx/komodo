@@ -67,7 +67,7 @@ export const DeployStack = ({
         disabled={isPending}
         loading={isPending || deploying}
       >
-        Deploy
+        部署
       </ConfirmModalWithDisable>
     );
   }
@@ -79,7 +79,7 @@ export const DeployStack = ({
       disabled={isPending}
       loading={isPending || deploying}
     >
-      Deploy
+      部署
     </ConfirmButton>
   );
 };
@@ -127,7 +127,7 @@ export const DestroyStack = ({
       disabled={isPending}
       loading={isPending || destroying}
     >
-      Destroy
+      销毁
     </ConfirmModalWithDisable>
   );
 };
@@ -165,7 +165,7 @@ export const PullStack = ({
       disabled={pullPending}
       loading={pullPending || actionState?.pulling}
     >
-      {`Pull Image${service ? "" : "s"}`}
+      {"拉取镜像"}
     </ConfirmButton>
   );
 };
@@ -215,7 +215,7 @@ export const RestartStack = ({
       disabled={restartPending}
       loading={restartPending || actionState?.restarting}
     >
-      Restart
+      重启
     </ConfirmModalWithDisable>
   );
 };
@@ -278,7 +278,7 @@ export const StartStopStack = ({
           disabled={startPending}
           loading={startPending || actionState?.starting}
         >
-          Start
+          启动
         </ConfirmButton>
       )}
       {showStop && (
@@ -291,7 +291,7 @@ export const StartStopStack = ({
           disabled={stopPending}
           loading={stopPending || actionState?.stopping}
         >
-          Stop
+          停止
         </ConfirmModalWithDisable>
       )}
     </>
@@ -343,7 +343,7 @@ export const PauseUnpauseStack = ({
         disabled={unpausePending}
         loading={unpausePending || actionState?.unpausing}
       >
-        Unpause
+        恢复
       </ConfirmButton>
     );
   }
@@ -361,7 +361,7 @@ export const PauseUnpauseStack = ({
         disabled={pausePending}
         loading={pausePending || actionState?.pausing}
       >
-        Pause
+        暂停
       </ConfirmModalWithDisable>
     );
   }

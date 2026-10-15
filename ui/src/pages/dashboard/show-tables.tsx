@@ -17,7 +17,7 @@ export default function ShowTables() {
       }
       w={{ base: "100%", xs: "fit-content" }}
     >
-      {preferences.showTables ? "Show Dashboard" : "Show Tables"}
+      {preferences.showTables ? "显示仪表盘" : "显示表格"}
     </Button>
   );
 }

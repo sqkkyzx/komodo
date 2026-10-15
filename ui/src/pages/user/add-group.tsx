@@ -1,8 +1,4 @@
-import {
-  useInvalidate,
-  useRead,
-  useWrite,
-} from "@/lib/hooks";
+import { useInvalidate, useRead, useWrite } from "@/lib/hooks";
 import { filterBySplit } from "mogh_ui";
 import { ICONS } from "@/lib/icons";
 import { Button, Combobox, ComboboxProps, Group, Text } from "@mantine/core";
@@ -31,7 +27,7 @@ export default function UserAddUserGroup({
     onSuccess: () => {
       inv(["ListUserGroups"]);
       notifications.show({
-        message: "Added User to User Group",
+        message: "已将用户添加到用户组",
         color: "green",
       });
     },
@@ -58,7 +54,7 @@ export default function UserAddUserGroup({
           leftSection={<ICONS.Add size="1rem" />}
           loading={isPending}
         >
-          Add Group
+          添加用户组
         </Button>
       </Combobox.Target>
 
@@ -67,7 +63,7 @@ export default function UserAddUserGroup({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder="search..."
+          placeholder="搜索…"
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
           {filtered.map((group) => (
@@ -79,7 +75,7 @@ export default function UserAddUserGroup({
             </Combobox.Option>
           ))}
           {filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
+            <Combobox.Empty>无匹配结果。</Combobox.Empty>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

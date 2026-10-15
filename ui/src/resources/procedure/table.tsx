@@ -47,7 +47,7 @@ export default function ProcedureTable({
           id: "Name",
           accessorKey: "name",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           cell: ({ row }) => (
             <ResourceLink type="Procedure" id={row.original.id} />
@@ -57,7 +57,7 @@ export default function ProcedureTable({
           id: "State",
           accessorKey: "info.state",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => <ProcedureComponents.State id={row.original.id} />,
         },
@@ -65,7 +65,7 @@ export default function ProcedureTable({
           id: "NextRun",
           accessorKey: "info.next_scheduled_run",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Next Run" />
+            <SortableHeader column={column} title="下次运行" />
           ),
           sortFn: (a, b) => {
             const sa = a.original.info.next_scheduled_run;
@@ -81,11 +81,11 @@ export default function ProcedureTable({
           },
           cell: ({ row }) =>
             row.original.info.next_scheduled_run
-              ? new Date(row.original.info.next_scheduled_run).toLocaleString()
-              : "Not Scheduled",
+              ? new Date(row.original.info.next_scheduled_run).toLocaleString("zh-CN")
+              : "未设置计划",
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

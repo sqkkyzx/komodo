@@ -13,7 +13,7 @@ export default function NewSwarmSecret({ id }: { id: string }) {
   const { mutateAsync: create, isPending } = useExecute("CreateSwarmSecret", {
     onSuccess: () => {
       invalidate(["ListSwarmSecrets"]);
-      notifications.show({ message: "Swarm config created." });
+      notifications.show({ message: "已创建集群配置。" });
       setName("");
       setData("");
     },
@@ -22,24 +22,24 @@ export default function NewSwarmSecret({ id }: { id: string }) {
   return (
     <CreateModal
       modalSize="xl"
-      entityType="Swarm Secret"
+      entityType="集群密钥"
       onConfirm={() => create({ swarm: id, name, data }).then(() => true)}
       disabled={!canExecute}
       loading={isPending}
-      configureLabel="a unique name and content"
+      configureLabel="唯一的名称和内容"
       configSection={() => (
         <Stack>
           <TextInput
-            label="Name"
+            label="名称"
             autoFocus
             placeholder="config.yaml"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            error={!name.trim() && "Enter name"}
+            error={!name.trim() && "输入名称"}
             maw={{ base: "100%", sm: 300 }}
           />
           <Stack gap="0.1rem">
-            <Text size="sm">Content</Text>
+            <Text size="sm">内容</Text>
             <MonacoEditor
               value={data}
               onValueChange={setData}
@@ -47,7 +47,7 @@ export default function NewSwarmSecret({ id }: { id: string }) {
               maxHeightProportion={0.4}
             />
           </Stack>
-          <Text>Note: the content cannot be viewed again after creation, but can be rotated.</Text>
+          <Text>提示：创建后无法再次查看内容，但可进行轮换。</Text>
         </Stack>
       )}
     />

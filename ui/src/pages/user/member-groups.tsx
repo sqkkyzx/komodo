@@ -16,7 +16,7 @@ export default function UserMemberGroups({ userId }: { userId: string }) {
     {
       onSuccess: () => {
         inv(["ListUserGroups"]);
-        notifications.show({ message: "Removed user from group" });
+        notifications.show({ message: "已将用户移出用户组" });
       },
     },
   );
@@ -25,7 +25,7 @@ export default function UserMemberGroups({ userId }: { userId: string }) {
   }
   return (
     <Section
-      title="Groups"
+      title="用户组"
       icon={<ICONS.UserGroup size="1.2rem" />}
       titleFz="h3"
       titleRight={
@@ -40,7 +40,7 @@ export default function UserMemberGroups({ userId }: { userId: string }) {
           {groups?.map((group) => (
             <Group
               key={group._id?.$oid}
-              title={`User Group - ${group.name}`}
+              title={`用户组 - ${group.name}`}
               onClick={() => nav(`/user-groups/${group._id?.$oid}`)}
               className="accent-hover-light bordered-heavy"
               py="xs"

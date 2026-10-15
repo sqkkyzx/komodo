@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useListItem, useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
 import { RequiredResourceComponents } from "..";
@@ -44,10 +45,10 @@ export const BuilderComponents: RequiredResourceComponents<
       {},
       { refetchInterval: 10_000 },
     ).data;
-    return [{ intention: "Good", value: summary?.total ?? 0, title: "Total" }];
+    return [{ intention: "Good", value: summary?.total ?? 0, title: "总计" }];
   },
 
-  Description: () => <>Build on your servers, or single-use AWS instances.</>,
+  Description: () => <>在自己的服务器或一次性 AWS 实例上进行构建。</>,
 
   New: () => {
     const [type, setType] = useState<Types.BuilderConfig["type"]>("Server");
@@ -58,12 +59,12 @@ export const BuilderComponents: RequiredResourceComponents<
         extraInputs={
           <Select
             w="100%"
-            label="Builder Type"
+            label="构建器类型"
             value={type}
             onChange={(type) =>
               type && setType(type as Types.BuilderConfig["type"])
             }
-            data={["Server", "Url", "Aws"]}
+            data={["Server", "Url", "Aws"].map((value) => ({ value, label: displayLabel(value) }))}
           />
         }
       />

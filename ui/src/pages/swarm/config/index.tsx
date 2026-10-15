@@ -26,7 +26,7 @@ export default function SwarmConfig() {
     swarm: swarmId,
     config: _config,
   });
-  useSetTitle(`${swarm?.name} | Config | ${config?.Spec?.Name ?? "Unknown"}`);
+  useSetTitle(`${swarm?.name} | 配置 | ${config?.Spec?.Name ?? "未知"}`);
 
   const intent = inUse ? "Good" : "Critical";
 
@@ -35,14 +35,14 @@ export default function SwarmConfig() {
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm config."
+          ? "无法检查集群配置。"
           : !config
-            ? `No swarm config found with given name: ${_config}`
+            ? `未找到以下名称的集群配置：${_config}`
             : undefined
       }
     >
       <ResourceSubPage
-        entityTypeName="Swarm Config"
+        entityTypeName="集群配置"
         parentType="Swarm"
         parentId={swarmId}
         name={config?.Spec?.Name}
@@ -51,7 +51,7 @@ export default function SwarmConfig() {
         state={
           !inUse && (
             <Badge variant="filled" color="red">
-              Unused
+              未使用
             </Badge>
           )
         }

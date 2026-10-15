@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useRead } from "@/lib/hooks";
 import { filterBySplit } from "mogh_ui";
 import { ReactNode, useState } from "react";
@@ -34,7 +35,7 @@ export default function SwarmNodes({
   const filtered = filterBySplit(
     nodes,
     search,
-    (node) => node.Name ?? node.Hostname ?? node.ID ?? "Unknown",
+    (node) => node.Name ?? node.Hostname ?? node.ID ?? "未知",
   );
 
   return (
@@ -50,14 +51,14 @@ export default function SwarmNodes({
         data={filtered}
         selectOptions={{
           selectKey: (node) =>
-            node.Name ?? node.Hostname ?? node.ID ?? "Unknown",
+            node.Name ?? node.Hostname ?? node.ID ?? "未知",
           state: selectState,
         }}
         columns={[
           {
             accessorKey: "Hostname",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Hostname" />
+              <SortableHeader column={column} title="主机名" />
             ),
             cell: ({ row }) => (
               <SwarmResourceLink
@@ -73,16 +74,16 @@ export default function SwarmNodes({
             header: ({ column }) => (
               <SortableHeader column={column} title="ID" />
             ),
-            cell: ({ row }) => row.original.ID ?? "Unknown",
+            cell: ({ row }) => row.original.ID ?? "未知",
           },
           {
             accessorKey: "Role",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Role" />
+              <SortableHeader column={column} title="角色" />
             ),
             cell: ({ row }) => (
               <StatusBadge
-                text={row.original.Role}
+                text={displayLabel(row.original.Role)}
                 intent={swarmNodeRoleIntention(row.original.Role)}
               />
             ),
@@ -90,11 +91,11 @@ export default function SwarmNodes({
           {
             accessorKey: "State",
             header: ({ column }) => (
-              <SortableHeader column={column} title="State" />
+              <SortableHeader column={column} title="状态" />
             ),
             cell: ({ row }) => (
               <StatusBadge
-                text={row.original.State}
+                text={displayLabel(row.original.State)}
                 intent={swarmNodeStateIntention(row.original.State)}
               />
             ),
@@ -102,11 +103,11 @@ export default function SwarmNodes({
           {
             accessorKey: "Availability",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Availability" />
+              <SortableHeader column={column} title="可用状态" />
             ),
             cell: ({ row }) => (
               <StatusBadge
-                text={row.original.Availability}
+                text={displayLabel(row.original.Availability)}
                 intent={swarmNodeAvailabilityIntention(
                   row.original.Availability,
                 )}
@@ -116,7 +117,7 @@ export default function SwarmNodes({
           {
             accessorKey: "Labels",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Labels" />
+              <SortableHeader column={column} title="标签" />
             ),
             cell: ({ row }) => {
               const labels = Object.entries(row.original.Labels ?? {}).sort();
@@ -141,12 +142,12 @@ export default function SwarmNodes({
           {
             accessorKey: "UpdatedAt",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Updated" />
+              <SortableHeader column={column} title="更新时间" />
             ),
             cell: ({ row }) =>
               row.original.UpdatedAt
-                ? new Date(row.original.UpdatedAt).toLocaleString()
-                : "Unknown",
+                ? new Date(row.original.UpdatedAt).toLocaleString("zh-CN")
+                : "未知",
           },
           // {
           //   accessorKey: "CreatedAt",
@@ -155,8 +156,8 @@ export default function SwarmNodes({
           //   ),
           //   cell: ({ row }) =>
           //     row.original.CreatedAt
-          //       ? new Date(row.original.CreatedAt).toLocaleString()
-          //       : "Unknown",
+          //       ? new Date(row.original.CreatedAt).toLocaleString("zh-CN")
+          //       : "未知",
           //   size: 200,
           // },
         ]}

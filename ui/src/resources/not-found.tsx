@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { useNavigate } from "react-router-dom";
 import { ResourceComponents, UsableResource } from ".";
 import { Button, Group, Stack, Text } from "@mantine/core";
@@ -20,7 +21,7 @@ export default function ResourceNotFound({
             leftSection={<ICONS.Back size="1rem" />}
             onClick={() => nav("/" + usableResourcePath(type))}
           >
-            Back
+            返回
           </Button>
         </Group>
       )}
@@ -33,7 +34,7 @@ export default function ResourceNotFound({
           )}
         </div>
         <Text fz="h1" ff="monospace">
-          {type} {type && " - "} 404 Not Found
+          {type && resourceLabel(type)} {type && " - "} 404 未找到
         </Text>
       </Group>
     </Stack>

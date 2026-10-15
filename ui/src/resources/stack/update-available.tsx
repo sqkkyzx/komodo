@@ -35,7 +35,7 @@ export default function StackUpdateAvailable({
     "CheckStackForUpdate",
     {
       onSuccess: () => {
-        notifications.show({ message: "Checked for updates", color: "blue" });
+        notifications.show({ message: "已检查更新", color: "blue" });
         inv(["ListStacks"]);
       },
     },
@@ -87,12 +87,7 @@ export default function StackUpdateAvailable({
                 bd={"1px solid " + hexColorByIntention("Neutral")}
                 leftSection={<ICONS.UpdateAvailable size="1rem" />}
               >
-                Update
-                {(info?.services.filter((s) => s.update_available).length ??
-                  0) > 1
-                  ? "s"
-                  : ""}{" "}
-                Available
+                有可用更新
               </Button>
             )}
           </HoverCard.Target>
@@ -111,7 +106,7 @@ export default function StackUpdateAvailable({
           <ConfirmModalWithDisable
             title={
               <>
-                Confirm <b>Redeploy</b>
+                确认 <b>重新部署</b>
               </>
             }
             confirmText={stack.name}
@@ -133,28 +128,27 @@ export default function StackUpdateAvailable({
               !info?.auto_update_all_services && (
                 <Stack className="bordered-light" p="md" bdrs="md" gap="sm">
                   <Text size="lg">
-                    Service
-                    {servicesWithUpdate.length === 1 ? "" : "s"} with update:
+                    以下服务有更新：
                   </Text>
                   <Services services={info?.services} />
                 </Stack>
               )
             }
           >
-            Update Available
+            有可用更新
           </ConfirmModalWithDisable>
         </Box>
       )}
       <Box>
         <Button
-          title="Check for updates"
+          title="检查更新"
           variant="outline"
           c="dimmed"
           rightSection={<ICONS.UpdateAvailable size="1rem" />}
           onClick={() => checkForUpdate({ stack: id })}
           loading={checkPending}
         >
-          Check
+          检查
         </Button>
       </Box>
     </>

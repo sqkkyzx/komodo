@@ -30,9 +30,9 @@ export default function ServerDiskUsage({
     >
       {withHeader && (
         <Group justify="space-between">
-          <Text fz="lg">Disk Usage</Text>
+          <Text fz="lg">磁盘使用情况</Text>
           <Group gap="xs">
-            <Text c="dimmed">Combined usage:</Text>
+            <Text c="dimmed">总使用率：</Text>
             <Text c={hexColorByIntention(intent)} fz="lg">
               {perc.toFixed(2)}%
             </Text>
@@ -49,15 +49,15 @@ export default function ServerDiskUsage({
           bdrs="sm"
         >
           <Group>
-            <Text c="dimmed">Mount:</Text>{" "}
+            <Text c="dimmed">挂载点：</Text>{" "}
             <Text ff="monospace" bg="accent.6" px="xs" bdrs="sm">
               {disk.mount}
             </Text>
           </Group>
           <Text>-</Text>
           <Group gap="0.4rem">
-            {disk.used_gb.toFixed(1)} GB <Text c="dimmed">of</Text>{" "}
-            {disk.total_gb.toFixed(1)} GB <Text c="dimmed">in use</Text> (
+            {disk.used_gb.toFixed(1)} GB <Text c="dimmed">/</Text>{" "}
+            {disk.total_gb.toFixed(1)} GB <Text c="dimmed">已使用</Text> (
             {((100 * disk.used_gb) / disk.total_gb).toFixed(1)} %)
           </Group>
         </Group>

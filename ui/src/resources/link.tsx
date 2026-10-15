@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { usableResourcePath } from "@/lib/utils";
 import { ResourceComponents, UsableResource } from ".";
 import { Group, GroupProps, Text, TextProps } from "@mantine/core";
@@ -29,7 +30,7 @@ export default function ResourceLink({
   const resource = RC.useListItem(id, useName);
   return (
     <Group
-      title={`${type} - ${resource?.name}`}
+      title={`${resourceLabel(type)} - ${resource?.name}`}
       renderRoot={(props) => (
         <Link to={`/${usableResourcePath(type)}/${id}`} {...props} />
       )}
@@ -52,7 +53,7 @@ export default function ResourceLink({
         fz={{ base: "sm", lg: "md" }}
         {...textProps}
       >
-        {resource?.name ?? "Unknown"}
+        {resource?.name ?? "未知"}
       </Text>
       {resource?.template && <TemplateMarker type={type} />}
     </Group>

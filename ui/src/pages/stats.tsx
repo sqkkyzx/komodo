@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import TagsFilter from "@/components/tags/filter";
 import {
   komodo_client,
@@ -25,7 +26,6 @@ import { Types } from "komodo_client";
 import { ChartLine, Download, Upload } from "lucide-react";
 import {
   fmtSizeBytes,
-  fmtUpperCamelcase,
   InfoCard,
   Page,
   SearchInput,
@@ -82,7 +82,7 @@ const STAT_TYPES: [StatType, ReactNode][] = [
 ];
 
 export default function Stats() {
-  useSetTitle("Stats");
+  useSetTitle("统计");
 
   // Server ids
   const [selectedServers, setSelectedServers] = useLocalStorage<string[]>({
@@ -134,7 +134,7 @@ export default function Stats() {
   const Content = useMemo(
     () =>
       servers.length === 0 ? (
-        <Text c="dimmed">No Servers found.</Text>
+        <Text c="dimmed">未找到服务器。</Text>
       ) : (
         <>
           <CurrentStatsSummary servers={filteredServers} />
@@ -142,7 +142,7 @@ export default function Stats() {
             servers={filteredServers}
             serverColors={serverColors}
           />
-          <Section title="Servers" icon={<ICONS.Server size="1.3rem" />}>
+          <Section title="服务器" icon={<ICONS.Server size="1.3rem" />}>
             <StatsServerTable resources={filteredServers} disableSorting />
           </Section>
         </>
@@ -152,9 +152,9 @@ export default function Stats() {
 
   return (
     <Page
-      title="Stats"
+      title="统计"
       icon={ICONS.Stats}
-      description="System stats across all servers."
+      description="所有服务器的系统统计信息。"
     >
       <Stack>
         <Group justify="space-between">
@@ -173,11 +173,11 @@ export default function Stats() {
                 Types.ServerSortBy.Memory,
                 Types.ServerSortBy.Disk,
                 Types.ServerSortBy.Network,
-              ].map((s) => ({ value: s, label: fmtUpperCamelcase(s) }))}
+              ].map((s) => ({ value: s, label: displayLabel(s) }))}
               allowDeselect={false}
               leftSection={
                 <Text c="dimmed" size="sm" ml="2">
-                  Sort By:
+                  排序：
                 </Text>
               }
               leftSectionWidth={64}
@@ -222,35 +222,34 @@ function CurrentStatsSummary({ servers }: { servers: Types.ServerListItem[] }) {
     <Section>
       <Group align="stretch">
         <InfoCard
-          title="Servers"
+          title="服务器"
           info={<ICONS.Server size="1.3rem" />}
           w={{ base: "100%", lg: 300 }}
           gap="0.2rem"
           justify="space-between"
         >
           <Text c="dimmed" size="sm">
-            <b>{okCount}</b> of <b>{servers.length}</b> reachable
+            共 <b>{servers.length}</b> 台，<b>{okCount}</b> 台可连接
           </Text>
           <Group gap="md">
             {unreachableCount > 0 && (
               <Text c="red" size="sm">
-                {unreachableCount} unreachable
+                {unreachableCount} 台无法连接
               </Text>
             )}
             {disabledCount > 0 && (
               <Text c="dimmed" size="sm">
-                {disabledCount} disabled
+                {disabledCount} 台已禁用
               </Text>
             )}
           </Group>
         </InfoCard>
         <StatBar
-          title="CPU Usage"
+          title="CPU 使用率"
           icon={<ICONS.Cpu size="1.3rem" />}
           description={
             <>
-              Average across <b>{stats.length}</b> reachable server
-              {stats.length === 1 ? "" : "s"}
+              <b>{stats.length}</b> 台可连接服务器的平均值
             </>
           }
           percentage={cpu}
@@ -258,13 +257,13 @@ function CurrentStatsSummary({ servers }: { servers: Types.ServerListItem[] }) {
           critical={90}
         />
         <StatBar
-          title="Memory Usage"
+          title="内存使用率"
           icon={<ICONS.Memory size="1.3rem" />}
           description={
             memTotal > 0 && (
               <>
-                <b>{memUsed.toFixed(1)} GB</b> of{" "}
-                <b>{memTotal.toFixed(1)} GB</b> in use
+                已用 <b>{memUsed.toFixed(1)} GB</b> / 共{" "}
+                <b>{memTotal.toFixed(1)} GB</b>
               </>
             )
           }
@@ -273,13 +272,13 @@ function CurrentStatsSummary({ servers }: { servers: Types.ServerListItem[] }) {
           critical={90}
         />
         <StatBar
-          title="Disk Usage"
+          title="磁盘使用率"
           icon={<ICONS.Disk size="1.3rem" />}
           description={
             diskTotal > 0 && (
               <>
-                <b>{diskUsed.toFixed(1)} GB</b> of{" "}
-                <b>{diskTotal.toFixed(1)} GB</b> in use
+                已用 <b>{diskUsed.toFixed(1)} GB</b> / 共{" "}
+                <b>{diskTotal.toFixed(1)} GB</b>
               </>
             )
           }
@@ -335,7 +334,7 @@ function HistoricalStats({
   return (
     <Section
       withBorder
-      title="Historical"
+      title="历史统计"
       icon={<ChartLine size="1.3rem" />}
       titleRight={
         <Group ml={{ sm: "xl" }}>
@@ -355,7 +354,7 @@ function HistoricalStats({
               Types.Timelength.OneHour,
               Types.Timelength.SixHours,
               Types.Timelength.OneDay,
-            ]}
+            ].map((value) => ({ value, label: displayLabel(value) }))}
             w={120}
           />
         </Group>
@@ -364,8 +363,8 @@ function HistoricalStats({
       <Stack>
         {servers.length > MAX_CHART_SERVERS && (
           <Text c="dimmed" size="sm">
-            Charting the first {MAX_CHART_SERVERS} of {servers.length} servers.
-            Filter to specific Servers to compare the others.
+            共 {servers.length} 台服务器，图表显示前 {MAX_CHART_SERVERS} 台。
+            请选择特定服务器以比较其余服务器。
           </Text>
         )}
         <SimpleGrid cols={{ base: 1, xl: 2 }} spacing="xl">
@@ -444,7 +443,7 @@ function MultiServerStatChart({
       <Group gap="xs">
         {icon}
         <Text fz="xl" fw={500}>
-          {isLoadAvg ? "Load Average (1m)" : type}
+          {isLoadAvg ? "平均负载（1 分钟）" : displayLabel(type)}
         </Text>
       </Group>
       {isPending ? (
@@ -492,7 +491,9 @@ function MultiServerStatChart({
                 fontSize: 12,
               }}
               labelStyle={{ color: "var(--mantine-color-dimmed)" }}
-              labelFormatter={(label) => new Date(Number(label)).toLocaleString()}
+              labelFormatter={(label) =>
+                new Date(Number(label)).toLocaleString()
+              }
               // List the busiest server first.
               itemSorter={(item) => -Number(item.value)}
               formatter={(value, name) => {

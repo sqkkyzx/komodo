@@ -24,26 +24,26 @@ export default function ServerVersion({ id }: { id: string }) {
             <ICONS.Check size="1rem" color={hexColorByIntention("Good")} />
           )}
           <Text style={{ textWrap: "nowrap" }}>
-            {serverVersion ?? "Unknown"}
+            {serverVersion ?? "未知"}
           </Text>
         </Group>
       </HoverCard.Target>
       <HoverCard.Dropdown>
         {server?.info.state === Types.ServerState.Disabled ? (
           <Text>
-            Server version is <b>disabled</b>.
+            服务器版本 <b>已禁用</b>.
           </Text>
         ) : !serverVersion ? (
           <Text>
-            Periphery version is <b>unknown</b>.
+            Periphery 版本 <b>未知</b>.
           </Text>
         ) : mismatch ? (
           <Text>
-            Periphery version <b>mismatch</b>. Expected <b>{coreVersion}</b>.
+            Periphery 版本 <b>不匹配</b>。预期版本 <b>{coreVersion}</b>.
           </Text>
         ) : (
           <Text>
-            Periphery and Core version <b>match</b>.
+            Periphery 与 Core 版本 <b>一致</b>.
           </Text>
         )}
       </HoverCard.Dropdown>

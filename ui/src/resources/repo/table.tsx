@@ -46,7 +46,7 @@ export default function RepoTable({
       columns={[
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           id: "Name",
           accessorKey: "name",
@@ -54,7 +54,7 @@ export default function RepoTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Repo" />
+            <SortableHeader column={column} title="代码仓库" />
           ),
           id: "Repo",
           accessorKey: "info.repo",
@@ -67,21 +67,21 @@ export default function RepoTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Branch" />
+            <SortableHeader column={column} title="分支" />
           ),
           id: "Branch",
           accessorKey: "info.branch",
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           id: "State",
           accessorKey: "info.state",
           cell: ({ row }) => <RepoComponents.State id={row.original.id} />,
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

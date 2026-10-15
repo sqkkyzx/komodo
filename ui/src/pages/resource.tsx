@@ -70,7 +70,7 @@ function ResourceInner({ type, id }: { type: UsableResource; id: string }) {
         <PageBreadcrumbs
           items={[
             ...(SETTINGS_RESOURCES.includes(type)
-              ? [{ label: "Settings", to: "/settings" }]
+              ? [{ label: "设置", to: "/settings" }]
               : []),
             resourceTypeCrumb(type),
             { label: resource.name },
@@ -172,7 +172,7 @@ function ResourceHeader({ type, id }: { type: UsableResource; id: string }) {
         <Group px="md" gap="sm">
           {!resource?.tags?.length && (
             <Text c="dimmed" fz="sm">
-              Tags:
+              标签：
             </Text>
           )}
           <ResourceTags

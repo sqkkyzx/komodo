@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { resourceSyncStateIntention } from "@/lib/color";
 import { useListItem, useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
@@ -49,31 +50,31 @@ export const ResourceSyncComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { title: "Ok", intention: "Good", value: summary?.ok ?? 0 },
+      { title: "正常", intention: "Good", value: summary?.ok ?? 0 },
       {
-        title: "Syncing",
+        title: "同步中",
         intention: "Warning",
         value: summary?.syncing ?? 0,
       },
       {
-        title: "Pending",
+        title: "待处理",
         intention: "Neutral",
         value: summary?.pending ?? 0,
       },
       {
-        title: "Failed",
+        title: "失败",
         intention: "Critical",
         value: summary?.failed ?? 0,
       },
       {
-        title: "Unknown",
+        title: "未知",
         intention: "Unknown",
         value: summary?.unknown ?? 0,
       },
     ];
   },
 
-  Description: () => <>Declare resources in TOML files.</>,
+  Description: () => <>通过 TOML 文件声明资源。</>,
 
   New: ({ repoId }) => (
     <NewResource
@@ -121,7 +122,7 @@ export const ResourceSyncComponents: RequiredResourceComponents<
   State: ({ id }) => {
     let state = useResourceSync(id)?.info.state;
     return (
-      <StatusBadge text={state} intent={resourceSyncStateIntention(state)} />
+      <StatusBadge text={displayLabel(state)} intent={resourceSyncStateIntention(state)} />
     );
   },
 
@@ -135,7 +136,7 @@ export const ResourceSyncComponents: RequiredResourceComponents<
       return (
         <Group gap="xs">
           <Clock size="1rem" />
-          {last_ts ? fmtDate(new Date(last_ts)) : "Never"}
+          {last_ts ? fmtDate(new Date(last_ts)) : "从未"}
         </Group>
       );
     },
@@ -149,7 +150,7 @@ export const ResourceSyncComponents: RequiredResourceComponents<
           <HashCompare
             lastHash={info?.last_sync_hash}
             lastMessage={info?.last_sync_message}
-            lastLabel="synced"
+            lastLabel="同步"
             latestHash={info?.pending_hash}
             latestMessage={info?.pending_message}
           />

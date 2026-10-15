@@ -18,7 +18,7 @@ import { SearchInput } from "mogh_ui";
 const TERMINAL_SORT_KEYS = Object.values(Types.TerminalSortBy);
 
 export default function Terminals() {
-  useSetTitle("Terminals");
+  useSetTitle("终端");
 
   const [page, setPage] = useState(0);
 
@@ -60,9 +60,9 @@ export default function Terminals() {
 
   return (
     <Page
-      title="Terminals"
+      title="终端"
       icon={ICONS.Terminal}
-      description="Manage terminals across all servers."
+      description="管理所有服务器上的终端。"
     >
       <Stack>
         <Group justify="space-between">
@@ -106,7 +106,7 @@ export default function Terminals() {
               id: "Name",
               accessorKey: "name",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Name" />
+                <SortableHeader column={column} title="名称" />
               ),
               cell: ({ row }) => (
                 <Link
@@ -126,7 +126,7 @@ export default function Terminals() {
               id: "Target",
               accessorKey: "target",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Target" />
+                <SortableHeader column={column} title="目标" />
               ),
               cell: ({ row }) => (
                 <TerminalTargetLink target={row.original.target} />
@@ -136,7 +136,7 @@ export default function Terminals() {
               id: "Command",
               accessorKey: "command",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Command" />
+                <SortableHeader column={column} title="命令" />
               ),
               cell: ({ row }) => (
                 <Text ff="monospace" fz="sm">
@@ -148,7 +148,7 @@ export default function Terminals() {
               id: "Size",
               accessorKey: "stored_size_kb",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Size" />
+                <SortableHeader column={column} title="大小" />
               ),
               cell: ({
                 row: {
@@ -164,7 +164,7 @@ export default function Terminals() {
               id: "Created",
               accessorKey: "created_at",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Created" />
+                <SortableHeader column={column} title="创建时间" />
               ),
               cell: ({
                 row: {
@@ -173,7 +173,7 @@ export default function Terminals() {
               }) => fmtDateWithMinutes(new Date(created_at)),
             },
             {
-              header: "Delete",
+              header: "删除",
               cell: ({ row }) => (
                 <DeleteTerminal
                   target={row.original.target}

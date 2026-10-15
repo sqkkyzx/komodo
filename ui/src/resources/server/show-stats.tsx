@@ -17,7 +17,7 @@ export default function ServerShowStats() {
       }
       w={{ base: "100%", xs: "fit-content" }}
     >
-      {preferences.showServerStats ? "Hide Server Stats" : "Show Server Stats"}
+      {preferences.showServerStats ? "隐藏服务器统计" : "显示服务器统计"}
     </Button>
   );
 }

@@ -17,7 +17,7 @@ import NewServiceUser from "./new-service-user";
 import NewLocalUser from "./new-local-user";
 
 export default function SettingsUsers() {
-  useSetTitle("Users");
+  useSetTitle("用户");
   const inv = useInvalidate();
   const [search, setSearch] = useState("");
   const user = useUser().data;
@@ -25,7 +25,7 @@ export default function SettingsUsers() {
   const { mutateAsync: deleteUser } = useWrite("DeleteUser", {
     onSuccess: (user) => {
       notifications.show({
-        message: `Deleted User ${user.username}.`,
+        message: `已删除用户 ${user.username}。`,
         color: "green",
       });
       inv(["ListUsers"]);
@@ -38,8 +38,7 @@ export default function SettingsUsers() {
       <SettingsUserGroups search={search} setSearch={setSearch} />
 
       <Section
-        title="Users"
-       
+        title="用户"
         icon={<ICONS.User size="1.3rem" />}
         titleRight={
           <Group ml="md">

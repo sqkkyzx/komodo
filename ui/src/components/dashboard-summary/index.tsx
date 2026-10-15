@@ -1,3 +1,4 @@
+import { resourceLabel, displayLabel } from "@/lib/l10n";
 import { Group, Paper, Stack, Text } from "@mantine/core";
 import { PieChart } from "react-minimal-pie-chart";
 import { ReactNode, useMemo } from "react";
@@ -38,7 +39,7 @@ export default function DashboardSummary({
             <Text fw="bold" c={hexColorByIntention(intention)}>
               {value}
             </Text>
-            {title}
+            {displayLabel(title)}
           </Group>
         ))}
       </Stack>
@@ -47,7 +48,7 @@ export default function DashboardSummary({
         radius={42}
         lineWidth={30}
         data={data.map(({ title, value, intention }) => ({
-          title,
+          title: displayLabel(title),
           value,
           color: hexColorByIntention(intention) || "#A855F7",
         }))}
@@ -63,7 +64,7 @@ export default function DashboardSummary({
     >
       <Group>
         {icon}
-        {name}s
+        {resourceLabel(name)}
       </Group>
       {children}
     </Paper>

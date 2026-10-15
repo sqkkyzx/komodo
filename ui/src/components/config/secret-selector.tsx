@@ -43,7 +43,7 @@ export default function SecretSelector({
           nav("/settings");
         } else if (variable) {
           navigator.clipboard.writeText("[[" + variable + "]]");
-          notifications.show({ message: "Copied secret key" });
+          notifications.show({ message: "已复制机密键名" });
         }
       }}
       width={300}
@@ -55,7 +55,7 @@ export default function SecretSelector({
           disabled={disabled}
           onClick={() => combobox.toggleDropdown()}
         >
-          {type}s
+          {type === "Variable" ? "变量" : "机密"}
         </Button>
       </Combobox.Target>
 
@@ -64,7 +64,7 @@ export default function SecretSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" />}
-          placeholder="Search"
+          placeholder="搜索"
           styles={{
             section: {
               marginRight: 4,
@@ -77,7 +77,7 @@ export default function SecretSelector({
               {key}
             </Combobox.Option>
           ))}
-          <Combobox.Option value="Show All">Show All</Combobox.Option>
+          <Combobox.Option value="Show All">显示全部</Combobox.Option>
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>

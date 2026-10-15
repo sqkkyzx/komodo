@@ -13,7 +13,7 @@ export default function ConfirmServerPubkey({ id }: { id: string }) {
     {
       onSuccess: () => {
         notifications.show({
-          message: "Confirmed Server public key",
+          message: "已确认服务器公钥",
           color: "green",
         });
       },
@@ -25,26 +25,26 @@ export default function ConfirmServerPubkey({ id }: { id: string }) {
   return (
     <ConfirmModal
       disabled={!canWrite}
-      title="Confirm Public Key"
-      confirmButtonContent="Confirm"
+      title="确认公钥"
+      confirmButtonContent="确认"
       confirmText={server.name}
       icon={<CircleOff size="1rem" />}
       targetProps={{ color: "red" }}
       topAdditonal={
         <Group gap="xs">
-          <Text c="dimmed">Public Key:</Text>
+          <Text c="dimmed">公钥：</Text>
           {server.info.attempted_public_key}
         </Group>
       }
       additional={
-        <Text>Note. May take a few moments for status to update.</Text>
+        <Text>提示：状态更新可能需要稍等片刻。</Text>
       }
       onConfirm={() =>
         confirm({ server: id, public_key: server.info.attempted_public_key! })
       }
       loading={isPending}
     >
-      Invalid Pubkey
+      无效公钥
     </ConfirmModal>
   );
 }

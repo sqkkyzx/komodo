@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import {
   swarmNodeStateIntention,
   swarmStateIntention,
@@ -35,13 +36,13 @@ export default function SwarmResourceLink({
   extra,
   dimmed,
 }: SwarmResourceLinkProps) {
-  if (!resourceId) return "Unknown";
+  if (!resourceId) return "未知";
 
   const Icon = SWARM_LINK_ICONS[type];
 
   return (
     <Group
-      title={`Swarm ${type} - ${name}`}
+      title={`集群${resourceLabel(type)} - ${name}`}
       renderRoot={(props) => (
         <Link
           to={`/swarms/${swarmId}/swarm-${type.toLowerCase()}/${encodeURIComponent(resourceId)}`}

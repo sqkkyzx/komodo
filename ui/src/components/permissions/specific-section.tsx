@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { useInvalidate, useWrite } from "@/lib/hooks";
 import { levelSortingFn } from "@/lib/utils";
 import { ResourceComponents, UsableResource } from "@/resources";
@@ -30,7 +31,7 @@ export default function SpecificPermissionsSection({
   const { mutate: update } = useWrite("UpdatePermissionOnTarget", {
     onSuccess: () => {
       inv(["ListUserTargetPermissions"]);
-      notifications.show({ message: "Updated permission", color: "green" });
+      notifications.show({ message: "权限已更新", color: "green" });
     },
   });
 
@@ -54,7 +55,7 @@ export default function SpecificPermissionsSection({
           {
             accessorKey: "resource_target.type",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Resource" />
+              <SortableHeader column={column} title="资源" />
             ),
             cell: ({ row }) => {
               const RC =
@@ -64,7 +65,9 @@ export default function SpecificPermissionsSection({
               return (
                 <Group gap="sm">
                   <RC.Icon />
-                  <Text>{row.original.resource_target.type}</Text>
+                  <Text>
+                    {resourceLabel(row.original.resource_target.type)}
+                  </Text>
                 </Group>
               );
             },
@@ -72,7 +75,7 @@ export default function SpecificPermissionsSection({
           {
             accessorKey: "resource_target",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Target" />
+              <SortableHeader column={column} title="目标" />
             ),
             cell: ({
               row: {
@@ -92,7 +95,7 @@ export default function SpecificPermissionsSection({
             sortFn: (a, b) =>
               levelSortingFn(a.original.level, b.original.level),
             header: ({ column }) => (
-              <SortableHeader column={column} title="Level" />
+              <SortableHeader column={column} title="级别" />
             ),
             cell: ({ row: { original: permission } }) => (
               <PermissionLevelSelector
@@ -111,7 +114,7 @@ export default function SpecificPermissionsSection({
             ),
           },
           {
-            header: "Specific",
+            header: "具体权限",
             cell: ({ row: { original: permission } }) => {
               return (
                 <SpecificPermissionSelector
@@ -138,7 +141,7 @@ export default function SpecificPermissionsSection({
 
   return (
     <Section
-      title="Per Resource Permissions"
+      title="各资源权限"
       titleFz="h3"
       actions={
         <Group>
@@ -150,7 +153,7 @@ export default function SpecificPermissionsSection({
           <LabelledSwitch
             checked={showAll}
             onCheckedChange={setShowAll}
-            label="Show All"
+            label="显示全部"
           />
         </Group>
       }

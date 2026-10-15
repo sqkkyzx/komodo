@@ -56,7 +56,7 @@ export default function StandardServerTable({
           id: "Name",
           accessorKey: "name",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           cell: ({ row }) => (
             <ResourceLink type="Server" id={row.original.id} />
@@ -80,7 +80,7 @@ export default function StandardServerTable({
             else return 0;
           },
           header: ({ column }) => (
-            <SortableHeader column={column} title="Resources" />
+            <SortableHeader column={column} title="资源" />
           ),
           cell: ({ row }) => {
             return <>{resourcesCount(row.original.id)}</>;
@@ -90,14 +90,14 @@ export default function StandardServerTable({
           id: "Region",
           accessorKey: "info.region",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Region" />
+            <SortableHeader column={column} title="区域" />
           ),
         },
         {
           id: "Version",
           accessorKey: "info.version",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Version" />
+            <SortableHeader column={column} title="版本" />
           ),
           // cell: ({ row }) => <ServerVersion id={row.original.id} />,
         },
@@ -105,12 +105,12 @@ export default function StandardServerTable({
           id: "State",
           accessorKey: "info.state",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => <ServerComponents.State id={row.original.id} />,
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

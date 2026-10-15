@@ -1,18 +1,16 @@
 import { Types } from "komodo_client";
 import { UsableResource } from "@/resources";
+import { resourceLabel } from "@/lib/l10n";
 
 export const fmtVersion = (version: Types.Version | undefined) => {
   if (!version) return "...";
   const { major, minor, patch } = version;
-  if (major === 0 && minor === 0 && patch === 0) return "Latest";
+  if (major === 0 && minor === 0 && patch === 0) return "最新";
   return `v${major}.${minor}.${patch}`;
 };
 
 export function fmtResourceType(type: UsableResource) {
-  if (type === "ResourceSync") {
-    return "Resource Sync";
-  }
-  return type;
+  return resourceLabel(type);
 }
 
 export function fmtUtcOffset(tz: Types.IanaTimezone): string {

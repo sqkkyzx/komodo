@@ -34,9 +34,7 @@ export default function StackServiceInspect({
     return (
       <Section titleOther={titleOther}>
         <Center className="min-h-[60vh]">
-          <Text>
-            User does not have permission to inspect this Stack service.
-          </Text>
+          <Text>用户无权检查此应用栈服务。</Text>
         </Center>
       </Section>
     );

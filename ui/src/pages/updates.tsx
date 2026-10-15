@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import ResourceTypeSelector from "@/components/resource-type-selector";
 import { useUpdateDetails } from "@/components/updates/details";
 import UserAvatar from "@/components/user-avatar";
@@ -6,13 +7,7 @@ import { UsableResource } from "@/resources";
 import ResourceLink from "@/resources/link";
 import ResourceSelector from "@/resources/selector";
 import { ICONS } from "@/lib/icons";
-import {
-  StatusBadge,
-  fmtDateWithMinutes,
-  DataTable,
-  Page,
-  fmtUpperCamelcase,
-} from "mogh_ui";
+import { StatusBadge, fmtDateWithMinutes, DataTable, Page } from "mogh_ui";
 import {
   ActionIcon,
   Group,
@@ -27,7 +22,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function Updates() {
-  useSetTitle("Updates");
+  useSetTitle("更新记录");
   const [page, setPage] = useState(0);
   const [params, setParams] = useSearchParams();
   const { open: openDetails } = useUpdateDetails();
@@ -54,11 +49,7 @@ export default function Updates() {
   );
 
   return (
-    <Page
-      title="Updates"
-      icon={ICONS.Update}
-      description="View historical updates"
-    >
+    <Page title="更新记录" icon={ICONS.Update} description="查看历史更新">
       <Stack>
         {/* QUERY */}
         <Group>
@@ -95,7 +86,7 @@ export default function Updates() {
           {/* OPERATION */}
           <Select
             value={operation}
-            placeholder="Select operation"
+            placeholder="选择操作"
             onChange={(op) => {
               const p = new URLSearchParams(params.toString());
               if (op) {
@@ -110,7 +101,7 @@ export default function Updates() {
               : Object.values(Types.Operation).filter(
                   (o) => o !== Types.Operation.None,
                 )
-            )?.map((value) => ({ value, label: fmtUpperCamelcase(value) }))}
+            )?.map((value) => ({ value, label: displayLabel(value) }))}
             w={{ base: "100%", xs: 250 }}
             searchable
             clearable
@@ -146,7 +137,7 @@ export default function Updates() {
           data={updates?.updates ?? []}
           columns={[
             {
-              header: "Details",
+              header: "详情",
               cell: () => {
                 return (
                   <ActionIcon>
@@ -156,12 +147,12 @@ export default function Updates() {
               },
             },
             !params.get("id") && {
-              header: "Resource",
+              header: "资源",
               cell: ({ row }) =>
                 row.original.target.type === "System" ? (
                   <Group gap="xs" wrap="nowrap">
                     <ICONS.System size="1rem" />
-                    <Text>System</Text>
+                    <Text>系统</Text>
                   </Group>
                 ) : (
                   <ResourceLink
@@ -171,25 +162,25 @@ export default function Updates() {
                 ),
             },
             {
-              header: "Operation",
+              header: "操作",
               accessorKey: "operation",
               cell: ({ row }) => {
                 const more =
                   row.original.status === Types.UpdateStatus.InProgress
-                    ? "in progress"
+                    ? "进行中"
                     : row.original.status === Types.UpdateStatus.Queued
-                      ? "queued"
+                      ? "排队中"
                       : undefined;
                 return (
                   <Group gap="xs" wrap="nowrap">
-                    <Text>{fmtUpperCamelcase(row.original.operation)}</Text>
+                    <Text>{displayLabel(row.original.operation)}</Text>
                     {more && <Text c="dimmed">{more}</Text>}
                   </Group>
                 );
               },
             },
             {
-              header: "Result",
+              header: "结果",
               cell: ({ row }) => {
                 const { success, status } = row.original;
                 return (
@@ -204,21 +195,21 @@ export default function Updates() {
                     text={
                       status === Types.UpdateStatus.Complete
                         ? success
-                          ? "Success"
-                          : "Failed"
-                        : "Processing"
+                          ? "成功"
+                          : "失败"
+                        : "处理中"
                     }
                   />
                 );
               },
             },
             {
-              header: "Start Time",
+              header: "开始时间",
               accessorFn: ({ start_ts }) =>
                 fmtDateWithMinutes(new Date(start_ts)),
             },
             {
-              header: "Operator",
+              header: "操作人",
               accessorKey: "operator",
               cell: ({ row }) => (
                 <UserAvatar userId={row.original.operator} fz="md" />

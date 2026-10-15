@@ -25,8 +25,8 @@ export default function OrganizationSelector({
   if (customMode) {
     return (
       <TextInput
-        label="Organization"
-        placeholder="Input custom organization name"
+        label="组织"
+        placeholder="输入自定义组织名称"
         w={{ base: "85%", lg: 400 }}
         value={selected}
         onChange={(e) => onSelect(e.target.value)}
@@ -51,11 +51,14 @@ export default function OrganizationSelector({
 
   return (
     <Select
-      placeholder="Select Organization"
-      label={showLabel && "Organization"}
+      placeholder="选择组织"
+      label={showLabel && "组织"}
       value={selected}
       disabled={disabled}
-      data={orgs}
+      data={orgs.map((value) => ({
+        value,
+        label: value === "None" ? "无" : value === "Custom" ? "自定义" : value,
+      }))}
       onChange={(value) => {
         if (value === "Custom") {
           onSelect("");

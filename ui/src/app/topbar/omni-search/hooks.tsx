@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import {
   SettingsView,
   useAllResources,
@@ -119,7 +120,7 @@ export function useOmniSearch(opened: boolean) {
         actions: [
           {
             id: "Dashboard",
-            label: "Dashboard",
+            label: "概览",
             leftSection: <ICONS.Dashboard size="1.3rem" />,
             onClick: () => nav("/"),
           },
@@ -129,7 +130,7 @@ export function useOmniSearch(opened: boolean) {
             const Components = ResourceComponents[_type];
             return {
               id: type + "s",
-              label: type + "s",
+              label: resourceLabel(_type),
               leftSection: <Components.Icon size="1.3rem" />,
               onClick: () => {
                 if (type === "Builder" || type === "Alerter") {
@@ -144,31 +145,31 @@ export function useOmniSearch(opened: boolean) {
 
           {
             id: "Containers",
-            label: "Containers",
+            label: "容器",
             leftSection: <ICONS.Container size="1.3rem" />,
             onClick: () => nav("/containers"),
           },
           {
             id: "Terminals",
-            label: "Terminals",
+            label: "终端",
             leftSection: <ICONS.Terminal size="1.3rem" />,
             onClick: () => nav("/terminals"),
           },
           {
             id: "Stats",
-            label: "Stats",
+            label: "统计",
             leftSection: <ICONS.Stats size="1.3rem" />,
             onClick: () => nav("/stats"),
           },
           {
             id: "Schedules",
-            label: "Schedules",
+            label: "计划任务",
             leftSection: <ICONS.Schedule size="1.3rem" />,
             onClick: () => nav("/schedules"),
           },
           {
             id: "Variables",
-            label: "Variables",
+            label: "变量",
             leftSection: <ICONS.Variable size="1.3rem" />,
             onClick: () => {
               setSettingsView("Variables");
@@ -177,7 +178,7 @@ export function useOmniSearch(opened: boolean) {
           },
           user?.admin && {
             id: "Users",
-            label: "Users",
+            label: "用户",
             leftSection: <ICONS.User size="1.3rem" />,
             onClick: () => {
               setSettingsView("Users");
@@ -186,7 +187,7 @@ export function useOmniSearch(opened: boolean) {
           },
         ].filter((item) => {
           if (!item) return;
-          const label = item.label.toLowerCase();
+          const label = `${item.id} ${item.label}`.toLowerCase();
           return (
             searchTerms.length === 0 ||
             searchTerms.every((term) => label.includes(term))
@@ -200,7 +201,7 @@ export function useOmniSearch(opened: boolean) {
         const typeKeyword = type.toLowerCase() + "s";
         const Components = ResourceComponents[_type];
         return {
-          group: type + "s",
+          group: resourceLabel(_type),
           actions:
             resources[_type]
               ?.filter((resource) => {
@@ -233,9 +234,9 @@ export function useOmniSearch(opened: boolean) {
                     <TemplateMarker type={_type} />
                   ),
                   description: info.swarm_id
-                    ? "Swarm: " + info.swarm_name
+                    ? "集群：" + info.swarm_name
                     : info.server_id
-                      ? "Server: " + info.server_name
+                      ? "服务器：" + info.server_name
                       : undefined,
                 };
               }) ?? [],
@@ -243,7 +244,7 @@ export function useOmniSearch(opened: boolean) {
       }),
 
       {
-        group: "Services",
+        group: "服务",
         actions:
           services?.map((service) => {
             const intention = service?.swarm_service?.State
@@ -253,7 +254,7 @@ export function useOmniSearch(opened: boolean) {
             return {
               id: service.stack_id + " " + service.service,
               label: service.service,
-              description: "Stack: " + service.stack_name,
+              description: "应用栈：" + service.stack_name,
               onClick: () =>
                 nav(`/stacks/${service.stack_id}/service/${service.service}`),
               leftSection: <ICONS.Service size="1.3rem" color={color} />,
@@ -262,12 +263,12 @@ export function useOmniSearch(opened: boolean) {
       },
 
       {
-        group: "Containers",
+        group: "容器",
         actions:
           containers?.map((container) => ({
             id: (container.server_id ?? "") + " " + container.name,
             label: container.name,
-            description: "Server: " + container.server_name,
+            description: "服务器：" + container.server_name,
             onClick: () =>
               nav(
                 `/servers/${container.server_id}/container/${container.name}`,
@@ -283,7 +284,7 @@ export function useOmniSearch(opened: boolean) {
       },
 
       {
-        group: "Terminals",
+        group: "终端",
         actions:
           terminals?.map((terminal) => ({
             id: JSON.stringify(terminal.target) + " " + terminal.name,
@@ -363,14 +364,12 @@ function terminalTargetDescription(
 ) {
   switch (target.type) {
     case "Server":
-      return "Server: " + target_name;
+      return "服务器：" + target_name;
     case "Container":
-      return (
-        "Server: " + target_name + ", Container: " + target.params.container
-      );
+      return "服务器：" + target_name + "，容器：" + target.params.container;
     case "Stack":
-      return "Stack: " + target_name + ", Service: " + target.params.service;
+      return "应用栈：" + target_name + "，服务：" + target.params.service;
     case "Deployment":
-      return "Deployment: " + target_name;
+      return "部署：" + target_name;
   }
 }

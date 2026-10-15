@@ -27,7 +27,7 @@ export default function FileSource({ info }: FileSourceProps) {
     return (
       <Group gap="xs" wrap="nowrap">
         <ICONS.Server size="1rem" />
-        <Text fz={{ base: "sm", lg: "md" }}>Files on Server</Text>
+        <Text fz={{ base: "sm", lg: "md" }}>服务器上的文件</Text>
       </Group>
     );
   } else if (info.linked_repo) {
@@ -38,7 +38,7 @@ export default function FileSource({ info }: FileSourceProps) {
     return (
       <Group gap="xs" wrap="nowrap">
         <NotepadText size="1rem" />
-        <Text fz={{ base: "sm", lg: "md" }}>UI Defined</Text>
+        <Text fz={{ base: "sm", lg: "md" }}>在界面中定义</Text>
       </Group>
     );
   }

@@ -24,16 +24,16 @@ export default function ServerDisks({
   return (
     <Section
       withBorder
-      title="Disks"
+      title="磁盘"
       icon={<ICONS.Disk size="1.3rem" />}
       titleRight={
         <Group ml={{ md: "xl" }} gap="md">
           <Group gap="xs" wrap="nowrap">
-            <Text c="dimmed">Used:</Text>
+            <Text c="dimmed">已使用：</Text>
             <Text>{diskUsed?.toFixed(2)} GB</Text>
           </Group>
           <Group gap="xs" wrap="nowrap">
-            <Text c="dimmed">Total:</Text>
+            <Text c="dimmed">总计：</Text>
             <Text>{diskTotal?.toFixed(2)} GB</Text>
           </Group>
           <ShowHideButton show={show} setShow={setShow} />
@@ -53,7 +53,7 @@ export default function ServerDisks({
           }
           columns={[
             {
-              header: "Path",
+              header: "路径",
               cell: ({ row }) => (
                 <div className="overflow-hidden overflow-ellipsis">
                   {row.original.mount}
@@ -63,14 +63,14 @@ export default function ServerDisks({
             {
               accessorKey: "used_gb",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Used" sortDescFirst />
+                <SortableHeader column={column} title="已使用" sortDescFirst />
               ),
               cell: ({ row }) => <>{row.original.used_gb.toFixed(2)} GB</>,
             },
             {
               accessorKey: "total_gb",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Total" sortDescFirst />
+                <SortableHeader column={column} title="总计" sortDescFirst />
               ),
               cell: ({ row }) => <>{row.original.total_gb.toFixed(2)} GB</>,
             },
@@ -79,12 +79,12 @@ export default function ServerDisks({
               header: ({ column }) => (
                 <SortableHeader
                   column={column}
-                  title="Percentage"
+                  title="占比"
                   sortDescFirst
                 />
               ),
               cell: ({ row }) => (
-                <>{row.original.percentage.toFixed(2)}% Full</>
+                <>{row.original.percentage.toFixed(2)}% 已使用</>
               ),
             },
           ]}

@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { listsEqual } from "@/lib/utils";
 import { UsableResource } from "@/resources";
 import { Box, MultiSelect, MultiSelectProps } from "@mantine/core";
@@ -53,7 +54,7 @@ export default function SpecificPermissionSelector({
   return (
     <Box w={550}>
       <MultiSelect
-        placeholder={!temp.length ? "Add specific permissions..." : undefined}
+        placeholder={!temp.length ? "添加具体权限…" : undefined}
         value={temp}
         onChange={(specific) => setTemp(specific as Types.SpecificPermission[])}
         onBlur={() => !listsEqual(specific, temp) && onChange(temp)}
@@ -61,7 +62,10 @@ export default function SpecificPermissionSelector({
           setTemp([]);
           onChange?.([]);
         }}
-        data={ALL_PERMISSIONS_BY_TYPE[type]}
+        data={ALL_PERMISSIONS_BY_TYPE[type]?.map((value) => ({
+          value,
+          label: displayLabel(value),
+        }))}
         clearable
         maw={500}
         {...props}

@@ -1,0 +1,900 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "name": "mogh_ui",
+    "version": "1.2.7"
+  },
+  "files": [
+    {
+      "path": "dist/auth/index.js",
+      "sha256": "0d55d80e0b9861c09cd35c2ce115f5b2491c833ea3ea8821205b3a3d6da09b40",
+      "replacements": [
+        {
+          "from": "\"Unknown error. See console.\"",
+          "to": "\"未知错误，请查看控制台。\"",
+          "count": 2
+        },
+        {
+          "from": "title: `Login request ${type} failed`",
+          "to": "title: `登录请求失败（${type}）`",
+          "count": 1
+        },
+        {
+          "from": "title: `Manage auth request ${type} failed`",
+          "to": "title: `身份验证管理请求失败（${type}）`",
+          "count": 1
+        },
+        {
+          "from": "message: `${msg_log}See console for details`",
+          "to": "message: `${msg_log}详情请查看控制台`",
+          "count": 2
+        },
+        {
+          "from": "\"Failed to select passkey\"",
+          "to": "\"选择通行密钥失败\"",
+          "count": 1
+        },
+        {
+          "from": "\"See console for details\"",
+          "to": "\"详情请查看控制台\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/auth/login/index.js",
+      "sha256": "ae6204c195021f619b0d659e0b6d4821dc67c345b81ff70cab84083ba736899e",
+      "replacements": [
+        {
+          "from": "\"Failed to select passkey\"",
+          "to": "\"选择通行密钥失败\"",
+          "count": 1
+        },
+        {
+          "from": "\"See console for details\"",
+          "to": "\"详情请查看控制台\"",
+          "count": 1
+        },
+        {
+          "from": "\"Username cannot be empty\"",
+          "to": "\"用户名不能为空\"",
+          "count": 1
+        },
+        {
+          "from": "\"Password cannot be empty\"",
+          "to": "\"密码不能为空\"",
+          "count": 1
+        },
+        {
+          "from": "\"Code should be 6 digits\"",
+          "to": "\"验证码应为 6 位数字\"",
+          "count": 1
+        },
+        {
+          "from": "label: \"Username\"",
+          "to": "label: \"用户名\"",
+          "count": 1
+        },
+        {
+          "from": "placeholder: \"Enter username\"",
+          "to": "placeholder: \"输入用户名\"",
+          "count": 1
+        },
+        {
+          "from": "label: \"Password\"",
+          "to": "label: \"密码\"",
+          "count": 1
+        },
+        {
+          "from": "placeholder: \"Enter password\"",
+          "to": "placeholder: \"输入密码\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Sign Up\"",
+          "to": "children: \"注册\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Log In\"",
+          "to": "children: \"登录\"",
+          "count": 2
+        },
+        {
+          "from": "children: \"Provide your passkey to finish login...\"",
+          "to": "children: \"请提供通行密钥以完成登录…\"",
+          "count": 1
+        },
+        {
+          "from": "\"2FA Code\"",
+          "to": "\"双重验证代码\"",
+          "count": 1
+        },
+        {
+          "from": "\"No login methods have been configured. \"",
+          "to": "\"尚未配置登录方式。\"",
+          "count": 1
+        },
+        {
+          "from": "\"See the\"",
+          "to": "\"请参阅\"",
+          "count": 1
+        },
+        {
+          "from": "\"example config\"",
+          "to": "\"配置示例\"",
+          "count": 1
+        },
+        {
+          "from": "\"for information on configuring auth.\"",
+          "to": "\"了解如何配置身份验证。\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/auth/login/header.js",
+      "sha256": "67b5b2e37d8743df6f172ead1bc167f218b85d5c4dd3b083f4246aa0beb85c60",
+      "replacements": [
+        {
+          "from": "import { jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "children: \"Log In\"",
+          "to": "children: \"登录\"",
+          "count": 1
+        },
+        {
+          "from": "children: provider\n",
+          "to": "children: __komodoZh(provider)\n",
+          "count": 1
+        },
+        {
+          "from": "alt: provider,",
+          "to": "alt: __komodoZh(provider),",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/auth/profile/passkey.js",
+      "sha256": "9b460133de3f34301022285139be83748bdad1fcf335b3b42dbc3d33da2cc682",
+      "replacements": [
+        {
+          "from": "\"Unenrolled in passkey 2FA\"",
+          "to": "\"已关闭通行密钥双重验证\"",
+          "count": 1
+        },
+        {
+          "from": "\"Enrolled in passkey authentication\"",
+          "to": "\"已启用通行密钥验证\"",
+          "count": 1
+        },
+        {
+          "from": "\"Failed to create passkey\"",
+          "to": "\"创建通行密钥失败\"",
+          "count": 1
+        },
+        {
+          "from": "\"See console for details\"",
+          "to": "\"详情请查看控制台\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Enroll Passkey 2FA\"",
+          "to": "children: \"启用通行密钥双重验证\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Unenroll Passkey 2FA\"",
+          "to": "children: \"关闭通行密钥双重验证\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/auth/profile/totp.js",
+      "sha256": "a6bf29894e9a9b28e39293b4845f6d7f80a57d409d6f3fba13428cc3b9473be2",
+      "replacements": [
+        {
+          "from": "\"Unenrolled in TOTP 2FA.\"",
+          "to": "\"已关闭 TOTP 双重验证。\"",
+          "count": 1
+        },
+        {
+          "from": "\"Save recovery keys\"",
+          "to": "\"请保存恢复代码\"",
+          "count": 1
+        },
+        {
+          "from": "\"Scan this QR code with your authenticator app, and enter the 6 digit code below.\"",
+          "to": "\"请使用身份验证器应用扫描此二维码，然后在下方输入 6 位验证码。\"",
+          "count": 1
+        },
+        {
+          "from": "alt: \"QRCode\"",
+          "to": "alt: \"身份验证二维码\"",
+          "count": 1
+        },
+        {
+          "from": "\"Confirm Code\"",
+          "to": "\"确认验证码\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Confirm\"",
+          "to": "children: \"确认\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Enroll TOTP 2FA\"",
+          "to": "children: \"启用 TOTP 双重验证\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Unenroll TOTP 2FA\"",
+          "to": "children: \"关闭 TOTP 双重验证\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/auth/profile/linked-logins.js",
+      "sha256": "a7fb5ae15a59df55415cbad46e162067c9ea2e5c561d93ec1c8f28bb35e4dd71",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "\"Unlinked login.\"",
+          "to": "\"已解除登录方式关联。\"",
+          "count": 1
+        },
+        {
+          "from": "title: \"Providers\"",
+          "to": "title: \"登录方式\"",
+          "count": 1
+        },
+        {
+          "from": "header: \"Provider\"",
+          "to": "header: \"提供商\"",
+          "count": 1
+        },
+        {
+          "from": "children: row.original.provider",
+          "to": "children: __komodoZh(row.original.provider)",
+          "count": 1
+        },
+        {
+          "from": "header: \"Linked\"",
+          "to": "header: \"关联状态\"",
+          "count": 1
+        },
+        {
+          "from": "children: data ? \"Linked\" : \"Unlinked\"",
+          "to": "children: data ? \"已关联\" : \"未关联\"",
+          "count": 1
+        },
+        {
+          "from": "header: \"Data\"",
+          "to": "header: \"数据\"",
+          "count": 1
+        },
+        {
+          "from": "header: \"Link\"",
+          "to": "header: \"关联\"",
+          "count": 1
+        },
+        {
+          "from": "title: \"Unlink Login\"",
+          "to": "title: \"解除登录关联\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Unlink\"",
+          "to": "children: \"解除关联\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Set password above to enable.\"",
+          "to": "children: \"请先在上方设置密码以启用。\"",
+          "count": 1
+        },
+        {
+          "from": "\"Link \",\n                    provider",
+          "to": "\"关联 \",\n                    __komodoZh(provider)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/confirm-modal.js",
+      "sha256": "7f1322a6d884ab05d333d73110b8c27ce584e9f86c888e10eeceec8b5621e0f3",
+      "replacements": [
+        {
+          "from": "\"Confirm \"",
+          "to": "\"确认\"",
+          "count": 1
+        },
+        {
+          "from": "\"Please enter \"",
+          "to": "\"请在下方输入 \"",
+          "count": 1
+        },
+        {
+          "from": "\" below to confirm this action.\"",
+          "to": "\" 以确认此操作。\"",
+          "count": 1
+        },
+        {
+          "from": "\"You may click the text in bold to copy it\"",
+          "to": "\"点击粗体文字即可复制\"",
+          "count": 1
+        },
+        {
+          "from": "\"Does not match\"",
+          "to": "\"输入内容不匹配\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/create-modal.js",
+      "sha256": "14904ae7285a3daefc4ce3fe2c69eb5d0730fae8979ecbef7b40e2f158af5937",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "\"a unique name\"",
+          "to": "\"唯一名称\"",
+          "count": 1
+        },
+        {
+          "from": "title: `New ${entityType}`",
+          "to": "title: `新建${__komodoZh(entityType)}`",
+          "count": 1
+        },
+        {
+          "from": "\"Enter \",\n            configureLabel,\n            \" for the new \",\n            entityType,\n            \".\"",
+          "to": "`请为新${__komodoZh(entityType)}输入${__komodoZh(configureLabel)}。`",
+          "count": 1
+        },
+        {
+          "from": "children: \"Create\"",
+          "to": "children: \"创建\"",
+          "count": 1
+        },
+        {
+          "from": "\"New \",\n          entityType",
+          "to": "\"新建\",\n          __komodoZh(entityType)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/config/group.js",
+      "sha256": "bbf8181d563e9078be12b6a81bd0ce174c16be1e090b7337f8023092f80e9e3a",
+      "replacements": [
+        {
+          "from": "import { jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "args?.label ?? key",
+          "to": "args?.label ?? __komodoZh(key)",
+          "count": 4
+        },
+        {
+          "from": "\"Config '\"",
+          "to": "\"配置“\"",
+          "count": 1
+        },
+        {
+          "from": "\"':\"",
+          "to": "\"”：\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/config/confirm.js",
+      "sha256": "3387cc5a60c2adb0cf6c2bf719aa705cbe2ff2bf42ed1b8c92b09d216af3ff63",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "children: \"Confirm Update\"",
+          "to": "children: \"确认更新\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"Save\"",
+          "to": "children: \"保存\"",
+          "count": 2
+        },
+        {
+          "from": "children: fmtSnakeCaseToUpperSpaceCase(_key)",
+          "to": "children: __komodoZh(fmtSnakeCaseToUpperSpaceCase(_key))",
+          "count": 1
+        },
+        {
+          "from": "children: prev_val || \"None\"",
+          "to": "children: prev_val || \"无\"",
+          "count": 1
+        },
+        {
+          "from": "children: val || \"None\"",
+          "to": "children: val || \"无\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/config/index.js",
+      "sha256": "67dbbcedee6340651e2c2983a5bbd03fef10e5dff4f9ef2bcc1a72397b983070",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "children: group }",
+          "to": "children: __komodoZh(group) }",
+          "count": 1
+        },
+        {
+          "from": "children: label }",
+          "to": "children: typeof label === \"string\" ? __komodoZh(label) : label }",
+          "count": 1
+        },
+        {
+          "from": "children: \"Reset\"",
+          "to": "children: \"重置\"",
+          "count": 1
+        },
+        {
+          "from": "children: group || \"GENERAL\"",
+          "to": "children: group ? __komodoZh(group) : \"常规\"",
+          "count": 1
+        },
+        {
+          "from": "children: groupArgs2.label",
+          "to": "children: __komodoZh(groupArgs2.label)",
+          "count": 1
+        },
+        {
+          "from": "placeholder: \"Go To\"",
+          "to": "placeholder: \"跳转到\"",
+          "count": 1
+        },
+        {
+          "from": "            group,\n            items:",
+          "to": "            group: __komodoZh(group),\n            items:",
+          "count": 1
+        },
+        {
+          "from": "label: arg.label,",
+          "to": "label: __komodoZh(arg.label),",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/config/item.js",
+      "sha256": "cf9e484611afff1e89544a921f1f603b3e41147958238b8b65f0830100a85cfe",
+      "replacements": [
+        {
+          "from": "import { jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "children: fmtSnakeCaseToUpperSpaceCase(label)",
+          "to": "children: __komodoZh(fmtSnakeCaseToUpperSpaceCase(label))",
+          "count": 1
+        },
+        {
+          "from": "children: addLabel ?? (\"Add \" + label?.endsWith(\"s\") ? label?.slice(0, -1) : label)",
+          "to": "children: addLabel ?? (\"添加\" + (typeof label === \"string\" ? __komodoZh(label) : \"项目\"))",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/config/layout.js",
+      "sha256": "2d68fc8a5575967f6e90a9f425c4bf5d1b756228a3c2238ec46eddfa91938eee",
+      "replacements": [
+        {
+          "from": "title: title ?? \"Config\"",
+          "to": "title: title ?? \"配置\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/config/unsaved-changes.js",
+      "sha256": "cce36890d71e3261027ee29243bd10f5da5821c6c1a316f5f0fe300fd7ac9ebd",
+      "replacements": [
+        {
+          "from": "\"Unsaved changes\"",
+          "to": "\"有未保存的更改\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/confirm-button.js",
+      "sha256": "68a403d4f9d1e26db4c6399a6cc47fd91f13d13a8440519544907fafaf942d24",
+      "replacements": [
+        {
+          "from": "children: clickedOnce ? \"Confirm\" : children",
+          "to": "children: clickedOnce ? \"确认\" : children",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/copy-button.js",
+      "sha256": "93a5c741ccc63a90e68401ff1cf1bc9d2c449fbcfa04d56e5409d9df0a374b45",
+      "replacements": [
+        {
+          "from": "import { jsx } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { jsx } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "label = \"content\"",
+          "to": "label = \"内容\"",
+          "count": 2
+        },
+        {
+          "from": "message: `Copied ${label} to clipboard.`",
+          "to": "message: `已将${__komodoZh(label)}复制到剪贴板。`",
+          "count": 1
+        },
+        {
+          "from": "\"Cannot copy to clipboard without HTTPS.\"",
+          "to": "\"需要 HTTPS 连接才能复制到剪贴板。\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/data-table.js",
+      "sha256": "a50a8c23a15c8840f1996e1751afc7cf4d8d4ebb46a39b8d37b23dba5c429d7e",
+      "replacements": [
+        {
+          "from": "children: \"No results\"",
+          "to": "children: \"无匹配结果\"",
+          "count": 1
+        },
+        {
+          "from": "\"aria-label\": \"Select row\"",
+          "to": "\"aria-label\": \"选择此行\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/enable-switch.js",
+      "sha256": "5df7cf28f93e6ddd88bd47a91a56f1262aa63593eee1176f2fde9c73c3e288de",
+      "replacements": [
+        {
+          "from": "children: checked ? \"Enabled\" : \"Disabled\"",
+          "to": "children: checked ? \"已启用\" : \"已禁用\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/entity-header.js",
+      "sha256": "951fdc36dbe9824211efda1617197706c75990cd3b1a768b1a1e448f5c9d39f0",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "title: \"Rename\"",
+          "to": "title: \"重命名\"",
+          "count": 1
+        },
+        {
+          "from": "placeholder: \"Enter name\"",
+          "to": "placeholder: \"输入名称\"",
+          "count": 1
+        },
+        {
+          "from": "children: state }",
+          "to": "children: typeof state === \"string\" ? __komodoZh(state) : state }",
+          "count": 1
+        },
+        {
+          "from": "children: status }",
+          "to": "children: typeof status === \"string\" ? __komodoZh(status) : status }",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/hover-error.js",
+      "sha256": "5f2beabf0342740a8e92276cc68af7114778dbb7971bbe368ba00a3cc9f42a1a",
+      "replacements": [
+        {
+          "from": "children: \"Error\"",
+          "to": "children: \"错误\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"ERROR:\"",
+          "to": "children: \"错误：\"",
+          "count": 1
+        },
+        {
+          "from": "children: \"TRACE:\"",
+          "to": "children: \"错误跟踪：\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/list-pagination.js",
+      "sha256": "c307aef42d5176ae37bd54577ea36848a4ff3ef712a902d7905160bc57f9c45f",
+      "replacements": [
+        {
+          "from": "jsx(Pagination.First, {})",
+          "to": "jsx(Pagination.First, { \"aria-label\": \"首页\" })",
+          "count": 1
+        },
+        {
+          "from": "jsx(Pagination.Previous, {})",
+          "to": "jsx(Pagination.Previous, { \"aria-label\": \"上一页\" })",
+          "count": 1
+        },
+        {
+          "from": "jsx(Pagination.Items, {})",
+          "to": "jsx(Pagination.Items, { getItemProps: (page) => ({ \"aria-label\": `第 ${page} 页` }) })",
+          "count": 1
+        },
+        {
+          "from": "jsx(Pagination.Next, {})",
+          "to": "jsx(Pagination.Next, { \"aria-label\": \"下一页\" })",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/mobile-friendly-tabs.js",
+      "sha256": "3b00a2becbe2c1e5801c3e8dcc139630ca89af803d921e03b7f5eb488693fe86",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "label ?? tabValue",
+          "to": "label ?? __komodoZh(tabValue)",
+          "count": 1
+        },
+        {
+          "from": "label: tab.label ?? tab.value",
+          "to": "label: tab.label ?? __komodoZh(tab.value)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/search-input.js",
+      "sha256": "42e2d8d9ef16b364e4c9cde5d3c20053ce01066b66eb76f2fb05af3996f4396c",
+      "replacements": [
+        {
+          "from": "placeholder: \"search...\"",
+          "to": "placeholder: \"搜索…\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/shared-text-update.js",
+      "sha256": "e81cef8994195697ed91ac44ffbfa9e2174905052e1060db944627c8175b3174",
+      "replacements": [
+        {
+          "from": "children: \"Update\"",
+          "to": "children: \"更新\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/text-update-modal.js",
+      "sha256": "a8f279534f4523e7209e892febdf465c056766ecc6056719b3b4b453eec74222",
+      "replacements": [
+        {
+          "from": "children: \"Update\"",
+          "to": "children: \"更新\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/show-hide-button.js",
+      "sha256": "55be80027ffd5bb28a08d9460b76e8af145510240ae88b6fb1352b448c522c05",
+      "replacements": [
+        {
+          "from": "children: show ? \"Hide\" : \"Show\"",
+          "to": "children: show ? \"隐藏\" : \"显示\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/back-button.js",
+      "sha256": "6aef5a26b7f1ea6eba128c71d5de7a3f371bcc49e6e83e3e85597ff5be3ed38a",
+      "replacements": [
+        {
+          "from": "children: \"Back\"",
+          "to": "children: \"返回\"",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/theme-toggle.js",
+      "sha256": "8923396bf5d5963413dd0bdbd3e27d6e030840a8a6cf2f2fd888d29dc567a913",
+      "replacements": [
+        {
+          "from": "import { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { Fragment, jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "\"aria-label\": \"ThemeToggle\"",
+          "to": "\"aria-label\": \"切换主题\"",
+          "count": 1
+        },
+        {
+          "from": "children: theme\n",
+          "to": "children: __komodoZh(theme)\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/tabbed-page.js",
+      "sha256": "71a3443919f03bf4f56054094b57888a2d9dd412c7abff35cf37949077fad66e",
+      "replacements": [
+        {
+          "from": "import { jsx, jsxs } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { jsx, jsxs } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "children: tab }",
+          "to": "children: __komodoZh(tab) }",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/components/status-badge.js",
+      "sha256": "93765beb751d52a3915620866f6b172480bdc9893aca6e1b814186e6e3f97c90",
+      "replacements": [
+        {
+          "from": "import { jsx } from \"react/jsx-runtime\";",
+          "to": "import { displayLabel as __komodoZh } from \"@/lib/l10n\";\nimport { jsx } from \"react/jsx-runtime\";",
+          "count": 1
+        },
+        {
+          "from": "const text = fmtSnakeCaseToUpperSpaceCase(\n        fmtUpperCamelcase(_text)\n      ).toUpperCase();",
+          "to": "const localized = __komodoZh(_text);\n      const text = localized !== _text ? localized : fmtSnakeCaseToUpperSpaceCase(\n        fmtUpperCamelcase(_text)\n      ).toUpperCase();",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/formatting.js",
+      "sha256": "c335abe7cbb36856c25dd5018df87e6b95d1aeae7058a783c3c384a6f8f208b1",
+      "replacements": [
+        {
+          "from": "${fmtMonth(d.getMonth())} ${d.getDate()} ",
+          "to": "${fmtMonth(d.getMonth())}${d.getDate()}日 ",
+          "count": 1
+        },
+        {
+          "from": "${fmtMonth(d.getUTCMonth())} ${d.getUTCDate()} ",
+          "to": "${fmtMonth(d.getUTCMonth())}${d.getUTCDate()}日 ",
+          "count": 1
+        },
+        {
+          "from": "\"Jan\"",
+          "to": "\"1月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Feb\"",
+          "to": "\"2月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Mar\"",
+          "to": "\"3月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Apr\"",
+          "to": "\"4月\"",
+          "count": 1
+        },
+        {
+          "from": "\"May\"",
+          "to": "\"5月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Jun\"",
+          "to": "\"6月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Jul\"",
+          "to": "\"7月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Aug\"",
+          "to": "\"8月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Sep\"",
+          "to": "\"9月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Oct\"",
+          "to": "\"10月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Nov\"",
+          "to": "\"11月\"",
+          "count": 1
+        },
+        {
+          "from": "\"Dec\"",
+          "to": "\"12月\"",
+          "count": 1
+        },
+        {
+          "from": "return d.toLocaleString();",
+          "to": "return d.toLocaleString(\"zh-CN\");",
+          "count": 1
+        },
+        {
+          "from": "`${minutes > 0 ? `${minutes} minute${minutes > 1 ? \"s\" : \"\"} ` : \"\"}${remaining_seconds.toFixed(minutes > 0 ? 0 : 1)} seconds`",
+          "to": "`${minutes > 0 ? `${minutes} 分钟 ` : \"\"}${remaining_seconds.toFixed(minutes > 0 ? 0 : 1)} 秒`",
+          "count": 1
+        },
+        {
+          "from": "bytes.toString() + \" bytes\"",
+          "to": "bytes.toString() + \" 字节\"",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

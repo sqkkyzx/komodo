@@ -36,11 +36,11 @@ export default function SettingsCoreInfo() {
       {info?.public_key && (
         <Group gap="xs">
           <Text c="dimmed" size="lg">
-            Public Key:
+            公钥：
           </Text>
           <CopyText
             content={info.public_key}
-            label="public key"
+            label="公钥"
             ff="monospace"
             className="text-ellipsis accent-hover-light bordered-heavy"
           />
@@ -58,7 +58,7 @@ function AllInfo() {
       <Modal
         opened={opened}
         onClose={close}
-        title={<Text size="xl">Core Info</Text>}
+        title={<Text size="xl">Core 信息</Text>}
         size="xl"
       >
         {info ? (

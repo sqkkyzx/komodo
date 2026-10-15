@@ -49,7 +49,7 @@ export default function UserDropdown() {
             avatar ? (
               <img
                 src={avatar}
-                alt="avatar"
+                alt="头像"
                 style={{
                   width: "1.1rem",
                   height: "1.1rem",
@@ -70,7 +70,7 @@ export default function UserDropdown() {
           <Group justify="space-between">
             <Group opacity={0.8} fz="sm" lh="sm">
               <ArrowLeftRight size="1rem" />
-              Switch accounts
+              切换账号
             </Group>
             <ActionIcon
               variant={viewLogout ? "filled" : "subtle"}
@@ -109,9 +109,9 @@ export default function UserDropdown() {
               }}
             >
               <Box component="span">
-                Add
+                添加
                 <Box component="span" pl="0.25rem" visibleFrom="xs">
-                  Account
+                  账号
                 </Box>
               </Box>
             </Button>
@@ -123,7 +123,7 @@ export default function UserDropdown() {
                 nav("/profile");
               }}
             >
-              Profile
+              个人设置
             </Button>
           </Group>
 
@@ -138,7 +138,7 @@ export default function UserDropdown() {
                 userInvalidate();
               }}
             >
-              Log Out All
+              退出所有账号
             </Button>
           )}
         </Stack>
@@ -198,7 +198,7 @@ function Account({
         {user.avatar && (
           <img
             src={user.avatar}
-            alt="avatar"
+            alt="头像"
             style={{ width: "1.1rem", height: "1.1rem", marginRight: "0.5rem" }}
           />
         )}

@@ -1,4 +1,5 @@
 import { fmtVersion } from "@/lib/formatting";
+import { displayLabel } from "@/lib/l10n";
 import { useRead } from "@/lib/hooks";
 import { ICONS } from "@/lib/icons";
 import { filterBySplit } from "mogh_ui";
@@ -14,7 +15,7 @@ import {
 import { Types } from "komodo_client";
 import { ChevronsUpDown } from "lucide-react";
 import { fmtDate, useSearchCombobox } from "mogh_ui";
-import { parseVersion } from "@/lib/utils";
+import { parseVersion, versionIsNone } from "@/lib/utils";
 
 export interface DeploymentImageConfigProps {
   image: Types.DeploymentImage | undefined;
@@ -91,7 +92,7 @@ export default function DeploymentImageConfig({
               },
             })
           }
-          placeholder="image name"
+          placeholder="镜像名称"
           disabled={disabled}
           w={{ base: 200, lg: 300, xl: 400 }}
         />
@@ -116,7 +117,7 @@ function ImageTypeSelector({
       onChange={(selected) =>
         selected && onSelect(selected as Types.DeploymentImage["type"])
       }
-      data={["Image", "Build"]}
+      data={["Image", "Build"].map((value) => ({ value, label: displayLabel(value) }))}
       w={100}
     />
   );
@@ -166,7 +167,7 @@ function BuildVersionSelector({
           rightSection={<ChevronsUpDown size="0.9rem" />}
           disabled={disabled}
         >
-          {selected ? fmtVersion(selected) : "Latest"}
+          {selected ? fmtVersion(selected) : "最新"}
         </Button>
       </Combobox.Target>
 
@@ -175,7 +176,7 @@ function BuildVersionSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" />}
-          placeholder="Search"
+          placeholder="搜索"
           styles={{
             section: {
               marginRight: 4,
@@ -183,11 +184,12 @@ function BuildVersionSelector({
           }}
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
-          <Combobox.Option value="Latest">Latest</Combobox.Option>
+          <Combobox.Option value="Latest">最新</Combobox.Option>
           {filtered.map((v) => {
             const version = fmtVersion(v.version);
+            const value = versionIsNone(v.version) ? "Latest" : version;
             return (
-              <Combobox.Option key={`${version}-${v.ts}`} value={version}>
+              <Combobox.Option key={`${value}-${v.ts}`} value={value}>
                 <Group justify="space-between" wrap="nowrap">
                   <Text>{version}</Text>
                   <Text c="dimmed">{fmtDate(new Date(v.ts))}</Text>

@@ -29,7 +29,7 @@ export default function ExportToml(props: ExportTomlProps) {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Export to Toml" size="auto">
+      <Modal opened={opened} onClose={close} title="导出为 TOML" size="auto">
         {opened && <ExportTomlInner {...props} />}
       </Modal>
 
@@ -39,7 +39,7 @@ export default function ExportToml(props: ExportTomlProps) {
         onClick={open}
         w={{ base: "100%", xs: "fit-content" }}
       >
-        Toml
+        导出 TOML
       </Button>
     </>
   );

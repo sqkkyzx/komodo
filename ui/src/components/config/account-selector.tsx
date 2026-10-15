@@ -58,13 +58,16 @@ export default function AccountSelector({
 
   return (
     <Select
-      label={showLabel && "Account"}
+      label={showLabel && "账号"}
       value={selected || "None"}
       onChange={(value) => value && onSelect(value === "None" ? "" : value)}
       disabled={disabled}
-      data={accounts}
+      data={accounts.map((value) => ({
+        value,
+        label: value === "None" ? "无" : value,
+      }))}
       w="fit-content"
-      placeholder="Select account"
+      placeholder="选择账号"
       {...selectProps}
     />
   );
@@ -76,10 +79,8 @@ export function AccountSelectorConfig({
 }: { description?: string } & AccountSelectorProps) {
   return (
     <ConfigItem
-      label="Account"
-      description={
-        description ?? "Select the account used to log in to the provider"
-      }
+      label="账号"
+      description={description ?? "选择用于登录服务商的账号"}
     >
       <AccountSelector {...props} />
     </ConfigItem>

@@ -1,7 +1,8 @@
+import { displayLabel } from "@/lib/l10n";
 import { BoxProps, Flex, FlexProps, Group, Stack } from "@mantine/core";
 import { Types } from "komodo_client";
 import { AlertTriangle, Check } from "lucide-react";
-import { fmtDate, fmtUpperCamelcase } from "mogh_ui";
+import { fmtDate } from "mogh_ui";
 import { ICONS } from "@/lib/icons";
 import { useAlertDetails } from "./details";
 import AlertLevel from "./level";
@@ -27,7 +28,7 @@ export default function AlertCard({
     <Flex justify="space-between" fz={{ base: "sm", lg: "md" }} {...flexProps}>
       <Group wrap="nowrap" gap="xs">
         <Icon alert={alert} />
-        {fmtUpperCamelcase(alert.data.type)}
+        {displayLabel(alert.data.type)}
       </Group>
       <Group c="dimmed" wrap="nowrap" gap="xs">
         <ICONS.Calendar size="1rem" />
@@ -61,7 +62,7 @@ export default function AlertCard({
             {alert.target.type === "System" ? (
               <>
                 <ICONS.System size="1rem" />
-                System
+                系统
               </>
             ) : (
               <ResourceLink

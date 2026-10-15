@@ -14,7 +14,7 @@ export default function DeleteProviderAccount({
   const { mutate, isPending } = useWrite(`Delete${type}Account`, {
     onSuccess: () => {
       invalidate([`List${type}Accounts`], [`Get${type}Account`]);
-      notifications.show({ message: "Account deleted" });
+      notifications.show({ message: "账户已删除" });
     },
   });
   return (
@@ -24,7 +24,7 @@ export default function DeleteProviderAccount({
       loading={isPending}
       confirmProps={{ variant: "filled", color: "red" }}
     >
-      Delete
+      删除
     </ConfirmButton>
   );
 }

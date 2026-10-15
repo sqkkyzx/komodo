@@ -35,21 +35,21 @@ export default function SettingsVariables() {
   const { mutate: updateValue } = useWrite("UpdateVariableValue", {
     onSuccess: () => {
       inv(["ListVariables"], ["GetVariable"]);
-      notifications.show({ message: "Updated variable value" });
+      notifications.show({ message: "变量值已更新" });
     },
   });
 
   const { mutate: updateDescription } = useWrite("UpdateVariableDescription", {
     onSuccess: () => {
       inv(["ListVariables"], ["GetVariable"]);
-      notifications.show({ message: "Updated variable description" });
+      notifications.show({ message: "变量描述已更新" });
     },
   });
 
   const { mutate: updateIsSecret } = useWrite("UpdateVariableIsSecret", {
     onSuccess: () => {
       inv(["ListVariables"], ["GetVariable"]);
-      notifications.show({ message: "Updated variable 'is secret'" });
+      notifications.show({ message: "变量保密设置已更新" });
     },
   });
 
@@ -68,18 +68,18 @@ export default function SettingsVariables() {
             {
               accessorKey: "name",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Name" />
+                <SortableHeader column={column} title="名称" />
               ),
               cell: ({ row }) => {
                 return (
-                  <CopyText content={row.original.name} label="variable name" />
+                  <CopyText content={row.original.name} label="变量名称" />
                 );
               },
             },
             {
               accessorKey: "value",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Value" />
+                <SortableHeader column={column} title="值" />
               ),
               cell: ({ row }) => {
                 return (
@@ -88,9 +88,9 @@ export default function SettingsVariables() {
                       className="text-ellipsis"
                       onClick={() => {
                         setUpdateMenuData({
-                          title: `${row.original.name} - Value`,
+                          title: `${row.original.name} - 值`,
                           value: row.original.value ?? "",
-                          placeholder: "Set value",
+                          placeholder: "设置值",
                           onUpdate: (value) => {
                             if (row.original.value === value) {
                               return;
@@ -104,9 +104,7 @@ export default function SettingsVariables() {
                     >
                       {(row.original.is_secret
                         ? "*".repeat(row.original.value?.length ?? 0)
-                        : row.original.value) || (
-                        <Text c="dimmed">Set value</Text>
-                      )}
+                        : row.original.value) || <Text c="dimmed">设置值</Text>}
                     </Button>
                     <CopyButton content={row.original.value ?? ""} />
                   </Group>
@@ -116,7 +114,7 @@ export default function SettingsVariables() {
             {
               accessorKey: "description",
               header: ({ column }) => (
-                <SortableHeader column={column} title="Description" />
+                <SortableHeader column={column} title="描述" />
               ),
               cell: ({ row }) => {
                 return (
@@ -124,9 +122,9 @@ export default function SettingsVariables() {
                     className="text-ellipsis"
                     onClick={() => {
                       setUpdateMenuData({
-                        title: `${row.original.name} - Description`,
+                        title: `${row.original.name} - 描述`,
                         value: row.original.description ?? "",
-                        placeholder: "Set description",
+                        placeholder: "设置描述",
                         onUpdate: (description) => {
                           if (row.original.description === description) {
                             return;
@@ -142,14 +140,14 @@ export default function SettingsVariables() {
                     justify="start"
                   >
                     {row.original.description || (
-                      <Text c="dimmed">Set description</Text>
+                      <Text c="dimmed">设置描述</Text>
                     )}
                   </Button>
                 );
               },
             },
             {
-              header: "Secret",
+              header: "保密",
               cell: ({ row }) => (
                 <Switch
                   checked={row.original.is_secret}
@@ -164,7 +162,7 @@ export default function SettingsVariables() {
               ),
             },
             {
-              header: "Delete",
+              header: "删除",
               cell: ({ row }) => (
                 <DeleteVariable name={row.original.name} disabled={disabled} />
               ),
@@ -174,7 +172,7 @@ export default function SettingsVariables() {
 
         {secrets?.length ? (
           <Group>
-            <Text c="dimmed">Core Secrets:</Text>
+            <Text c="dimmed">Core 机密：</Text>
             <Group gap="xs">
               {secrets.map((secret) => (
                 <Badge key={secret} tt="none">

@@ -1,8 +1,8 @@
+import { displayLabel } from "@/lib/l10n";
 import { useAlertDetails } from "@/components/alerts/details";
 import AlertLevel from "@/components/alerts/level";
 import ResourceTypeSelector from "@/components/resource-type-selector";
 import { alertLevelIntention } from "@/lib/color";
-import { fmtUpperCamelcase } from "mogh_ui";
 import { useRead } from "@/lib/hooks";
 import { UsableResource } from "@/resources";
 import ResourceLink from "@/resources/link";
@@ -73,11 +73,7 @@ export default function Alerts() {
     : FALLBACK_ALERT_TYPES;
 
   return (
-    <Page
-      title="Alerts"
-      icon={ICONS.Alert}
-      description="View historical alerts"
-    >
+    <Page title="告警" icon={ICONS.Alert} description="查看历史告警">
       <Stack>
         {/* QUERY */}
         <Group>
@@ -114,7 +110,7 @@ export default function Alerts() {
           {/* ALERT TYPE */}
           <Select
             value={alertType}
-            placeholder="Select alert type"
+            placeholder="选择告警类型"
             onChange={(type) => {
               const p = new URLSearchParams(params.toString());
               if (type) {
@@ -126,7 +122,7 @@ export default function Alerts() {
             }}
             data={alertTypes.map((value) => ({
               value,
-              label: fmtUpperCamelcase(value),
+              label: displayLabel(value),
             }))}
             w={{ base: "100%", xs: 250 }}
             searchable
@@ -134,7 +130,7 @@ export default function Alerts() {
           />
 
           <LabelledSwitch
-            label="Only Open"
+            label="仅显示未解决"
             checked={open}
             onCheckedChange={() => {
               const p = new URLSearchParams(params.toString());
@@ -173,7 +169,7 @@ export default function Alerts() {
           data={alerts?.alerts ?? []}
           columns={[
             {
-              header: "Details",
+              header: "详情",
               cell: () => {
                 return (
                   <ActionIcon>
@@ -183,18 +179,18 @@ export default function Alerts() {
               },
             },
             !params.get("id") && {
-              header: "Resource",
+              header: "资源",
               cell: ({ row }) => {
                 const type = row.original.target.type as UsableResource;
                 return <ResourceLink type={type} id={row.original.target.id} />;
               },
             },
             {
-              header: "Status",
+              header: "状态",
               cell: ({ row }) => {
                 return (
                   <StatusBadge
-                    text={row.original.resolved ? "RESOLVED" : "OPEN"}
+                    text={row.original.resolved ? "已解决" : "未解决"}
                     intent={
                       row.original.resolved
                         ? "Good"
@@ -205,12 +201,13 @@ export default function Alerts() {
               },
             },
             {
-              header: "Level",
+              header: "级别",
               cell: ({ row }) => <AlertLevel level={row.original.level} />,
             },
             {
-              header: "Alert Type",
+              header: "告警类型",
               accessorKey: "data.type",
+              cell: ({ row }) => displayLabel(row.original.data.type),
             },
           ]}
           onRowClick={(row) => openDetails(row._id?.$oid!)}

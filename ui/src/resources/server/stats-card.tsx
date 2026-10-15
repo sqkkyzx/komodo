@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useDashboardPreferences, useRead } from "@/lib/hooks";
 import { useServer } from ".";
 import { Types } from "komodo_client";
@@ -105,13 +106,13 @@ export default function ServerStatsCard({ id }: ServerStatsCardProps) {
         type: "cpu" as const,
       },
       {
-        label: "Memory",
+        label: "内存",
         icon: ICONS.Memory,
         percentage: memoryPercentage,
         type: "memory" as const,
       },
       {
-        label: "Disk",
+        label: "磁盘",
         icon: ICONS.Disk,
         percentage: diskPercentage,
         type: "disk" as const,
@@ -146,7 +147,7 @@ export default function ServerStatsCard({ id }: ServerStatsCardProps) {
           )}
         >
           <Text fw="bold" fs="italic" c="dimmed">
-            {isDisabled ? "Disabled" : "Unreachable"}
+            {isDisabled ? "已禁用" : "无法连接"}
           </Text>
         </Center>
       )}
@@ -177,7 +178,7 @@ function StatItem({
       <Icon size={13} />
       <Stack gap="0.1rem" w="calc(100% - 20px)">
         <Group justify="space-between">
-          <Text size="sm">{label}</Text>
+          <Text size="sm">{displayLabel(label)}</Text>
           <Text
             size="sm"
             c={
@@ -186,7 +187,7 @@ function StatItem({
                 : hexColorByIntention(intention(percentage, type))
             }
           >
-            {isUnreachable ? "N/A" : `${percentage.toFixed(1)}%`}
+            {isUnreachable ? "不适用" : `${percentage.toFixed(1)}%`}
           </Text>
         </Group>
         <Progress color="bw" value={percentage} size={4} />

@@ -9,7 +9,7 @@ export default function NewLocalUser() {
   const { mutateAsync: create, isPending } = useWrite("CreateLocalUser", {
     onSuccess: () => {
       inv(["ListUsers"]);
-      notifications.show({ message: "Created Local User", color: "green" });
+      notifications.show({ message: "本地用户已创建", color: "green" });
     },
   });
   const [username, setUsername] = useState("");
@@ -18,34 +18,34 @@ export default function NewLocalUser() {
 
   return (
     <CreateModal
-      entityType="Local User"
+      entityType="本地用户"
       onConfirm={() => create({ username, password }).then(() => true)}
       loading={isPending}
-      configureLabel="login information"
+      configureLabel="登录信息"
       configSection={() => (
         <>
           <TextInput
             autoFocus
-            label="Username"
-            placeholder="username"
+            label="用户名"
+            placeholder="用户名"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            error={!username.trim() && "Enter username"}
+            error={!username.trim() && "请输入用户名"}
           />
           <PasswordInput
-            label="Password"
-            placeholder="password"
+            label="密码"
+            placeholder="密码"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            error={!password.trim() && "Enter password"}
+            error={!password.trim() && "请输入密码"}
           />
           <PasswordInput
-            label="Confirm Password"
-            placeholder="confirm-password"
+            label="确认密码"
+            placeholder="确认密码"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             error={
-              password !== confirmPassword ? "Passwords don't match" : undefined
+              password !== confirmPassword ? "两次输入的密码不一致" : undefined
             }
           />
         </>

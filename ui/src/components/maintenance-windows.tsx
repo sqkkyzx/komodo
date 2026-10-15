@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import {
   ActionIcon,
   Button,
@@ -63,7 +64,7 @@ export default function ConfigMaintenanceWindows({
             onClick={() => setEditingWindow(-1)}
             w={{ base: "85%", lg: 400 }}
           >
-            Add Window
+            添加维护窗口
           </Button>
         )}
 
@@ -75,7 +76,7 @@ export default function ConfigMaintenanceWindows({
               {
                 accessorKey: "name",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Name" />
+                  <SortableHeader column={column} title="名称" />
                 ),
                 cell: ({ row }) => (
                   <Group>
@@ -92,7 +93,7 @@ export default function ConfigMaintenanceWindows({
               {
                 accessorKey: "schedule_type",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Schedule" />
+                  <SortableHeader column={column} title="计划" />
                 ),
                 cell: ({ row }) => (
                   <ScheduleDescription window={row.original} />
@@ -101,21 +102,21 @@ export default function ConfigMaintenanceWindows({
               {
                 accessorKey: "start_time",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Start Time" />
+                  <SortableHeader column={column} title="开始时间" />
                 ),
                 cell: ({ row }) => fmtMaintenanceWindowTime(row.original),
               },
               {
                 accessorKey: "duration_minutes",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Duration" />
+                  <SortableHeader column={column} title="持续时间" />
                 ),
-                accessorFn: (row) => `${row.duration_minutes} min`,
+                accessorFn: (row) => `${row.duration_minutes} 分钟`,
               },
               {
                 accessorKey: "enabled",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Enabled" />
+                  <SortableHeader column={column} title="已启用" />
                 ),
                 cell: ({ row }) => (
                   <Switch
@@ -127,7 +128,7 @@ export default function ConfigMaintenanceWindows({
               },
               {
                 id: "actions",
-                header: "Actions",
+                header: "操作",
                 cell: ({ row }) =>
                   !disabled && (
                     <Group gap="xs">
@@ -156,7 +157,7 @@ export default function ConfigMaintenanceWindows({
       <Modal
         title={
           <Text size="xl">
-            {editingWindow === -1 ? "Create" : "Edit"} Maintenance Window
+            {editingWindow === -1 ? "创建" : "编辑"} 维护窗口
           </Text>
         }
         opened={!!editingWindow}
@@ -203,13 +204,13 @@ function ScheduleDescription({
 }): string {
   switch (window.schedule_type) {
     case "Daily":
-      return "Daily";
+      return "每天";
     case "Weekly":
-      return `Weekly (${window.day_of_week || "Monday"})`;
+      return `每周（${displayLabel(window.day_of_week || "Monday")}）`;
     case "OneTime":
-      return `One-time (${window.date || "No date"})`;
+      return `单次（${window.date || "未设置日期"}）`;
     default:
-      return "Unknown";
+      return "未知";
   }
 }
 
@@ -245,25 +246,25 @@ function MaintenanceWindowForm({
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = "名称不能为空";
     }
 
     if (formData.hour! < 0 || formData.hour! > 23) {
-      newErrors.hour = "Hour must be between 0 and 23";
+      newErrors.hour = "小时必须在 0 到 23 之间";
     }
 
     if (formData.minute! < 0 || formData.minute! > 59) {
-      newErrors.minute = "Minute must be between 0 and 59";
+      newErrors.minute = "分钟必须在 0 到 59 之间";
     }
 
     if (formData.duration_minutes <= 0) {
-      newErrors.duration = "Duration must be greater than 0";
+      newErrors.duration = "持续时间必须大于 0";
     }
 
     if (formData.schedule_type && formData.schedule_type === "OneTime") {
       const date = formData.date;
       if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        newErrors.date = "Date must be in YYYY-MM-DD format";
+        newErrors.date = "日期必须采用 YYYY-MM-DD 格式";
       }
     }
 
@@ -297,8 +298,8 @@ function MaintenanceWindowForm({
         onChange={(e) =>
           setFormData((data) => ({ ...data, name: e.target.value }))
         }
-        placeholder="e.g., Daily Backup"
-        label="Name"
+        placeholder="例如：每日备份"
+        label="名称"
         error={errors.name}
       />
 
@@ -307,8 +308,11 @@ function MaintenanceWindowForm({
         onChange={(value) =>
           value && updateScheduleType(value as Types.MaintenanceScheduleType)
         }
-        label="Schedule Type"
-        data={Object.values(Types.MaintenanceScheduleType)}
+        label="计划类型"
+        data={Object.values(Types.MaintenanceScheduleType).map((value) => ({
+          value,
+          label: displayLabel(value),
+        }))}
       />
 
       {formData.schedule_type === "Weekly" && (
@@ -321,14 +325,17 @@ function MaintenanceWindowForm({
               day_of_week: value,
             }))
           }
-          label="Day of Week"
-          data={Object.values(Types.DayOfWeek)}
+          label="星期"
+          data={Object.values(Types.DayOfWeek).map((value) => ({
+            value,
+            label: displayLabel(value),
+          }))}
         />
       )}
 
       {formData.schedule_type === "OneTime" && (
         <TextInput
-          label="Date"
+          label="日期"
           type="date"
           value={formData.date || new Date().toISOString().split("T")[0]}
           onChange={(e) =>
@@ -343,7 +350,7 @@ function MaintenanceWindowForm({
 
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         <TextInput
-          label="Start Time"
+          label="开始时间"
           type="time"
           value={`${formData.hour!.toString().padStart(2, "0")}:${formData.minute!.toString().padStart(2, "0")}`}
           onChange={(e) => {
@@ -360,7 +367,7 @@ function MaintenanceWindowForm({
           w="100%"
         />
         <TimezoneSelector
-          label="Timezone"
+          label="时区"
           timezone={formData.timezone ?? ""}
           onChange={(timezone) =>
             setFormData((data) => ({ ...data, timezone }))
@@ -370,7 +377,7 @@ function MaintenanceWindowForm({
       </SimpleGrid>
 
       <TextInput
-        label="Duration (minutes)"
+        label="持续时间（分钟）"
         type="number"
         min={1}
         value={formData.duration_minutes}
@@ -384,12 +391,12 @@ function MaintenanceWindowForm({
       />
 
       <TextInput
-        label="Description (optional)"
+        label="描述（可选）"
         value={formData.description}
         onChange={(e) =>
           setFormData((data) => ({ ...data, description: e.target.value }))
         }
-        placeholder="e.g., Automated backup process"
+        placeholder="例如：自动备份过程"
       />
 
       <Group justify="end" mt="xs">
@@ -398,10 +405,10 @@ function MaintenanceWindowForm({
           onClick={onCancel}
           leftSection={<ICONS.Cancel size="1rem" />}
         >
-          Cancel
+          取消
         </Button>
         <Button onClick={handleSave} leftSection={<ICONS.Check size="1rem" />}>
-          {initialData ? "Update" : "Create"}
+          {initialData ? "更新" : "创建"}
         </Button>
       </Group>
     </Stack>

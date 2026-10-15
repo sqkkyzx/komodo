@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { ReactNode } from "react";
 import { Types } from "komodo_client";
 import { useRead } from "@/lib/hooks";
@@ -25,13 +26,13 @@ export default function DockerResourceLink({
   extra,
   dimmed,
 }: DockerResourceLinkProps) {
-  if (!name) return "Unknown";
+  if (!name) return "未知";
 
   const Icon = DOCKER_LINK_ICONS[type];
 
   return (
     <Group
-      title={`${type} - ${name}`}
+      title={`${resourceLabel(type)} - ${name}`}
       renderRoot={(props) => (
         <Link
           to={`/servers/${serverId}/${type.toLowerCase()}/${encodeURIComponent(name)}`}

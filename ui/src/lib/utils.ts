@@ -4,6 +4,7 @@ import sanitizeHtml from "sanitize-html";
 import ConvertAnsiToHtml from "ansi-to-html";
 import { RowSelectionState } from "@tanstack/react-table";
 import { Crumb } from "mogh_ui";
+import { resourceLabel } from "@/lib/l10n";
 
 export const EXECUTION_ACTION_STATE_REQUERY_MS = 500;
 
@@ -133,7 +134,12 @@ export function hasMinimumPermissions(
  * terms like 'on' are still used to search by name.
  */
 export function termMatchesTypeKeyword(keyword: string, term: string) {
-  return term.length >= 3 && keyword.startsWith(term);
+  return (
+    (term.length >= 3 && keyword.startsWith(term)) ||
+    (term.length >= 2 &&
+      /[\u3400-\u9fff]/.test(term) &&
+      resourceLabel(keyword).startsWith(term))
+  );
 }
 
 export function usableResourcePath(resource: UsableResource) {
@@ -163,7 +169,7 @@ const convert_ansi = new ConvertAnsiToHtml();
  * @param log incoming log string
  */
 export function updateLogToHtml(log: string) {
-  if (!log) return "No log.";
+  if (!log) return "暂无日志。";
   return convert_ansi.toHtml(sanitizeOnlySpan(log));
 }
 
@@ -173,7 +179,7 @@ export function updateLogToHtml(log: string) {
  * @param log incoming log string
  */
 export function logToHtml(log: string) {
-  if (!log) return "No log.";
+  if (!log) return "暂无日志。";
   const sanitized = sanitizeHtml(log, {
     allowedTags: sanitizeHtml.defaults.allowedTags.filter(
       (tag) => tag !== "script",
@@ -324,6 +330,5 @@ export function parseVersion(version: string): Types.Version {
 
 /** Crumb linking to the list page for a resource type, eg. `Servers` -> /servers */
 export function resourceTypeCrumb(type: UsableResource): Crumb {
-  const name = type === "ResourceSync" ? "Resource Sync" : type;
-  return { label: `${name}s`, to: `/${usableResourcePath(type)}` };
+  return { label: resourceLabel(type), to: `/${usableResourcePath(type)}` };
 }

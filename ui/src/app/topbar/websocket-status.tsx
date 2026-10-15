@@ -11,8 +11,8 @@ export default function WebsocketStatus() {
     reconnect();
     notifications.show({
       message: connected
-        ? "Triggered websocket reconnect"
-        : "Triggered websocket connect",
+        ? "已触发 WebSocket 重新连接"
+        : "已触发 WebSocket 连接",
       color: "blue",
     });
   };
@@ -38,9 +38,9 @@ export default function WebsocketStatus() {
         <HoverCard offset={16}>
           <HoverCard.Target>{Target}</HoverCard.Target>
           <HoverCard.Dropdown>
-            <Text>Websocket Status</Text>
+            <Text>WebSocket 状态</Text>
             <Text c="dimmed" fz="sm">
-              Click to reconnect
+              点击重新连接
             </Text>
           </HoverCard.Dropdown>
         </HoverCard>

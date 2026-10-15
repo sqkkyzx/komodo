@@ -42,14 +42,14 @@ export default function SwarmConfig({
       groups={{
         "": [
           {
-            label: "Managers",
+            label: "管理节点",
             labelHidden: true,
             fields: {
               server_ids: (serverIds, set) => {
                 return (
                   <ConfigItem
-                    label="Manager Nodes"
-                    description="Select the Servers which have joined the Swarm as Manager Nodes."
+                    label="管理节点"
+                    description="选择已作为管理节点加入集群的服务器。"
                     gap="sm"
                   >
                     {serverIds?.map((serverId, index) => {
@@ -107,7 +107,7 @@ export default function SwarmConfig({
                         leftSection={<ICONS.Add size="1rem" />}
                         w={{ base: "100%", lg: 400 }}
                       >
-                        Add Server
+                        添加服务器
                       </Button>
                     )}
                   </ConfigItem>
@@ -116,22 +116,19 @@ export default function SwarmConfig({
             },
           },
           {
-            label: "Alerts",
+            label: "告警",
             labelHidden: true,
             fields: {
               send_unhealthy_alerts: {
-                description: "Send alerts when the Swarm is unhealthy",
+                description: "集群不健康时发送告警",
               },
               maintenance_windows: (values, set) => {
                 return (
                   <ConfigItem
-                    label="Maintenance"
+                    label="维护"
                     description={
                       <>
-                        Configure maintenance windows to temporarily disable
-                        alerts during scheduled maintenance periods. When a
-                        maintenance window is active, alerts from this swarm
-                        will be suppressed.
+                        配置维护窗口，在计划维护期间暂停告警。维护窗口生效时，不发送此集群的告警。
                       </>
                     }
                   >
@@ -148,19 +145,19 @@ export default function SwarmConfig({
             },
           },
           {
-            label: "Links",
+            label: "链接",
             labelHidden: true,
             fields: {
               links: (values, set) => (
                 <ConfigList
-                  label="Links"
-                  addLabel="Add Link"
-                  description="Add quick links in the resource header"
+                  label="链接"
+                  addLabel="添加链接"
+                  description="在资源页顶部添加快捷链接"
                   field="links"
                   values={values ?? []}
                   set={set}
                   disabled={disabled}
-                  placeholder="Input link"
+                  placeholder="输入链接"
                 />
               ),
             },

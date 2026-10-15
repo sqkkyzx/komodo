@@ -14,8 +14,7 @@ export default function UpdatesSection({
 }: UpdatesSectionProps) {
   return (
     <Section
-      title="Updates"
-     
+      title="操作记录"
       icon={<ICONS.Update size="1.3rem" />}
       actions={
         link && (

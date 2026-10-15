@@ -19,11 +19,21 @@ export default function TemplateQuerySelector() {
           c="dimmed"
           h="fit-content"
         >
-          <Center>{isExclude ? <Ban size="0.7rem" /> : "T"}</Center>
+          <Center>{isExclude ? <Ban size="0.7rem" /> : "模板"}</Center>
         </Badge>
       }
       value={value}
-      data={BEHAVIORS.map((value) => ({ value, label: value + " Templates" }))}
+      data={BEHAVIORS.map((value) => ({
+        value,
+        label:
+          (
+            {
+              Exclude: "排除模板",
+              Include: "包含模板",
+              Only: "仅模板",
+            } as Record<string, string>
+          )[value] ?? value,
+      }))}
       onChange={(value) =>
         set(
           (value as Types.TemplatesQueryBehavior) ??

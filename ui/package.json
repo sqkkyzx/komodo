@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "check:l10n": "node localization/check-mogh-ui.mjs && node --test localization/mogh-ui-zh-cn.test.mjs",
     "dev": "vite --host",
     "preview": "vite preview --host --port 5173",
     "build": "tsc && vite build",

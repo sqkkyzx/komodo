@@ -51,7 +51,7 @@ export default function NewResourceWithDeployTarget({
             )}
             {showSwarms && !serverId && (
               <>
-                {!swarmId && <Divider label="OR" my="-10" />}
+                {!swarmId && <Divider label="或" my="-10" />}
                 <ResourceSelector
                   type="Swarm"
                   selected={swarmId}

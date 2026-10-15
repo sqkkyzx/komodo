@@ -136,7 +136,7 @@ export default function Terminal({
         });
       },
       on_close: () => {
-        term.writeln("\r\n\x1b[33m[connection closed]\x1b[0m");
+        term.writeln("\r\n\x1b[33m[连接已关闭]\x1b[0m");
       },
     };
 

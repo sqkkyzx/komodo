@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Grid, Popover, Select, Stack, TextInput } from "@mantine/core";
@@ -32,7 +33,7 @@ export default function NewTerminal() {
     >
       <Popover.Target>
         <Button leftSection={<ICONS.Create size="1rem" />} onClick={toggle}>
-          New Terminal
+          新建终端
         </Button>
       </Popover.Target>
       <Popover.Dropdown p="lg">
@@ -91,7 +92,7 @@ function CreateTerminalLayout({
   finalize,
   onSuccess,
   showMode,
-  commandPlaceholder = "sh (Optional)",
+  commandPlaceholder = "sh（可选）",
 }: {
   type: Types.TerminalTarget["type"];
   setType: (type: Types.TerminalTarget["type"]) => void;
@@ -121,25 +122,28 @@ function CreateTerminalLayout({
   };
   const nodes: Node[] = [
     {
-      label: "Type",
+      label: "类型",
       node: (
         <Select
           value={type}
           onChange={(type) =>
             type && setType(type as Types.TerminalTarget["type"])
           }
-          data={TERMINAL_TYPES}
+          data={TERMINAL_TYPES.map((value) => ({
+            value,
+            label: resourceLabel(value),
+          }))}
           comboboxProps={{ withinPortal: false }}
         />
       ),
     },
     ..._nodes,
     {
-      label: "Terminal Name",
+      label: "终端名称",
       node: (
         <TextInput
           autoFocus
-          placeholder="terminal-name (Optional)"
+          placeholder="终端名称（可选）"
           value={baseRequest.name}
           onChange={(e) =>
             setBaseRequest({ ...baseRequest, name: e.target.value })
@@ -153,10 +157,10 @@ function CreateTerminalLayout({
       ),
     },
     {
-      label: "Mode",
+      label: "模式",
       hidden: !showMode,
       node: (
-        <Select
+        <Select<Types.ContainerTerminalMode>
           value={baseRequest.mode}
           onChange={(mode) =>
             mode &&
@@ -169,13 +173,19 @@ function CreateTerminalLayout({
               mode: mode as Types.ContainerTerminalMode,
             })
           }
-          data={["exec", "attach"]}
+          data={[
+            { value: Types.ContainerTerminalMode.Exec, label: "执行（exec）" },
+            {
+              value: Types.ContainerTerminalMode.Attach,
+              label: "附加（attach）",
+            },
+          ]}
           comboboxProps={{ withinPortal: false }}
         />
       ),
     },
     {
-      label: "Command",
+      label: "命令",
       hidden: showMode && baseRequest.mode === "attach",
       node: (
         <TextInput
@@ -218,7 +228,7 @@ function CreateTerminalLayout({
         onClick={() => mutate(finalize(baseRequest))}
         leftSection={<ICONS.Create size="1rem" />}
       >
-        Create
+        创建
       </Button>
     </Stack>
   );
@@ -266,7 +276,7 @@ function CreateServerTerminal({
       }}
       nodes={[
         {
-          label: "Server",
+          label: "服务器",
           node: (
             <ResourceSelector
               type="Server"
@@ -279,7 +289,7 @@ function CreateServerTerminal({
           ),
         },
       ]}
-      commandPlaceholder="bash (Optional)"
+      commandPlaceholder="bash（可选）"
     />
   );
 }
@@ -333,7 +343,7 @@ function CreateContainerTerminal({
       }}
       nodes={[
         {
-          label: "Server",
+          label: "服务器",
           node: (
             <ResourceSelector
               type="Server"
@@ -346,7 +356,7 @@ function CreateContainerTerminal({
           ),
         },
         {
-          label: "Container",
+          label: "容器",
           node: (
             <ContainerSelector
               serverId={params.server}
@@ -417,7 +427,7 @@ function CreateStackServiceTerminal({
       }}
       nodes={[
         {
-          label: "Stack",
+          label: "应用栈",
           node: (
             <ResourceSelector
               type="Stack"
@@ -430,7 +440,7 @@ function CreateStackServiceTerminal({
           ),
         },
         {
-          label: "Service",
+          label: "服务",
           node: (
             <StackServiceSelector
               stackId={params.stack}
@@ -491,7 +501,7 @@ function CreateDeploymentTerminal({
       }}
       nodes={[
         {
-          label: "Deployment",
+          label: "部署",
           node: (
             <ResourceSelector
               type="Deployment"

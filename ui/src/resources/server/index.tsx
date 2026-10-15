@@ -13,7 +13,7 @@ import { Box, Group, HoverCard } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import ConfirmServerPubkey from "./confirm-pubkey";
 import ServerTabs from "./tabs";
-import { fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 import ConfirmModalWithDisable from "@/components/confirm-modal-with-disable";
 import ResourceHeader from "../header";
 import { useIsServerAvailable } from "./hooks";
@@ -60,19 +60,19 @@ export const ServerComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { title: "Healthy", intention: "Good", value: summary?.healthy ?? 0 },
+      { title: "健康", intention: "Good", value: summary?.healthy ?? 0 },
       {
-        title: "Warning",
+        title: "警告",
         intention: "Warning",
         value: summary?.warning ?? 0,
       },
       {
-        title: "Unhealthy",
+        title: "不健康",
         intention: "Critical",
         value: summary?.unhealthy ?? 0,
       },
       {
-        title: "Disabled",
+        title: "已禁用",
         intention: "Neutral",
         value: summary?.disabled ?? 0,
       },
@@ -80,7 +80,7 @@ export const ServerComponents: RequiredResourceComponents<
   },
 
   Description: () => (
-    <>Connect servers for alerting, building, and deploying.</>
+    <>连接服务器，用于告警、构建和部署。</>
   ),
 
   New: () => <NewResource type="Server" />,
@@ -141,8 +141,8 @@ export const ServerComponents: RequiredResourceComponents<
         name={server?.name}
         state={
           server?.info.state === Types.ServerState.Ok && versionMismatch
-            ? "Version Mismatch"
-            : fmtUpperCamelcase(server?.info.state ?? "")
+            ? "版本不匹配"
+            : displayLabel(server?.info.state ?? "")
         }
         status={server?.info.region}
       />
@@ -154,7 +154,7 @@ export const ServerComponents: RequiredResourceComponents<
     const info = useServer(id)?.info;
     return (
       <StatusBadge
-        text={info?.state}
+        text={displayLabel(info?.state)}
         intent={serverStateIntention(
           info?.state,
           !!coreVersion && !!info?.version && coreVersion !== info.version,
@@ -176,16 +176,16 @@ export const ServerComponents: RequiredResourceComponents<
                   navigator.clipboard
                     .writeText(publicIp)
                     .then(() =>
-                      notifications.show({ message: "Copied public IP" }),
+                      notifications.show({ message: "已复制公网 IP" }),
                     );
               }}
               style={{ cursor: "pointer" }}
             >
               <ICONS.IP size="1rem" />
-              {publicIp ?? "Unknown IP"}
+              {publicIp ?? "未知 IP"}
             </Group>
           </HoverCard.Target>
-          <HoverCard.Dropdown>Public IP (click to copy)</HoverCard.Dropdown>
+          <HoverCard.Dropdown>公网 IP（点击复制）</HoverCard.Dropdown>
         </HoverCard>
       );
     },
@@ -205,8 +205,8 @@ export const ServerComponents: RequiredResourceComponents<
             <Group gap="xs">
               <ICONS.Cpu size="1rem" />
               {coreCount
-                ? `${coreCount} Core${coreCount === 1 ? "" : "s"}`
-                : "N/A"}
+                ? `${coreCount} 核心`
+                : "不适用"}
             </Group>
           </HoverCard.Target>
           <HoverCard.Dropdown>
@@ -233,7 +233,7 @@ export const ServerComponents: RequiredResourceComponents<
           <HoverCard.Target>
             <Group gap="xs">
               <ICONS.LoadAvg size="1rem" />
-              {one?.toFixed(2) ?? "N/A"}
+              {one?.toFixed(2) ?? "不适用"}
             </Group>
           </HoverCard.Target>
           <HoverCard.Dropdown>
@@ -257,7 +257,7 @@ export const ServerComponents: RequiredResourceComponents<
           <HoverCard.Target>
             <Group gap="xs">
               <ICONS.Memory size="1rem" />
-              {stats?.mem_total_gb.toFixed(2).concat(" GB") ?? "N/A"}
+              {stats?.mem_total_gb.toFixed(2).concat(" GB") ?? "不适用"}
             </Group>
           </HoverCard.Target>
           <HoverCard.Dropdown>
@@ -285,7 +285,7 @@ export const ServerComponents: RequiredResourceComponents<
           <HoverCard.Target>
             <Group gap="xs">
               <ICONS.Disk size="1rem" />
-              {diskTotalGb?.toFixed(2).concat(" GB") ?? "N/A"}
+              {diskTotalGb?.toFixed(2).concat(" GB") ?? "不适用"}
             </Group>
           </HoverCard.Target>
           <HoverCard.Dropdown>
@@ -334,7 +334,7 @@ export const ServerComponents: RequiredResourceComponents<
             loading={pending}
             disabled={pending}
           >
-            Start Containers
+            启动容器
           </ConfirmButton>
         )
       );
@@ -359,7 +359,7 @@ export const ServerComponents: RequiredResourceComponents<
             disabled={pending}
             loading={pending}
           >
-            Restart Containers
+            重启容器
           </ConfirmModalWithDisable>
         )
       );
@@ -393,7 +393,7 @@ export const ServerComponents: RequiredResourceComponents<
             disabled={pending}
             loading={pending}
           >
-            Pause Containers
+            暂停容器
           </ConfirmModalWithDisable>
         )
       );
@@ -427,7 +427,7 @@ export const ServerComponents: RequiredResourceComponents<
             loading={pending}
             disabled={pending}
           >
-            Unpause Containers
+            恢复容器
           </ConfirmButton>
         )
       );
@@ -450,7 +450,7 @@ export const ServerComponents: RequiredResourceComponents<
             disabled={pending}
             loading={pending}
           >
-            Stop Containers
+            停止容器
           </ConfirmModalWithDisable>
         )
       );

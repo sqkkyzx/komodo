@@ -28,7 +28,7 @@ export default function NewProviderAccount({
   const { mutate: create, isPending } = useWrite(`Create${type}Account`, {
     onSuccess: () => {
       invalidate([`List${type}Accounts`]);
-      notifications.show({ message: "Account created" });
+      notifications.show({ message: "账户已创建" });
       close();
     },
   });
@@ -40,36 +40,35 @@ export default function NewProviderAccount({
     | [string, boolean, (checked: boolean) => void, true]
   > = [
     [
-      "Domain",
+      "域名",
       domain,
       (e: ChangeEvent<HTMLInputElement>) => setDomain(e.target.value),
       false,
     ],
     type === "GitProvider"
-      ? ["Use HTTPS", https, (https: boolean) => setHttps(https), true]
+      ? ["使用 HTTPS", https, (https: boolean) => setHttps(https), true]
       : undefined,
     [
-      "Username",
+      "用户名",
       username,
       (e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value),
       false,
     ],
     [
-      "Token",
+      "令牌",
       token,
       (e: ChangeEvent<HTMLInputElement>) => setToken(e.target.value),
       false,
     ],
   ];
-  const accountType =
-    type === "ImageRegistry" ? "Registry Account" : "Git Account";
+  const accountType = type === "ImageRegistry" ? "镜像仓库账户" : "Git 账户";
 
   return (
     <>
       <Modal
         opened={opened}
         onClose={close}
-        title={<Text size="lg">Create {accountType}</Text>}
+        title={<Text size="lg">创建 {accountType}</Text>}
         size="lg"
       >
         <Stack>
@@ -94,7 +93,7 @@ export default function NewProviderAccount({
               <Group key={title} justify="space-between">
                 {title}
                 <TextInput
-                  placeholder={`Input ${title.toLowerCase()}`}
+                  placeholder={`输入${title.toLowerCase()}`}
                   value={value}
                   onChange={onChange}
                   w={{ base: 200, lg: 300 }}
@@ -109,14 +108,14 @@ export default function NewProviderAccount({
               onClick={submit}
               loading={isPending}
             >
-              Create
+              创建
             </Button>
           </Group>
         </Stack>
       </Modal>
 
       <Button leftSection={<ICONS.Create size="1rem" />} onClick={open}>
-        New Account
+        新建账户
       </Button>
     </>
   );

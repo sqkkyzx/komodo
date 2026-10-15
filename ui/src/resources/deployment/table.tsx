@@ -49,7 +49,7 @@ export default function DeploymentTable({
           id: "Name",
           accessorKey: "name",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           cell: ({ row }) => (
             <Group wrap="nowrap">
@@ -62,7 +62,7 @@ export default function DeploymentTable({
           id: "Image",
           accessorKey: "info.image",
           header: ({ column }) => (
-            <SortableHeader column={column} title="Image" />
+            <SortableHeader column={column} title="镜像" />
           ),
           cell: ({
             row: {
@@ -74,7 +74,7 @@ export default function DeploymentTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Host" />
+            <SortableHeader column={column} title="主机" />
           ),
           id: "Host",
           accessorKey: "info.server_id",
@@ -105,14 +105,14 @@ export default function DeploymentTable({
           id: "State",
           accessorKey: "info.state",
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           cell: ({ row }) => (
             <DeploymentComponents.State id={row.original.id} />
           ),
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

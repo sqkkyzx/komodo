@@ -24,7 +24,7 @@ export default function SwarmSecrets({
   const filtered = filterBySplit(
     secrets,
     search,
-    (secret) => secret.Name ?? secret.ID ?? "Unknown",
+    (secret) => secret.Name ?? secret.ID ?? "未知",
   );
 
   return (
@@ -44,7 +44,7 @@ export default function SwarmSecrets({
           {
             accessorKey: "Name",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Name" />
+              <SortableHeader column={column} title="名称" />
             ),
             cell: ({ row }) => (
               <SwarmResourceLink
@@ -55,7 +55,7 @@ export default function SwarmSecrets({
                 extra={
                   !row.original.InUse && (
                     <Badge variant="filled" color="red">
-                      Unused
+                      未使用
                     </Badge>
                   )
                 }
@@ -67,47 +67,47 @@ export default function SwarmSecrets({
             header: ({ column }) => (
               <SortableHeader column={column} title="ID" />
             ),
-            cell: ({ row }) => row.original.ID ?? "Unknown",
+            cell: ({ row }) => row.original.ID ?? "未知",
           },
           {
             accessorKey: "Driver",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Driver" />
+              <SortableHeader column={column} title="驱动" />
             ),
             cell: ({ row }) =>
               row.original.Driver ?? (
-                <div className="text-muted-foreground">None</div>
+                <div className="text-muted-foreground">无</div>
               ),
           },
           {
             accessorKey: "Templating",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Templating" />
+              <SortableHeader column={column} title="模板处理" />
             ),
             cell: ({ row }) =>
               row.original.Templating ?? (
-                <div className="text-muted-foreground">None</div>
+                <div className="text-muted-foreground">无</div>
               ),
           },
           {
             accessorKey: "UpdatedAt",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Updated" />
+              <SortableHeader column={column} title="更新时间" />
             ),
             cell: ({ row }) =>
               row.original.UpdatedAt
-                ? new Date(row.original.UpdatedAt).toLocaleString()
-                : "Unknown",
+                ? new Date(row.original.UpdatedAt).toLocaleString("zh-CN")
+                : "未知",
           },
           {
             accessorKey: "CreatedAt",
             header: ({ column }) => (
-              <SortableHeader column={column} title="Created" />
+              <SortableHeader column={column} title="创建时间" />
             ),
             cell: ({ row }) =>
               row.original.CreatedAt
-                ? new Date(row.original.CreatedAt).toLocaleString()
-                : "Unknown",
+                ? new Date(row.original.CreatedAt).toLocaleString("zh-CN")
+                : "未知",
           },
         ]}
       />

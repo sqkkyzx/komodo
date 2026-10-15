@@ -54,18 +54,21 @@ export default function ContainerTabs({
     () => [
       {
         value: "Log",
+        label: "日志",
         hidden: !specificLogs,
         disabled: logDisabled,
         icon: ICONS.Log,
       },
       {
         value: "Inspect",
+        label: "检查",
         hidden: !specificInspect,
         disabled: inspectDisabled,
         icon: ICONS.Inspect,
       },
       {
         value: "Terminals",
+        label: "终端",
         hidden: !specificTerminal,
         disabled: terminalDisabled,
         icon: ICONS.Terminal,

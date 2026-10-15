@@ -2,12 +2,18 @@ import path from "path";
 import dotenv from "dotenv";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import moghUiZhCn from "./localization/mogh-ui-zh-cn.mjs";
 
 dotenv.config({ path: ".env.development" });
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    moghUiZhCn({
+      packageRoot: path.resolve(import.meta.dirname, "node_modules/mogh_ui"),
+    }),
+    react(),
+  ],
   server: {
     allowedHosts: process.env.ALLOWED_HOSTS?.split(","),
   },

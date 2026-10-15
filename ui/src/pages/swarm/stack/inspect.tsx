@@ -26,9 +26,9 @@ export default function SwarmStackInspectSection({
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm stack."
+          ? "无法检查集群应用栈。"
           : !inspect
-            ? `No swarm stack found with given name: ${stack}`
+            ? `未找到以下名称的集群应用栈：${stack}`
             : undefined
       }
       {...sectionProps}

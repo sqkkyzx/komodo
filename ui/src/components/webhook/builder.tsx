@@ -24,7 +24,7 @@ export default function WebhookBuilder({
     <ConfigItem {...itemProps}>
       <Stack gap="xs">
         <Select
-          label="Auth style?"
+          label="认证方式"
           value={getIntegration(gitProvider)}
           onChange={(integration) =>
             integration &&
@@ -34,10 +34,13 @@ export default function WebhookBuilder({
           w={{ base: "100%", sm: 200 }}
         />
         <Select
-          label="Resource Id or Name?"
+          label="资源 ID 或名称"
           value={idOrName}
           onChange={(value) => value && setIdOrName(value as WebhookIdOrName)}
-          data={["Id", "Name"]}
+          data={[
+            { value: "Id", label: "ID" },
+            { value: "Name", label: "名称" },
+          ]}
           w={{ base: "100%", sm: 200 }}
         />
         {extra}

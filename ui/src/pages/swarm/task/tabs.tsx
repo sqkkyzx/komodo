@@ -36,11 +36,13 @@ export default function SwarmTaskTabs({
     () => [
       {
         value: "Log",
+        label: "日志",
         icon: ICONS.Log,
         disabled: !specificLogs,
       },
       {
         value: "Inspect",
+        label: "检查",
         icon: ICONS.Inspect,
         disabled: !specificInspect,
       },

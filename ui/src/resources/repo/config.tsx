@@ -60,7 +60,7 @@ export default function RepoConfig({
       groups={{
         "": [
           {
-            label: "Server",
+            label: "服务器",
             labelHidden: true,
             fields: {
               server_id: (server_id, set) => {
@@ -69,7 +69,7 @@ export default function RepoConfig({
                     label={
                       server_id ? (
                         <Group fz="h3">
-                          Server:
+                          服务器：
                           <ResourceLink
                             type="Server"
                             id={server_id}
@@ -78,10 +78,10 @@ export default function RepoConfig({
                           />
                         </Group>
                       ) : (
-                        "Select Server"
+                        "选择服务器"
                       )
                     }
-                    description="Select the Server to clone on. Optional."
+                    description="选择用于克隆的服务器，可选。"
                   >
                     <ResourceSelector
                       type="Server"
@@ -96,7 +96,7 @@ export default function RepoConfig({
             },
           },
           {
-            label: "Builder",
+            label: "构建器",
             labelHidden: true,
             fields: {
               builder_id: (builder_id, set) => {
@@ -105,7 +105,7 @@ export default function RepoConfig({
                     label={
                       builder_id ? (
                         <Group fz="h3">
-                          Builder:
+                          构建器：
                           <ResourceLink
                             type="Builder"
                             id={builder_id}
@@ -114,10 +114,10 @@ export default function RepoConfig({
                           />
                         </Group>
                       ) : (
-                        "Select Builder"
+                        "选择构建器"
                       )
                     }
-                    description="Select the Builder to build with. Optional."
+                    description="选择用于构建的构建器，可选。"
                   >
                     <ResourceSelector
                       type="Builder"
@@ -132,7 +132,7 @@ export default function RepoConfig({
             },
           },
           {
-            label: "Source",
+            label: "来源",
             fields: {
               git_provider: (provider, set) => {
                 const https = update.git_https ?? config.git_https;
@@ -156,41 +156,40 @@ export default function RepoConfig({
                   selected={account}
                   onSelect={(git_account) => set({ git_account })}
                   disabled={disabled}
-                  placeholder="None"
+                  placeholder="无"
                 />
               ),
               repo: {
-                placeholder: "Enter repo",
+                placeholder: "输入代码仓库",
                 description:
-                  "The repo path on the provider. {namespace}/{repo_name}",
+                  "代码托管平台上的仓库路径：{namespace}/{repo_name}",
               },
               branch: {
-                placeholder: "Enter branch",
-                description: "Select a custom branch, or default to 'main'.",
+                placeholder: "输入分支",
+                description: "选择自定义分支，默认为 main。",
               },
               commit: {
-                label: "Commit Hash",
-                placeholder: "Input commit hash",
+                label: "提交哈希",
+                placeholder: "输入提交哈希",
                 description:
-                  "Optional. Switch to a specific commit hash after cloning the branch.",
+                  "可选。克隆分支后切换到指定提交。",
               },
             },
           },
           {
-            label: "Path",
+            label: "路径",
             labelHidden: true,
             fields: {
               path: {
-                label: "Clone Path",
+                label: "克隆路径",
                 placeholder: "/clone/path/on/host",
                 description: (
                   <Stack gap="0">
                     <Text>
-                      Explicitly specify the folder on the host to clone the
-                      repo in.
+                      指定主机上用于克隆代码仓库的文件夹。
                     </Text>
                     <Text>
-                      If <b>relative path</b> (no leading '/'), relative to{" "}
+                      若为 <b>相对路径</b> （不以 / 开头），则相对于{" "}
                       <b>{"$root_directory/repos/" + repo.name}</b>
                     </Text>
                   </Stack>
@@ -199,9 +198,9 @@ export default function RepoConfig({
             },
           },
           {
-            label: "Environment",
+            label: "环境变量",
             description:
-              "Write these variables to a .env-formatted file at the specified path before on_clone / on_pull are run.",
+              "运行 on_clone / on_pull 前，将这些变量写入指定路径的 .env 格式文件。",
             fields: {
               environment: (env, set) => (
                 <Stack gap="xs">
@@ -218,16 +217,16 @@ export default function RepoConfig({
               ),
               env_file_path: {
                 description:
-                  "The path to write the file to, relative to the root of the repo.",
+                  "要写入的文件路径，相对于代码仓库根目录。",
                 placeholder: ".env",
               },
               // skip_secret_interp: true,
             },
           },
           {
-            label: "On Clone",
+            label: "克隆后操作",
             description:
-              "Execute a shell command after cloning the repo. The given Cwd is relative to repo root.",
+              "克隆代码仓库后执行 Shell 命令。Cwd 相对于代码仓库根目录。",
             fields: {
               on_clone: (value, set) => (
                 <SystemCommand
@@ -239,9 +238,9 @@ export default function RepoConfig({
             },
           },
           {
-            label: "On Pull",
+            label: "拉取后操作",
             description:
-              "Execute a shell command after pulling the repo. The given Cwd is relative to repo root.",
+              "拉取代码仓库后执行 Shell 命令。Cwd 相对于代码仓库根目录。",
             fields: {
               on_pull: (value, set) => (
                 <SystemCommand
@@ -253,17 +252,17 @@ export default function RepoConfig({
             },
           },
           {
-            label: "Webhooks",
-            description: `Copy the webhook given here, and  your ${webhookIntegration}-style repo provider to send webhooks to Komodo`,
+            label: "Webhook",
+            description: `复制此处的 Webhook 地址，并在兼容 ${webhookIntegration} 的代码托管平台中配置向 Komodo 发送 Webhook`,
             fields: {
               ["Guard" as any]: () => {
                 if (update.branch ?? config.branch) {
                   return null;
                 }
                 return (
-                  <ConfigItem label="Configure Branch">
+                  <ConfigItem label="配置分支">
                     <Text>
-                      Must configure Branch before webhooks will work.
+                      需先配置分支，Webhook 才能生效。
                     </Text>
                   </ConfigItem>
                 );
@@ -273,21 +272,21 @@ export default function RepoConfig({
               ),
               ["Pull" as any]: () => (
                 <CopyWebhookUrl
-                  label="Webhook URL - Pull"
+                  label="Webhook 地址 - 拉取"
                   integration={webhookIntegration}
                   path={`/repo/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/pull`}
                 />
               ),
               ["Clone" as any]: () => (
                 <CopyWebhookUrl
-                  label="Webhook URL - Clone"
+                  label="Webhook 地址 - 克隆"
                   integration={webhookIntegration}
                   path={`/repo/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/clone`}
                 />
               ),
               ["Build" as any]: () => (
                 <CopyWebhookUrl
-                  label="Webhook URL - Build"
+                  label="Webhook 地址 - 构建"
                   integration={webhookIntegration}
                   path={`/repo/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}/build`}
                 />
@@ -295,25 +294,25 @@ export default function RepoConfig({
               webhook_enabled: true,
               webhook_secret: {
                 description:
-                  "Provide a custom webhook secret for this resource, or use the global default.",
-                placeholder: "Input custom secret",
+                  "为此资源设置自定义 Webhook 密钥，或使用全局默认值。",
+                placeholder: "输入自定义密钥",
               },
             },
           },
           {
-            label: "Links",
+            label: "链接",
             labelHidden: true,
             fields: {
               links: (values, set) => (
                 <ConfigList
-                  label="Links"
-                  addLabel="Add Link"
-                  description="Add quick links in the resource header"
+                  label="链接"
+                  addLabel="添加链接"
+                  description="在资源页顶部添加快捷链接"
                   field="links"
                   values={values ?? []}
                   set={set}
                   disabled={disabled}
-                  placeholder="Input link"
+                  placeholder="输入链接"
                 />
               ),
             },

@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { stackStateIntention } from "@/lib/color";
 import {
   useInvalidate,
@@ -82,30 +83,30 @@ export const StackComponents: RequiredResourceComponents<
     const [running, stopped, unhealthy, unknown] = all;
     return [
       all.every((item) => item === 0) && {
-        title: "Down",
+        title: "未运行",
         intention: "Neutral",
         value: summary?.down ?? 0,
       },
-      { intention: "Good", value: running, title: "Running" },
+      { intention: "Good", value: running, title: "运行中" },
       {
         intention: "Warning",
         value: stopped,
-        title: "Stopped",
+        title: "已停止",
       },
       {
         intention: "Critical",
         value: unhealthy,
-        title: "Unhealthy",
+        title: "不健康",
       },
       {
         intention: "Unknown",
         value: unknown,
-        title: "Unknown",
+        title: "未知",
       },
     ];
   },
 
-  Description: () => <>Deploy docker compose files.</>,
+  Description: () => <>部署 Docker Compose 文件。</>,
 
   New: (props) => <NewResourceWithDeployTarget type="Stack" {...props} />,
 
@@ -168,7 +169,7 @@ export const StackComponents: RequiredResourceComponents<
     let info = useStack(id)?.info;
     return (
       <StatusBadge
-        text={info?.state}
+        text={displayLabel(info?.state)}
         intent={stackStateIntention(
           info?.state,
           info?.services &&
@@ -189,7 +190,7 @@ export const StackComponents: RequiredResourceComponents<
       ) : (
         <Group gap="xs">
           <ICONS.Server size="1rem" />
-          <Text>Unknown</Text>
+          <Text>未知</Text>
         </Group>
       );
     },
@@ -203,8 +204,7 @@ export const StackComponents: RequiredResourceComponents<
         <HoverCard position="bottom-start">
           <HoverCard.Target>
             <Text>
-              <b>{info?.services.length}</b> Service
-              {(info?.services.length ?? 0) !== 1 ? "s" : ""}
+              <b>{info?.services.length}</b> 个服务
             </Text>
           </HoverCard.Target>
           <HoverCard.Dropdown>
@@ -252,7 +252,7 @@ export const StackComponents: RequiredResourceComponents<
           <HashCompare
             lastHash={fullInfo?.deployed_hash}
             lastMessage={fullInfo?.deployed_message}
-            lastLabel="deployed"
+            lastLabel="部署"
             latestHash={fullInfo?.latest_hash}
             latestMessage={fullInfo?.latest_message}
           />
@@ -275,14 +275,12 @@ export const StackComponents: RequiredResourceComponents<
           <HoverCard width={300} position="bottom-start">
             <HoverCard.Target>
               <Button variant="filled" color="red">
-                Config Missing
+                缺少配置
               </Button>
             </HoverCard.Target>
             <HoverCard.Dropdown>
               <Text>
-                No configuration provided for stack. Cannot get stack state.
-                Either paste the compose file contents into the UI, or configure
-                a git repo containing your files.
+                应用栈未提供配置，无法获取状态。请在界面中粘贴 Compose 文件内容，或配置包含文件的 Git 仓库。
               </Text>
             </HoverCard.Dropdown>
           </HoverCard>
@@ -308,14 +306,12 @@ export const StackComponents: RequiredResourceComponents<
           <HoverCard width={300} position="bottom-start">
             <HoverCard.Target>
               <Button variant="filled" color="red">
-                Project Missing
+                缺少项目
               </Button>
             </HoverCard.Target>
             <HoverCard.Dropdown>
               <Text>
-                The compose project is not on the host. If the compose stack is
-                running, the 'Project Name' needs to be set. This can be found
-                with 'docker compose ls'.
+                主机上未找到此 Compose 项目。若应用栈正在运行，请设置“项目名称”，可使用 docker compose ls 查询。
               </Text>
             </HoverCard.Dropdown>
           </HoverCard>
@@ -333,13 +329,13 @@ export const StackComponents: RequiredResourceComponents<
           <HoverCard width={300} position="bottom-start">
             <HoverCard.Target>
               <Button variant="filled" color="red">
-                Remote Error
+                远程错误
               </Button>
             </HoverCard.Target>
             <HoverCard.Dropdown>
               <Text>
-                There are errors reading the remote file contents. See{" "}
-                <b>Info</b> tab for details.
+                读取远程文件内容时出错。请查看{" "}
+                <b>信息</b> 选项卡了解详情。
               </Text>
             </HoverCard.Dropdown>
           </HoverCard>
@@ -353,7 +349,7 @@ export const StackComponents: RequiredResourceComponents<
       const { mutate, isPending } = useWrite("RefreshStackCache", {
         onSuccess: () => {
           inv(["ListStacks"], ["GetStack", { stack: id }]);
-          notifications.show({ message: "Refreshed source file contents" });
+          notifications.show({ message: "已刷新源文件内容" });
         },
       });
 

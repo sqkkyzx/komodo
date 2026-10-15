@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useParams } from "react-router-dom";
 import { swarmNodeStateIntention } from "@/lib/color";
 import { useRead, useSetTitle } from "@/lib/hooks";
@@ -26,7 +27,7 @@ export default function SwarmNode() {
   });
   const state = node?.Status?.State;
   useSetTitle(
-    `${swarm?.name} | Node | ${node?.Description?.Hostname ?? "Unknown"}`,
+    `${swarm?.name} | 节点 | ${node?.Description?.Hostname ?? "未知"}`,
   );
 
   const intent = swarmNodeStateIntention(state);
@@ -36,21 +37,21 @@ export default function SwarmNode() {
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm node."
+          ? "无法检查集群节点。"
           : !node
-            ? `No swarm node found with given id: ${_node}`
+            ? `未找到以下 ID 的集群节点：${_node}`
             : undefined
       }
     >
       <ResourceSubPage
-        entityTypeName="Swarm Node"
+        entityTypeName="集群节点"
         parentType="Swarm"
         parentId={swarmId}
         name={node?.Description?.Hostname}
         icon={ICONS.SwarmNode}
         intent={intent}
-        state={state}
-        status={node?.Spec?.Role}
+        state={state ? displayLabel(state) : state}
+        status={node?.Spec?.Role ? displayLabel(node.Spec.Role) : undefined}
         executions={
           node?.ID && (
             <>

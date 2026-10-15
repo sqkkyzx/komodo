@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import TagsFilter from "@/components/tags/filter";
 import { keepPreviousData } from "@tanstack/react-query";
 import {
@@ -118,7 +119,7 @@ function TableSection({
             <Link to={`/${usableResourcePath(type)}`} {...props} />
           )}
         >
-          {type + "s"}
+          {resourceLabel(type)}
         </Text>
       }
       titleRight={

@@ -45,7 +45,7 @@ export default function ResourceSyncTable({
       columns={[
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Name" />
+            <SortableHeader column={column} title="名称" />
           ),
           id: "Name",
           accessorKey: "name",
@@ -55,7 +55,7 @@ export default function ResourceSyncTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Source" />
+            <SortableHeader column={column} title="来源" />
           ),
           id: "Source",
           accessorKey: "info.repo",
@@ -63,14 +63,14 @@ export default function ResourceSyncTable({
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="Branch" />
+            <SortableHeader column={column} title="分支" />
           ),
           id: "Branch",
           accessorKey: "info.branch",
         },
         {
           header: ({ column }) => (
-            <SortableHeader column={column} title="State" />
+            <SortableHeader column={column} title="状态" />
           ),
           id: "State",
           accessorKey: "info.state",
@@ -79,7 +79,7 @@ export default function ResourceSyncTable({
           ),
         },
         {
-          header: "Tags",
+          header: "标签",
           cell: ({ row }) => <TableTags tagIds={row.original.tags} />,
         },
       ]}

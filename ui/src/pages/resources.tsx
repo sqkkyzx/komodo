@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { useState } from "react";
 import { useResourceParamType, useSetTitle, useTagsFilter } from "@/lib/hooks";
 import { ResourceComponents, UsableResource } from "@/resources";
@@ -13,8 +14,8 @@ export default function Resources({ _type }: { _type?: UsableResource }) {
   const __type = useResourceParamType()!;
   const type = _type ? _type : __type;
 
-  const name = type === "ResourceSync" ? "Resource Sync" : type;
-  useSetTitle(name + "s");
+  const name = resourceLabel(type);
+  useSetTitle(name);
 
   const [query, setQuery] = useState<Types.ResourceQuery<any>>({});
 
@@ -28,7 +29,7 @@ export default function Resources({ _type }: { _type?: UsableResource }) {
 
   return (
     <Page
-      title={`${name}s`}
+      title={name}
       icon={RC.Icon}
       description={<RC.Description />}
       oppositeTitle={

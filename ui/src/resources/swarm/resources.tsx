@@ -15,14 +15,14 @@ export default function SwarmHostedResourcesSection({
 }: SwarmHostedResourcesSectionProps) {
   return (
     <Section gap={48} {...sectionProps}>
-      <Section title="Stacks" icon={<ICONS.Stack size="1.3rem" />}>
+      <Section title="应用栈" icon={<ICONS.Stack size="1.3rem" />}>
         <ResourceTable
           type="Stack"
           newProps={{ swarmId }}
           specific={{ swarm_ids: [swarmId] }}
         />
       </Section>
-      <Section title="Deployments" icon={<ICONS.Deployment size="1.3rem" />}>
+      <Section title="部署" icon={<ICONS.Deployment size="1.3rem" />}>
         <ResourceTable
           type="Deployment"
           newProps={{ swarmId }}

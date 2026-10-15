@@ -161,7 +161,7 @@ export default function ResourceTable({
           {showAvailableUpdatesQuery &&
             (type === "Stack" || type === "Deployment") && (
               <LabelledSwitch
-                label="Pending Update"
+                label="待更新"
                 checked={filterUpdateAvailable}
                 onCheckedChange={toggleFilterUpdateAvailable}
                 opacity={0.7}

@@ -1,3 +1,4 @@
+import { resourceLabel, displayLabel } from "@/lib/l10n";
 import { useRead } from "@/lib/hooks";
 import { StatusBadge } from "mogh_ui";
 import { Box, Group, HoverCard, Loader, Stack, Text } from "@mantine/core";
@@ -30,7 +31,7 @@ export default function SwarmHeaderInfo<R>({
             {resources ? (
               <>
                 <b>{resources.length}</b>{" "}
-                {`${type.toLowerCase()}${resources.length === 1 ? "" : "s"}`}
+                {resourceLabel(type)}
               </>
             ) : (
               <Loader size="xs" />
@@ -53,7 +54,7 @@ export default function SwarmHeaderInfo<R>({
                   name={resourceName(resource as R)}
                 />
                 <StatusBadge
-                  text={resourceState(resource as R)}
+                  text={displayLabel(resourceState(resource as R))}
                   intent={resourceStateIntent(resource as R)}
                 />
               </Group>

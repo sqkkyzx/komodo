@@ -38,7 +38,7 @@ export default function SwarmConfigEditSection({
   const { mutateAsync: confirmEdit } = useExecute("RotateSwarmConfig", {
     onSuccess: (res) => {
       notifications.show({
-        message: res.success ? "Config updated." : "Failed to update config.",
+        message: res.success ? "配置已更新。" : "更新配置失败。",
         color: res.success ? "green" : "red",
       });
       setEdit({ edit: undefined });
@@ -55,9 +55,9 @@ export default function SwarmConfigEditSection({
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm config."
+          ? "无法检查集群配置。"
           : !config
-            ? `No swarm config found with given name: ${config}`
+            ? `未找到以下名称的集群配置：${config}`
             : undefined
       }
       actions={
@@ -74,7 +74,7 @@ export default function SwarmConfigEditSection({
               leftSection={<ICONS.History size="1rem" />}
               w={100}
             >
-              Reset
+              重置
             </Button>
             <ConfirmUpdate
               original={{ contents: data }}
@@ -94,7 +94,7 @@ export default function SwarmConfigEditSection({
       {...sectionProps}
     >
       <MonacoEditor
-        value={edit ?? data ?? "Failed to retrieve config data"}
+        value={edit ?? data ?? "无法获取配置数据"}
         language={language}
         onValueChange={(edit) => setEdit({ edit })}
         readOnly={!canExecute}

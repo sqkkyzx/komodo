@@ -33,7 +33,7 @@ export default function UpdateList({
   return (
     <Box style={{ overflow: "auto", ...style }} {...boxProps}>
       <Stack pr="sm" gap="0">
-        {!updates?.updates.length && <Center c="dimmed">No Updates</Center>}
+        {!updates?.updates.length && <Center c="dimmed">暂无操作记录</Center>}
         {updates?.updates.slice(0, max).map((update, i) => (
           <UpdateCard
             key={update.id}
@@ -50,7 +50,7 @@ export default function UpdateList({
             to={showAllLink}
             fullWidth
           >
-            Show All
+            显示全部
           </Button>
         )}
       </Stack>

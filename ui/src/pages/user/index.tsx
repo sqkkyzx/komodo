@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { useInvalidate, useRead, useUser, useWrite } from "@/lib/hooks";
 import {
   ConfirmButton,
@@ -28,7 +29,7 @@ export default function User() {
       inv(["FindUser"]);
       inv(["ListUsers"]);
       notifications.show({
-        message: "Modified user base permissions",
+        message: "用户基础权限已更新",
         color: "green",
       });
     },
@@ -37,7 +38,7 @@ export default function User() {
     onSuccess: () => {
       inv(["FindUser"]);
       inv(["ListUsers"]);
-      notifications.show({ message: "Modified user admin", color: "green" });
+      notifications.show({ message: "用户管理员权限已更新", color: "green" });
     },
   });
   return (
@@ -45,9 +46,9 @@ export default function User() {
       isPending={isPending}
       error={
         !adminUser?.admin
-          ? "This page is only for admin users."
+          ? "仅管理员可访问此页面。"
           : !user
-            ? "User could not be found"
+            ? "未找到用户"
             : undefined
       }
     >
@@ -56,7 +57,7 @@ export default function User() {
         breadcrumbs={
           <PageBreadcrumbs
             items={[
-              { label: "Settings", to: "/settings" },
+              { label: "设置", to: "/settings" },
               { label: user?.username },
             ]}
           />
@@ -66,7 +67,7 @@ export default function User() {
         <Stack mt="lg" gap="xl">
           {user?._id?.$oid !== adminUser?._id?.$oid &&
             (!user?.admin || (!user.super_admin && adminUser?.super_admin)) && (
-              <Section title="User Permissions" titleFz="h3" withBorder>
+              <Section title="用户权限" titleFz="h3" withBorder>
                 <Group>
                   <ConfirmButton
                     icon={
@@ -82,7 +83,7 @@ export default function User() {
                       updateBase({ user_id: userId, enabled: !user?.enabled })
                     }
                   >
-                    {user?.enabled ? "Disable User" : "Enable User"}
+                    {user?.enabled ? "禁用用户" : "启用用户"}
                   </ConfirmButton>
                   <ConfirmButton
                     icon={
@@ -98,7 +99,7 @@ export default function User() {
                       updateAdmin({ user_id: userId, admin: !user?.admin })
                     }
                   >
-                    {user?.admin ? "Take Admin" : "Make Admin"}
+                    {user?.admin ? "移除管理员权限" : "设为管理员"}
                   </ConfirmButton>
 
                   {!user?.admin &&
@@ -112,7 +113,7 @@ export default function User() {
                         return (
                           <LabelledSwitch
                             key={item}
-                            label={`Create ${item} Permission`}
+                            label={`创建${resourceLabel(item)}权限`}
                             checked={user?.[key]}
                             onCheckedChange={(checked) =>
                               updateBase({

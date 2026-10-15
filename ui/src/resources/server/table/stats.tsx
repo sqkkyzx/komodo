@@ -55,7 +55,7 @@ export default function StatsServerTable({
           header: ({ column }) => (
             <SortableHeader
               column={column}
-              title="Name"
+              title="名称"
               disabled={disableSorting}
             />
           ),
@@ -85,7 +85,7 @@ export default function StatsServerTable({
           header: ({ column }) => (
             <SortableHeader
               column={column}
-              title="Memory"
+              title="内存"
               disabled={disableSorting}
             />
           ),
@@ -98,7 +98,7 @@ export default function StatsServerTable({
           header: ({ column }) => (
             <SortableHeader
               column={column}
-              title="Disk"
+              title="磁盘"
               disabled={disableSorting}
             />
           ),
@@ -111,7 +111,7 @@ export default function StatsServerTable({
           header: ({ column }) => (
             <SortableHeader
               column={column}
-              title="Load Avg"
+              title="平均负载"
               disabled={disableSorting}
             />
           ),
@@ -124,14 +124,14 @@ export default function StatsServerTable({
           header: ({ column }) => (
             <SortableHeader
               column={column}
-              title="Net"
+              title="网络"
               disabled={disableSorting}
             />
           ),
           cell: ({ row }) => <NetCell server={row.original} />,
         },
         {
-          header: "Version",
+          header: "版本",
           cell: ({ row }) => <ServerVersion id={row.original.id} />,
         },
       ]}
@@ -207,7 +207,7 @@ function LoadAvgCell({ server }: { server: Types.ServerListItem }) {
           1m
         </Text>
         <Text c={one !== undefined ? undefined : "dimmed"}>
-          {one !== undefined ? one.toFixed(2) : "N/A"}
+          {one !== undefined ? one.toFixed(2) : "不适用"}
         </Text>
       </Group>
       <Group gap="0.2rem" wrap="nowrap">
@@ -215,7 +215,7 @@ function LoadAvgCell({ server }: { server: Types.ServerListItem }) {
           5m
         </Text>
         <Text c={five !== undefined ? undefined : "dimmed"}>
-          {five !== undefined ? five.toFixed(2) : "N/A"}
+          {five !== undefined ? five.toFixed(2) : "不适用"}
         </Text>
       </Group>
       <Group gap="0.2rem" wrap="nowrap">
@@ -223,12 +223,12 @@ function LoadAvgCell({ server }: { server: Types.ServerListItem }) {
           15m
         </Text>
         <Text c={fifteen !== undefined ? undefined : "dimmed"}>
-          {fifteen !== undefined ? fifteen.toFixed(2) : "N/A"}
+          {fifteen !== undefined ? fifteen.toFixed(2) : "不适用"}
         </Text>
       </Group>
       {logicalCores && (
         <Text c="dimmed" size="sm">
-          {logicalCores} / {physicalCores} Core{logicalCores === 1 ? "" : "s"}
+          {logicalCores} / {physicalCores} 核心
         </Text>
       )}
     </Group>
@@ -240,7 +240,7 @@ function NetCell({ server }: { server: Types.ServerListItem }) {
   const ingress = stats?.network_ingress_bytes ?? 0;
   const egress = stats?.network_egress_bytes ?? 0;
   if (!stats) {
-    return <Text c="dimmed">N/A</Text>;
+    return <Text c="dimmed">不适用</Text>;
   }
   return (
     <Text style={{ textWrap: "nowrap" }}>{fmtRateBytes(ingress + egress)}</Text>

@@ -4,7 +4,7 @@ import { PageGuard } from "mogh_ui";
 import { useParams } from "react-router-dom";
 
 export default function Update() {
-  useSetTitle("Update");
+  useSetTitle("更新记录");
   const id = useParams().id as string;
   const { data: update, isPending } = useRead(
     "GetUpdate",
@@ -15,7 +15,7 @@ export default function Update() {
   return (
     <PageGuard
       isPending={isPending}
-      error={!update ? "Update could not be found." : undefined}
+      error={!update ? "未找到更新记录。" : undefined}
     >
       <UpdateDetails updateId={id} />
     </PageGuard>

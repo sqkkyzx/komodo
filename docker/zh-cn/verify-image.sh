@@ -156,6 +156,8 @@ def content_type(name):
 html = (directory / "index.body").read_text()
 if content_type("index") != "text/html" or not re.search(r"<html(?:\s|>)", html, re.I):
     raise SystemExit("The homepage response is not an HTML document.")
+if not re.search(r'<html\b[^>]*\blang=[\"\x27]zh-CN[\"\x27]', html, re.I):
+    raise SystemExit("The homepage must declare the zh-CN locale.")
 
 
 class Assets(HTMLParser):

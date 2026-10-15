@@ -112,7 +112,7 @@ export default function ContainerSelector({
         >
           <Group gap="xs" wrap="nowrap">
             <DOCKER_LINK_ICONS.Container serverId={serverId} name={selected} />
-            <Text>{name || (placeholder ?? "Select container")}</Text>
+            <Text>{name || (placeholder ?? "选择容器")}</Text>
           </Group>
         </Button>
       </Combobox.Target>
@@ -122,7 +122,7 @@ export default function ContainerSelector({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder="Search"
+          placeholder="搜索"
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
           {filtered.map((container) => (
@@ -136,9 +136,7 @@ export default function ContainerSelector({
               </Group>
             </Combobox.Option>
           ))}
-          {filtered.length === 0 && (
-            <Combobox.Empty>No results.</Combobox.Empty>
-          )}
+          {filtered.length === 0 && <Combobox.Empty>无结果。</Combobox.Empty>}
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>

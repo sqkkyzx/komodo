@@ -15,7 +15,7 @@ export default function CopyWebhookUrl({
   const baseUrl = useRead("GetCoreInfo", {}).data?.webhook_base_url;
   const url = baseUrl + "/listener/" + integration.toLowerCase() + path;
   return (
-    <ConfigItem label="Webhook URL" {...itemProps}>
+    <ConfigItem label="Webhook 地址" {...itemProps}>
       <CopyText content={url} />
     </ConfigItem>
   );

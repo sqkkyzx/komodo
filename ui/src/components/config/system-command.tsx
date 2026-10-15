@@ -14,13 +14,13 @@ export default function SystemCommand({
   set,
 }: SystemCommandProps) {
   const placeholder = value?.shell_mode
-    ? "  # Add a command to run.\n  "
-    : "  # Add multiple commands on new lines. Supports comments and escaped newlines.\n  ";
+    ? "  # 添加要运行的命令。\n  "
+    : "  # 每行添加一条命令。支持注释和转义换行。\n  ";
   return (
     <Stack>
       <TextInput
-        label="Path"
-        placeholder="Command working directory"
+        label="路径"
+        placeholder="命令工作目录"
         value={value?.path}
         w={{ base: "85%", sm: 300 }}
         onChange={(e) => set({ ...(value || {}), path: e.target.value })}
@@ -29,11 +29,11 @@ export default function SystemCommand({
       <Checkbox
         label={
           <>
-            Run in shell mode (
+            以 Shell 模式运行（
             <Code fz="sm" p="0">
               sh -c
             </Code>
-            ){" "}
+            ）{" "}
           </>
         }
         checked={value?.shell_mode ?? false}

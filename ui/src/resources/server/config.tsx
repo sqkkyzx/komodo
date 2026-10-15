@@ -60,23 +60,23 @@ export default function ServerConfig({
       groups={{
         "": [
           {
-            label: "Enabled",
+            label: "已启用",
             labelHidden: true,
             fields: {
               enabled: {
                 description:
-                  "Whether to attempt to connect to this host / send alerts if offline. Disabling will also convert all attached resource's state to 'Unknown'.",
+                  "是否连接此主机并在离线时告警。禁用后，关联资源的状态也将变为“未知”。",
               },
             },
           },
           {
-            label: "Auth",
+            label: "认证",
             labelHidden: true,
             fields: {
               enabled: () => (
                 <ConfigInput
-                  label="Periphery Public Key"
-                  description="If provided, the associated private key must be set as Periphery 'private_key'. For Periphery -> Core connection, either this or using 'periphery_public_key' in Core config is required for Periphery to be able to connect."
+                  label="Periphery 公钥"
+                  description="若填写此项，需将对应私钥设置为 Periphery 的 private_key。使用 Periphery 主动连接 Core 时，必须填写此项或在 Core 中配置 periphery_public_key。"
                   placeholder="custom-public-key"
                   value={publicKey}
                   onValueChange={(publicKey) => setPublicKey(publicKey)}
@@ -95,7 +95,7 @@ export default function ServerConfig({
                           loading={updatePublicPending}
                           disabled={publicKey === server?.info?.public_key}
                         >
-                          Save
+                          保存
                         </ConfirmButton>
                         <ConfirmButton
                           icon={<ICONS.RotateKey size="1rem" />}
@@ -104,7 +104,7 @@ export default function ServerConfig({
                           loading={rotatePending}
                           disabled={!isAvailable}
                         >
-                          Rotate
+                          轮换
                         </ConfirmButton>
                       </Group>
                     )
@@ -114,43 +114,43 @@ export default function ServerConfig({
               ),
               auto_rotate_keys: {
                 description:
-                  "Include in key rotation with 'RotateAllServerKeys'.",
+                  "执行 RotateAllServerKeys 时也轮换此服务器的密钥。",
               },
             },
           },
           {
-            label: "Address",
+            label: "地址",
             labelHidden: true,
             fields: {
               address: {
                 description:
-                  "For Core -> Periphery connection mode, specify address of periphery in your network.",
+                  "使用 Core 主动连接 Periphery 时，指定网络中的 Periphery 地址。",
                 placeholder: "12.34.56.78:8120",
               },
               insecure_tls: {
                 hidden: !tlsAddress,
-                description: "Skip Periphery TLS certificate validation.",
+                description: "跳过 Periphery 的 TLS 证书验证。",
               },
               external_address: {
                 description:
-                  "Optional. The address of the server used in container links, if different than the Address.",
+                  "可选。若容器链接使用的服务器地址与上述地址不同，可在此指定。",
                 placeholder: "my.server.int",
               },
               region: {
                 description:
-                  "Optional. Attach a region to the server for visual grouping.",
-                placeholder: "Configure Region",
+                  "可选。为服务器设置区域，便于分组显示。",
+                placeholder: "配置区域",
               },
             },
           },
           {
-            label: "Disks",
+            label: "磁盘",
             labelHidden: true,
             fields: {
               ignore_mounts: (values, set) => (
                 <ConfigList
-                  description="If undesired disk mount points are coming through in server stats, filter them out here."
-                  label="Ignore Disks"
+                  description="在此过滤不希望出现在服务器统计中的磁盘挂载点。"
+                  label="忽略磁盘"
                   field="ignore_mounts"
                   values={values ?? []}
                   set={set}
@@ -161,47 +161,47 @@ export default function ServerConfig({
             },
           },
           {
-            label: "Monitoring",
+            label: "监控",
             labelHidden: true,
             fields: {
               stats_monitoring: {
-                label: "System Stats Monitoring",
+                label: "系统统计监控",
                 description:
-                  "Whether to store historical CPU, RAM, and disk usage.",
+                  "是否保存 CPU、内存和磁盘使用率的历史数据。",
               },
             },
           },
           {
-            label: "Pruning",
+            label: "清理",
             labelHidden: true,
             fields: {
               auto_prune: {
-                label: "Auto Prune Images",
+                label: "自动清理镜像",
                 description:
-                  "Whether to prune unused images every day at UTC 00:00",
+                  "是否每天 UTC 00:00 清理未使用的镜像",
               },
             },
           },
         ],
         alerts: [
           {
-            label: "Unreachable",
+            label: "无法连接",
             labelHidden: true,
             fields: {
               send_unreachable_alerts: {
                 description:
-                  "Send an alert if the Periphery agent cannot be reached.",
+                  "无法连接 Periphery 代理时发送告警。",
               },
             },
           },
           {
-            label: "Version",
+            label: "版本",
             labelHidden: true,
             fields: {
               send_version_mismatch_alerts: {
-                label: "Send Version Mismatch Alerts",
+                label: "发送版本不匹配告警",
                 description:
-                  "Send an alert if the Periphery version differs from the Core version.",
+                  "Periphery 与 Core 版本不同时发送告警。",
               },
             },
           },
@@ -210,66 +210,64 @@ export default function ServerConfig({
             labelHidden: true,
             fields: {
               send_cpu_alerts: {
-                label: "Send CPU Alerts",
+                label: "发送 CPU 告警",
                 description:
-                  "Send an alert if the CPU usage is above the configured thresholds.",
+                  "CPU 使用率超过设定阈值时发送告警。",
               },
               cpu_warning: {
                 description:
-                  "Send a 'Warning' alert if the CPU usage in % is above these thresholds",
+                  "CPU 使用率超过此阈值时发送“警告”告警",
               },
               cpu_critical: {
                 description:
-                  "Send a 'Critical' alert if the CPU usage in % is above these thresholds",
+                  "CPU 使用率超过此阈值时发送“严重”告警",
               },
             },
           },
           {
-            label: "Memory",
+            label: "内存",
             labelHidden: true,
             fields: {
               send_mem_alerts: {
-                label: "Send Memory Alerts",
+                label: "发送内存告警",
                 description:
-                  "Send an alert if the memory usage is above the configured thresholds.",
+                  "内存使用率超过设定阈值时发送告警。",
               },
               mem_warning: {
-                label: "Memory Warning",
+                label: "内存警告阈值",
                 description:
-                  "Send a 'Warning' alert if the memory usage in % is above these thresholds",
+                  "内存使用率超过此阈值时发送“警告”告警",
               },
               mem_critical: {
-                label: "Memory Critical",
+                label: "内存严重阈值",
                 description:
-                  "Send a 'Critical' alert if the memory usage in % is above these thresholds",
+                  "内存使用率超过此阈值时发送“严重”告警",
               },
             },
           },
           {
-            label: "Disk",
+            label: "磁盘",
             labelHidden: true,
             fields: {
               send_disk_alerts: {
                 description:
-                  "Send an alert if the Disk Usage (for any mounted disk) is above the configured thresholds.",
+                  "任一已挂载磁盘的使用率超过设定阈值时发送告警。",
               },
               disk_warning: {
                 description:
-                  "Send a 'Warning' alert if the disk usage in % is above these thresholds",
+                  "磁盘使用率超过此阈值时发送“警告”告警",
               },
               disk_critical: {
                 description:
-                  "Send a 'Critical' alert if the disk usage in % is above these thresholds",
+                  "磁盘使用率超过此阈值时发送“严重”告警",
               },
             },
           },
           {
-            label: "Maintenance",
+            label: "维护",
             description: (
               <>
-                Configure maintenance windows to temporarily disable alerts
-                during scheduled maintenance periods. When a maintenance window
-                is active, alerts from this server will be suppressed.
+                配置维护窗口，在计划维护期间暂停告警。维护窗口生效时，不发送此服务器的告警。
               </>
             ),
             fields: {

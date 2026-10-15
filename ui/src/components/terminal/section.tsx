@@ -34,7 +34,7 @@ export default function TerminalSection({
 
   const { mutateAsync: deleteTerminal } = useWrite("DeleteTerminal", {
     onSuccess: () =>
-      notifications.show({ message: "Terminal deleted.", color: "green" }),
+      notifications.show({ message: "终端已删除。", color: "green" }),
   });
 
   const [_selected, setSelected] = useLocalStorage<{
@@ -115,7 +115,7 @@ export default function TerminalSection({
             leftSection={<ICONS.Refresh size="1rem" />}
             onClick={() => triggerReconnect()}
           >
-            Reconnect
+            重新连接
           </Button>
         ) : null}
       </Group>
@@ -147,10 +147,10 @@ export default function TerminalSection({
           >
             <Group>
               <ICONS.Terminal size="2rem" />
-              <Text fz="h2">No Terminals</Text>
+              <Text fz="h2">暂无终端</Text>
             </Group>
             <Text c="dimmed">
-              Create a terminal using the <b>New</b> button.
+              点击 <b>新建</b> 按钮创建终端。
             </Text>
           </Stack>
         </Stack>

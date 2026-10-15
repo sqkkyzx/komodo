@@ -4,7 +4,7 @@ import { MultiSelect } from "@mantine/core";
 import { Types } from "komodo_client";
 import { useMemo } from "react";
 import { UsableResource } from ".";
-import { fmtResourceType } from "@/lib/formatting";
+import { resourceLabel } from "@/lib/l10n";
 
 /**
  * Multi select over resource names, using server side term search
@@ -49,7 +49,7 @@ export default function ResourceMultiSelector({
 
   return (
     <MultiSelect
-      placeholder={placeholder ?? `Filter by ${fmtResourceType(type)}s`}
+      placeholder={placeholder ?? `按${resourceLabel(type)}筛选`}
       value={value}
       onChange={onChange}
       data={data}

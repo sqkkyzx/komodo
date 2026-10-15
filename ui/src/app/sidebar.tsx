@@ -1,3 +1,4 @@
+import { resourceLabel } from "@/lib/l10n";
 import { ICONS } from "@/lib/icons";
 import { usableResourcePath } from "@/lib/utils";
 import { SIDEBAR_RESOURCES } from "@/resources";
@@ -14,25 +15,25 @@ const Sidebar = ({ close }: { close: () => void }) => {
       <ScrollArea>
         <Stack gap="0.15rem" mr="md">
           <SidebarLink
-            label="Dashboard"
+            label="概览"
             icon={<ICONS.Dashboard size="1rem" />}
             to="/"
             {...linkProps}
           />
           <SidebarLink
-            label="Containers"
+            label="容器"
             icon={<ICONS.Container size="1rem" />}
             to="/containers"
             {...linkProps}
           />
           <SidebarLink
-            label="Terminals"
+            label="终端"
             icon={<ICONS.Terminal size="1rem" />}
             to="/terminals"
             {...linkProps}
           />
           <SidebarLink
-            label="Stats"
+            label="统计"
             icon={<ICONS.Stats size="1rem" />}
             to="/stats"
             {...linkProps}
@@ -41,7 +42,7 @@ const Sidebar = ({ close }: { close: () => void }) => {
           <Divider
             label={
               <Text opacity={0.7} size="sm">
-                Resources
+                资源
               </Text>
             }
             my="0.1rem"
@@ -52,7 +53,7 @@ const Sidebar = ({ close }: { close: () => void }) => {
             return (
               <SidebarLink
                 key={type}
-                label={type === "ResourceSync" ? "Syncs" : type + "s"}
+                label={resourceLabel(type)}
                 icon={<Icon size="1rem" />}
                 to={`/${usableResourcePath(type)}`}
                 {...linkProps}
@@ -63,20 +64,20 @@ const Sidebar = ({ close }: { close: () => void }) => {
           <Divider
             label={
               <Text opacity={0.7} size="sm">
-                Notifications
+                通知
               </Text>
             }
             my="0.1rem"
           />
 
           <SidebarLink
-            label="Alerts"
+            label="告警"
             icon={<ICONS.Alert size="1rem" />}
             to="/alerts"
             {...linkProps}
           />
           <SidebarLink
-            label="Updates"
+            label="操作记录"
             icon={<ICONS.Update size="1rem" />}
             to="/updates"
             {...linkProps}
@@ -85,13 +86,13 @@ const Sidebar = ({ close }: { close: () => void }) => {
           <Divider my="xs" />
 
           <SidebarLink
-            label="Schedules"
+            label="计划任务"
             icon={<ICONS.Schedule size="1rem" />}
             to="/schedules"
             {...linkProps}
           />
           <SidebarLink
-            label="Settings"
+            label="设置"
             icon={<ICONS.Settings size="1rem" />}
             to="/settings"
             {...linkProps}

@@ -40,7 +40,7 @@ export default function NewTerminal({
   const [service, setService] = useState<string | undefined>(undefined);
   const { mutateAsync: createTerminal } = useWrite("CreateTerminal", {
     onSuccess: () =>
-      notifications.show({ message: "Terminal created.", color: "green" }),
+      notifications.show({ message: "终端已创建。", color: "green" }),
   });
 
   const { search, setSearch, combobox } = useSearchCombobox();
@@ -106,7 +106,7 @@ export default function NewTerminal({
           onClick={() => combobox.toggleDropdown()}
           {...targetProps}
         >
-          New
+          新建
         </Button>
       </Combobox.Target>
       <Combobox.Dropdown>
@@ -114,9 +114,7 @@ export default function NewTerminal({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" style={{ marginRight: 6 }} />}
-          placeholder={
-            !!services && !service ? "Select Service" : "Select Command"
-          }
+          placeholder={!!services && !service ? "选择服务" : "选择命令"}
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
           {!!services &&
@@ -129,7 +127,7 @@ export default function NewTerminal({
           {(!services || !!service) && (
             <>
               {isServer && !search && (
-                <Combobox.Option value="Default">Default</Combobox.Option>
+                <Combobox.Option value="Default">默认</Combobox.Option>
               )}
               {filtered.map((command) => (
                 <Combobox.Option key={command} value={command}>
@@ -146,7 +144,7 @@ export default function NewTerminal({
               >
                 <Group justify="center" gap="xs">
                   <ICONS.Create size="1rem" />
-                  Custom
+                  自定义
                 </Group>
               </Combobox.Option>
             </>

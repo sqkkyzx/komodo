@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { useDockerSelectionState, useRead } from "@/lib/hooks";
 import { filterBySplit } from "mogh_ui";
 import { Prune } from "@/resources/server/executions";
@@ -52,7 +53,7 @@ export default function ContainersSection({
   return (
     <Section
       titleOther={titleOther}
-      title={!titleOther ? "Containers" : undefined}
+      title={!titleOther ? "容器" : undefined}
       icon={!titleOther ? <ICONS.Container size="1.3rem" /> : undefined}
       {...sectionProps}
     >
@@ -95,7 +96,7 @@ export default function ContainersSection({
               {
                 accessorKey: "name",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Name" />
+                  <SortableHeader column={column} title="名称" />
                 ),
                 cell: ({ row }) => (
                   <DockerResourceLink
@@ -108,13 +109,13 @@ export default function ContainersSection({
               {
                 accessorKey: "state",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="State" />
+                  <SortableHeader column={column} title="状态" />
                 ),
                 cell: ({ row }) => {
                   const state = row.original?.state;
                   return (
                     <StatusBadge
-                      text={state}
+                      text={displayLabel(state)}
                       intent={containerStateIntention(state)}
                     />
                   );
@@ -123,7 +124,7 @@ export default function ContainersSection({
               {
                 accessorKey: "image",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Image" />
+                  <SortableHeader column={column} title="镜像" />
                 ),
                 cell: ({ row }) => (
                   <DockerResourceLink
@@ -137,7 +138,7 @@ export default function ContainersSection({
               {
                 accessorKey: "networks.0",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Networks" />
+                  <SortableHeader column={column} title="网络" />
                 ),
                 cell: ({ row }) =>
                   (row.original.networks?.length ?? 0) > 0 ? (
@@ -181,7 +182,7 @@ export default function ContainersSection({
                   return pa === pb ? 0 : pa > pb ? 1 : -1;
                 },
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Ports" />
+                  <SortableHeader column={column} title="端口" />
                 ),
                 cell: ({ row }) => (
                   <ContainerPorts
@@ -193,7 +194,7 @@ export default function ContainersSection({
               {
                 accessorKey: "volumes.0",
                 header: ({ column }) => (
-                  <SortableHeader column={column} title="Volumes" />
+                  <SortableHeader column={column} title="卷" />
                 ),
                 cell: ({ row }) => (
                   <DividedChildren wrap="nowrap">

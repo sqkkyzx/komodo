@@ -26,42 +26,42 @@ export default function ApiKeysTable({
       tableKey="api-keys"
       data={keys}
       columns={[
-        { header: "Name", accessorKey: "name" },
+        { header: "名称", accessorKey: "name" },
         {
-          header: "Key",
+          header: "密钥",
           cell: ({
             row: {
               original: { key },
             },
           }) => {
-            return <CopyText content={key} label="API key" />;
+            return <CopyText content={key} label="API 密钥" />;
           },
         },
         {
-          header: "Expires",
+          header: "到期时间",
           cell: ({ row }) => {
             return (
               <Text>
                 {row.original.expires ? (
                   <>
-                    In{" "}
+                    剩余{" "}
                     <b>
                       {(
                         (row.original.expires - Date.now()) /
                         ONE_DAY_MS
                       ).toFixed()}
                     </b>{" "}
-                    Days
+                    天
                   </>
                 ) : (
-                  <b>Never</b>
+                  <b>永不过期</b>
                 )}
               </Text>
             );
           },
         },
         {
-          header: "Delete",
+          header: "删除",
           cell: ({ row }) => (
             <ConfirmButton
               icon={<ICONS.Delete size="1rem" />}
@@ -69,7 +69,7 @@ export default function ApiKeysTable({
               loading={deletePending}
               confirmProps={{ variant: "filled", color: "red" }}
             >
-              Delete
+              删除
             </ConfirmButton>
           ),
         },

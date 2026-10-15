@@ -26,7 +26,7 @@ export default function AddExtraArg({
         disabled={disabled}
         w={200}
       >
-        Add Extra Arg
+        添加额外参数
       </Button>
     );
   }
@@ -51,7 +51,7 @@ export default function AddExtraArg({
           disabled={disabled}
           w={200}
         >
-          Add Extra Arg
+          添加额外参数
         </Button>
       </Combobox.Target>
 
@@ -60,7 +60,7 @@ export default function AddExtraArg({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<ICONS.Search size="1rem" />}
-          placeholder="Search"
+          placeholder="搜索"
           styles={{
             section: {
               marginRight: 4,
@@ -68,7 +68,7 @@ export default function AddExtraArg({
           }}
         />
         <Combobox.Options mah={224} style={{ overflowY: "auto" }}>
-          <Combobox.Option value={search}>Custom Extra Arg</Combobox.Option>
+          <Combobox.Option value={search}>自定义额外参数</Combobox.Option>
           {filtered.map((suggestion) => (
             <Combobox.Option key={suggestion} value={suggestion}>
               {suggestion}

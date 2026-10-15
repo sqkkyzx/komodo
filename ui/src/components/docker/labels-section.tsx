@@ -30,14 +30,13 @@ export default function DockerLabelsSection({
 
   return (
     <Section
-      title="Labels"
+      title="标签"
       icon={<ICONS.Tags size="1.3rem" />}
       titleRight={
         <Box pl="md">
           <SearchInput value={search} onSearch={setSearch} />
         </Box>
       }
-     
       {...props}
     >
       <DockerOptions options={filtered} {...groupProps} />

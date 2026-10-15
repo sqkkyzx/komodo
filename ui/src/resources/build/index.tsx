@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import { buildStateIntention } from "@/lib/color";
 import {
   useInvalidate,
@@ -58,26 +59,26 @@ export const BuildComponents: RequiredResourceComponents<
       { refetchInterval: 10_000 },
     ).data;
     return [
-      { title: "Ok", intention: "Good", value: summary?.ok ?? 0 },
+      { title: "正常", intention: "Good", value: summary?.ok ?? 0 },
       {
-        title: "Building",
+        title: "构建中",
         intention: "Warning",
         value: summary?.building ?? 0,
       },
       {
-        title: "Failed",
+        title: "失败",
         intention: "Critical",
         value: summary?.failed ?? 0,
       },
       {
-        title: "Unknown",
+        title: "未知",
         intention: "Unknown",
         value: summary?.unknown ?? 0,
       },
     ];
   },
 
-  Description: () => <>Build container images.</>,
+  Description: () => <>构建容器镜像。</>,
 
   New: ({ builderId: _builderId, repoId }) => {
     const [builderId, setBuilderId] = useState("");
@@ -143,7 +144,7 @@ export const BuildComponents: RequiredResourceComponents<
 
   State: ({ id }) => {
     let state = useBuild(id)?.info.state;
-    return <StatusBadge text={state} intent={buildStateIntention(state)} />;
+    return <StatusBadge text={displayLabel(state)} intent={buildStateIntention(state)} />;
   },
 
   Info: {
@@ -155,7 +156,7 @@ export const BuildComponents: RequiredResourceComponents<
       ) : (
         <Group gap="xs">
           <ICONS.Builder size="1rem" />
-          <Text>Unknown Builder</Text>
+          <Text>未知构建器</Text>
         </Group>
       );
     },
@@ -185,7 +186,7 @@ export const BuildComponents: RequiredResourceComponents<
           <HashCompare
             lastHash={info?.built_hash}
             lastMessage={info?.built_message}
-            lastLabel="built"
+            lastLabel="构建"
             latestHash={info?.latest_hash}
             latestMessage={info?.latest_message}
           />
@@ -199,7 +200,7 @@ export const BuildComponents: RequiredResourceComponents<
       const { mutate, isPending } = useWrite("RefreshBuildCache", {
         onSuccess: () => {
           inv(["ListBuilds"], ["GetBuild", { build: id }]);
-          notifications.show({ message: "Refreshed source file contents" });
+          notifications.show({ message: "已刷新源文件内容" });
         },
       });
 

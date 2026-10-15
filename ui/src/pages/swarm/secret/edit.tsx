@@ -38,7 +38,7 @@ export default function SwarmSecretEditSection({
   const { mutateAsync: confirmEdit } = useExecute("RotateSwarmSecret", {
     onSuccess: (res) => {
       notifications.show({
-        message: res.success ? "Secret updated." : "Failed to update secret.",
+        message: res.success ? "机密已更新。" : "更新机密失败。",
         color: res.success ? "green" : "red",
       });
       setEdit({ edit: undefined });
@@ -54,9 +54,9 @@ export default function SwarmSecretEditSection({
       isPending={isPending}
       error={
         isError
-          ? "Failed to inspect swarm secret."
+          ? "无法检查集群机密。"
           : !secret
-            ? `No swarm secret found with given name: ${secret}`
+            ? `未找到以下名称的集群机密：${secret}`
             : undefined
       }
       actions={
@@ -73,7 +73,7 @@ export default function SwarmSecretEditSection({
               leftSection={<ICONS.History size="1rem" />}
               w={100}
             >
-              Reset
+              重置
             </Button>
             <ConfirmUpdate
               original={{ contents: "" }}

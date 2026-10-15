@@ -40,7 +40,7 @@ export default function OmniSearch({}: {}) {
       >
         <Group>
           <ICONS.Search size="1rem" />
-          Search
+          搜索
         </Group>
       </Button>
 
@@ -55,7 +55,7 @@ export default function OmniSearch({}: {}) {
       >
         <Spotlight.Search
           leftSection={<ICONS.Search size="1.3rem" />}
-          placeholder="search..."
+          placeholder="搜索…"
         />
         <Group justify="flex-end">
           <Group
@@ -64,7 +64,7 @@ export default function OmniSearch({}: {}) {
             p="0.5rem 1rem"
             style={{ cursor: "pointer" }}
           >
-            <Text>Clear on close</Text>
+            <Text>关闭时清空</Text>
             <Switch
               checked={clearOnClose}
               onChange={() => setClearOnClose((v) => !v)}
@@ -84,7 +84,7 @@ export default function OmniSearch({}: {}) {
             </Spotlight.ActionsGroup>
           ))}
           {actions.length === 0 && (
-            <Spotlight.Empty>Nothing found...</Spotlight.Empty>
+            <Spotlight.Empty>未找到结果…</Spotlight.Empty>
           )}
         </Spotlight.ActionsList>
       </Spotlight.Root>

@@ -55,7 +55,7 @@ export function RunBuild({ id }: { id: string }) {
         onClick={() => cancel({ build: id })}
         loading={cancelPending || cancelling}
       >
-        Cancel Build
+        取消构建
       </ConfirmButton>
     );
   } else {
@@ -65,7 +65,7 @@ export function RunBuild({ id }: { id: string }) {
         onClick={() => run({ build: id })}
         loading={runPending}
       >
-        Build
+        构建
       </ConfirmButton>
     );
   }

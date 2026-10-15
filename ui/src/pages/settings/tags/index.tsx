@@ -9,7 +9,7 @@ import DeleteTag from "./delete";
 import { SearchInput } from "mogh_ui";
 
 export default function SettingsTags() {
-  useSetTitle("Tags");
+  useSetTitle("标签");
   const user = useUser().data!;
 
   const [search, setSearch] = useState("");
@@ -28,14 +28,14 @@ export default function SettingsTags() {
         data={tags?.filter((tag) => tag.name.includes(search)) ?? []}
         columns={[
           {
-            header: "Name",
+            header: "名称",
             accessorKey: "name",
             cell: ({ row }) => {
               return <Tag tag={row.original} size="md" fz="md" />;
             },
           },
           {
-            header: "Color",
+            header: "颜色",
             cell: ({ row }) => (
               <TagColorSelector
                 tagId={row.original._id?.$oid!}
@@ -45,17 +45,17 @@ export default function SettingsTags() {
             ),
           },
           // {
-          //   header: "Owner",
+          //   header: "所有者",
           //   size: 200,
           //   cell: ({ row }) =>
           //     row.original.owner ? (
           //       <UserAvatar userId={row.original.owner} fz="md" />
           //     ) : (
-          //       "Unknown"
+          //       "未知"
           //     ),
           // },
           {
-            header: "Delete",
+            header: "删除",
             cell: ({ row }) => (
               <DeleteTag
                 tagId={row.original._id!.$oid}

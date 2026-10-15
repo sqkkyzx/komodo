@@ -1,3 +1,4 @@
+import { displayLabel } from "@/lib/l10n";
 import {
   usePermissions,
   useRead,
@@ -127,7 +128,7 @@ export default function BuildConfig({
   let groups: ConfigProps<Types.BuildConfig>["groups"] = {};
 
   const builderGroup: ConfigGroupArgs<Types.BuildConfig> = {
-    label: "Builder",
+    label: "构建器",
     labelHidden: true,
     fields: {
       builder_id(builderId, set) {
@@ -136,7 +137,7 @@ export default function BuildConfig({
             label={
               builderId ? (
                 <Group fz="h3" fw="bold">
-                  Builder:
+                  构建器：
                   <ResourceLink
                     type="Builder"
                     id={builderId}
@@ -145,10 +146,10 @@ export default function BuildConfig({
                   />
                 </Group>
               ) : (
-                "Select Builder"
+                "选择构建器"
               )
             }
-            description="Select the Builder to build with."
+            description="选择用于构建的构建器。"
           >
             <ResourceSelector
               type="Builder"
@@ -164,7 +165,7 @@ export default function BuildConfig({
   };
 
   const versionGroup: ConfigGroupArgs<Types.BuildConfig> = {
-    label: "Version",
+    label: "版本",
     labelHidden: true,
     fields: {
       version: (_version, set) => {
@@ -175,8 +176,8 @@ export default function BuildConfig({
         return (
           <ConfigInput
             inputProps={{ size: "lg" }}
-            label="Version"
-            description="Version the image with major.minor.patch. It can be interpolated using [[$VERSION]]."
+            label="版本"
+            description="使用 major.minor.patch 为镜像设置版本，可通过 [[$VERSION]] 引用。"
             placeholder="0.0.0"
             value={version}
             onValueChange={(version) => set({ version: version as any })}
@@ -185,27 +186,27 @@ export default function BuildConfig({
         );
       },
       auto_increment_version: {
-        description: "Automatically increment the patch number on every build.",
+        description: "每次构建时自动递增补丁版本号。",
       },
     },
   };
 
   const chooseMode: ConfigGroupArgs<Types.BuildConfig> = {
-    label: "Choose Mode",
+    label: "选择模式",
     labelHidden: true,
     fields: {
       builder_id: () => {
         return (
           <ConfigItem
-            label="Choose Mode"
-            description="Will the dockerfile contents be defined in UI, stored on the server, or pulled from a git repo?"
+            label="选择模式"
+            description="选择在界面中编辑 Dockerfile、使用服务器上的文件，或从 Git 仓库拉取。"
           >
             <Select
               w="fit-content"
-              placeholder="Choose Mode"
+              placeholder="选择模式"
               value={mode}
               onChange={(mode) => mode && setMode(mode as BuildMode)}
-              data={BUILD_MODES}
+              data={BUILD_MODES.map((value) => ({ value, label: displayLabel(value) }))}
               disabled={disabled}
             />
           </ConfigItem>
@@ -220,13 +221,13 @@ export default function BuildConfig({
 
   const generalCommon: ConfigGroupArgs<Types.BuildConfig>[] = [
     {
-      label: "Registry",
+      label: "镜像仓库",
       labelHidden: true,
       fields: {
         image_registry: (image_registries, set) => (
           <ConfigItem
-            label="Image Registry"
-            description="Configure where the built image is pushed."
+            label="镜像仓库"
+            description="配置构建完成后镜像的推送位置。"
             gap="xl"
           >
             {!disabled && (
@@ -242,7 +243,7 @@ export default function BuildConfig({
                 w={200}
               >
                 <ICONS.Create size="1rem" />
-                Add Registry
+                添加镜像仓库
               </Button>
             )}
 
@@ -274,16 +275,16 @@ export default function BuildConfig({
       },
     },
     {
-      label: "Tagging",
+      label: "镜像标签",
       labelHidden: true,
       fields: {
         image_name: {
-          description: "Push the image under a different name",
-          placeholder: "Custom image name",
+          description: "使用其他名称推送镜像",
+          placeholder: "自定义镜像名称",
         },
         image_tag: {
-          description: `Push a custom tag, plus postfix the other tags (eg ':latest-${customTag ? customTag : "<TAG>"}').`,
-          placeholder: "Custom image tag",
+          description: `推送自定义标签，并为其他标签添加后缀（如 :latest-${customTag ? customTag : "<TAG>"}）。`,
+          placeholder: "自定义镜像标签",
         },
         include_latest_tag: {
           description: `:latest${customTagPostfix}`,
@@ -297,19 +298,19 @@ export default function BuildConfig({
       },
     },
     {
-      label: "Links",
+      label: "链接",
       labelHidden: true,
       fields: {
         links: (values, set) => (
           <ConfigList
-            label="Links"
-            addLabel="Add Link"
-            description="Add quick links in the resource header"
+            label="链接"
+            addLabel="添加链接"
+            description="在资源页顶部添加快捷链接"
             field="links"
             values={values ?? []}
             set={set}
             disabled={disabled}
-            placeholder="Input link"
+            placeholder="输入链接"
           />
         ),
       },
@@ -318,9 +319,9 @@ export default function BuildConfig({
 
   const advanced: ConfigGroupArgs<Types.BuildConfig>[] = [
     {
-      label: "Pre Build",
+      label: "构建前操作",
       description:
-        "Execute a shell command before running docker build. The 'path' is relative to the root of the repo.",
+        "运行 docker build 前执行 Shell 命令。path 相对于代码仓库根目录。",
       fields: {
         pre_build: (value, set) => (
           <SystemCommand
@@ -332,9 +333,9 @@ export default function BuildConfig({
       },
     },
     {
-      label: "Build Args",
+      label: "构建参数",
       description:
-        "Pass build args to 'docker build'. These can be used in the Dockerfile via ARG, and are visible in the final image.",
+        "向 docker build 传递构建参数。可在 Dockerfile 中通过 ARG 使用，这些参数在最终镜像中可见。",
       labelExtra: !disabled && (
         <SecretsSearch builder={update.builder_id ?? config.builder_id} />
       ),
@@ -350,19 +351,18 @@ export default function BuildConfig({
       },
     },
     {
-      label: "Secret Args",
+      label: "密钥参数",
       description: (
         <Group>
           <Text>
-            Pass secrets to 'docker build'. These values remain hidden in the
-            final image by using docker secret mounts.
+            向 docker build 传递密钥。使用 Docker 密钥挂载，避免在最终镜像中暴露这些值。
           </Text>
           <Link
             to="https://docs.rs/komodo_client/latest/komodo_client/entities/build/struct.BuildConfig.html#structfield.secret_args"
             target="_blank"
             className="text-primary"
           >
-            See docker docs.
+            查看 Docker 文档。
           </Link>
         </Group>
       ),
@@ -379,15 +379,15 @@ export default function BuildConfig({
       },
     },
     {
-      label: "Extra Args",
+      label: "额外参数",
       labelHidden: true,
       fields: {
         extra_args: (value, set) => (
           <ConfigItem
-            label="Extra Args"
+            label="额外参数"
             description={
               <Group gap="xs">
-                <Text>Pass extra arguments to 'docker build'.</Text>
+                <Text>向 docker build 传递额外参数。</Text>
                 <Text
                   className="hover-underline"
                   fw="bold"
@@ -395,7 +395,7 @@ export default function BuildConfig({
                   to="https://docs.docker.com/reference/cli/docker/buildx/build/"
                   target="_blank"
                 >
-                  See docker docs.
+                  查看 Docker 文档。
                 </Text>
               </Group>
             }
@@ -426,8 +426,8 @@ export default function BuildConfig({
       },
     },
     {
-      label: "Labels",
-      description: "Attach --labels to image.",
+      label: "标签",
+      description: "通过 --labels 为镜像添加标签。",
       fields: {
         labels: (labels, set) => (
           <MonacoEditor
@@ -451,15 +451,15 @@ export default function BuildConfig({
         builderGroup,
         versionGroup,
         {
-          label: "Files",
+          label: "文件",
           fields: {
             build_path: {
-              description: `Set the working directory when running the 'docker build' command. Can be absolute path, or relative to $PERIPHERY_BUILD_DIR/${build.name}`,
+              description: `设置运行 docker build 命令时的工作目录。可使用绝对路径，或相对于 $PERIPHERY_BUILD_DIR/${build.name} 的路径`,
               placeholder: "/path/to/folder",
             },
             dockerfile_path: {
               description:
-                "The path to the dockerfile, relative to the build path.",
+                "Dockerfile 路径，相对于构建路径。",
               placeholder: "Dockerfile",
             },
           },
@@ -475,7 +475,7 @@ export default function BuildConfig({
         builderGroup,
         versionGroup,
         {
-          label: "Source",
+          label: "来源",
           contentHidden: !show.git,
           actions: (
             <ShowHideButton
@@ -516,52 +516,52 @@ export default function BuildConfig({
                       selected={account}
                       onSelect={(git_account) => set({ git_account })}
                       disabled={disabled}
-                      placeholder="None"
+                      placeholder="无"
                     />
                   ),
                   repo: {
-                    placeholder: "Enter repo",
+                    placeholder: "输入代码仓库",
                     description:
-                      "The repo path on the provider. {namespace}/{repo_name}",
+                      "代码托管平台上的仓库路径：{namespace}/{repo_name}",
                   },
                   branch: {
-                    placeholder: "Enter branch",
+                    placeholder: "输入分支",
                     description:
-                      "Select a custom branch, or default to 'main'.",
+                      "选择自定义分支，默认为 main。",
                   },
                   commit: {
-                    label: "Commit Hash",
-                    placeholder: "Input commit hash",
+                    label: "提交哈希",
+                    placeholder: "输入提交哈希",
                     description:
-                      "Optional. Switch to a specific commit hash after cloning the branch.",
+                      "可选。克隆分支后切换到指定提交。",
                   },
                 }
               : {}),
           },
         },
         {
-          label: "Files",
+          label: "文件",
           fields: {
             build_path: {
               description: (
                 <>
-                  The directory to run 'docker build',{" "}
-                  <b>relative to the root of the repo.</b>
+                  运行 docker build 的目录，{" "}
+                  <b>相对于代码仓库根目录。</b>
                 </>
               ),
               placeholder: "path/to/folder",
             },
             dockerfile_path: {
               description:
-                "The path to the dockerfile, relative to the build path.",
+                "Dockerfile 路径，相对于构建路径。",
               placeholder: "Dockerfile",
             },
           },
         },
         ...generalCommon,
         {
-          label: "Webhooks",
-          description: `Copy the webhook given here, and configure your ${webhookIntegration}-style repo provider to send webhooks to Komodo`,
+          label: "Webhook",
+          description: `复制此处的 Webhook 地址，并在兼容 ${webhookIntegration} 的代码托管平台中配置向 Komodo 发送 Webhook`,
           contentHidden: !show.webhooks,
           actions: (
             <ShowHideButton
@@ -575,8 +575,8 @@ export default function BuildConfig({
                 return null;
               }
               return (
-                <ConfigItem label="Configure Branch">
-                  <Text>Must configure Branch before webhooks will work.</Text>
+                <ConfigItem label="配置分支">
+                  <Text>需先配置分支，Webhook 才能生效。</Text>
                 </ConfigItem>
               );
             },
@@ -586,7 +586,7 @@ export default function BuildConfig({
             ["Build" as any]: () =>
               (update.branch ?? config.branch) && (
                 <CopyWebhookUrl
-                  label="Webhook URL - Build"
+                  label="Webhook 地址 - 构建"
                   integration={webhookIntegration}
                   path={`/build/${idOrName === "Id" ? id : encodeURIComponent(name ?? "...")}`}
                 />
@@ -594,8 +594,8 @@ export default function BuildConfig({
             webhook_enabled: true,
             webhook_secret: {
               description:
-                "Provide a custom webhook secret for this resource, or use the global default.",
-              placeholder: "Input custom secret",
+                "为此资源设置自定义 Webhook 密钥，或使用全局默认值。",
+              placeholder: "输入自定义密钥",
             },
           },
         },
@@ -609,7 +609,7 @@ export default function BuildConfig({
         versionGroup,
         {
           label: "Dockerfile",
-          description: "Manage the dockerfile contents here.",
+          description: "在此管理 Dockerfile 内容。",
           contentHidden: !show.file,
           actions: (
             <ShowHideButton

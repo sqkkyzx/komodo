@@ -1,4 +1,4 @@
-import { fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
 import { ICONS } from "@/lib/icons";
 import { ConfigItem } from "mogh_ui";
 import { Badge, Group, Select } from "@mantine/core";
@@ -43,12 +43,12 @@ export default function AlerterConfigAlertTypes({
 }) {
   return (
     <ConfigItem
-      label="Alert Types"
-      description="Only send alerts of certain types."
+      label="告警类型"
+      description="仅发送指定类型的告警。"
     >
       <Group wrap="nowrap">
         <Select
-          placeholder="Add Filter"
+          placeholder="添加筛选条件"
           value={null}
           onChange={(type) =>
             set([...alertTypes, type as Types.AlertData["type"]])
@@ -56,7 +56,7 @@ export default function AlerterConfigAlertTypes({
           w={300}
           data={ALERT_TYPES.filter(
             (alert_type) => !alertTypes.includes(alert_type),
-          ).map((type) => ({ value: type, label: fmtUpperCamelcase(type) }))}
+          ).map((type) => ({ value: type, label: displayLabel(type) }))}
           searchable
         />
         <Group>
@@ -70,7 +70,7 @@ export default function AlerterConfigAlertTypes({
               rightSection={<ICONS.Remove size="1rem" color="red" />}
               size="lg"
             >
-              {fmtUpperCamelcase(type)}
+              {displayLabel(type)}
             </Badge>
           ))}
         </Group>

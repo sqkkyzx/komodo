@@ -37,7 +37,7 @@ export function RefreshSync({ id }: { id: string }) {
       onClick={() => mutate({ sync: id })}
       disabled={pending}
     >
-      Refresh
+      刷新
     </Button>
   );
 }
@@ -88,7 +88,7 @@ export function ExecuteSync({ id }: { id: string }) {
       disabled={pending}
       loading={pending}
     >
-      Execute Sync
+      执行同步
     </ConfirmModalWithDisable>
   );
 }
@@ -121,7 +121,7 @@ export function CommitSync({ id }: { id: string }) {
         disabled={isPending}
         loading={isPending}
       >
-        Commit Changes
+        提交变更
       </ConfirmButton>
     );
   } else {
@@ -133,7 +133,7 @@ export function CommitSync({ id }: { id: string }) {
         disabled={isPending}
         loading={isPending}
       >
-        Commit Changes
+        提交变更
       </ConfirmModalWithDisable>
     );
   }

@@ -4,7 +4,16 @@ This fork builds the frontend and replaces `/app/ui` in the matching official
 Core image. Core, the bundled `km` CLI, and the runtime configuration are
 inherited unchanged. Use the official matching Periphery release.
 
-The first image is a build baseline; translations are added separately.
+This branch includes Simplified Chinese navigation, resource configuration,
+Docker/Swarm pages, settings, permissions, and shared login/2FA/configuration
+controls. Commands, code, resource names, API identifiers, and backend logs and
+errors retain their original content.
+
+The external `mogh_ui` package is translated during the Vite build using a
+reviewed patch catalog. Package version, source hashes, and exact match counts
+are checked before transformation; an upstream mismatch stops the build. Run
+`corepack yarn --cwd ui check:l10n` to check the catalog and its behavioral
+invariants. The image build runs the same checks before compiling the UI.
 
 ## GitHub Actions
 

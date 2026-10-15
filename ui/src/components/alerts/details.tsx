@@ -1,4 +1,5 @@
-import { fmtDateWithMinutes, fmtDuration, fmtUpperCamelcase } from "mogh_ui";
+import { displayLabel } from "@/lib/l10n";
+import { fmtDateWithMinutes, fmtDuration } from "mogh_ui";
 import { useInvalidate, useRead, useUser, useWrite } from "@/lib/hooks";
 import { ResourceComponents, UsableResource } from "@/resources";
 import { ActionIcon, Drawer, Group, Stack, Text } from "@mantine/core";
@@ -74,7 +75,7 @@ export function AlertDetailsContent({
     {
       onSuccess: () => {
         inv(["ListAlerts"], ["GetAlert"]);
-        notifications.show({ message: "Closed alert." });
+        notifications.show({ message: "告警已关闭。" });
         close();
       },
     },
@@ -93,7 +94,7 @@ export function AlertDetailsContent({
     <Stack gap="xl" m="md">
       {/** HEADER */}
       <Group justify="space-between">
-        <Text fz="h1">{fmtUpperCamelcase(alert.data.type)}</Text>
+        <Text fz="h1">{displayLabel(alert.data.type)}</Text>
         <ActionIcon size="lg" variant="filled" color="red" onClick={close}>
           <ICONS.Clear size="1.3rem" />
         </ActionIcon>
@@ -113,7 +114,7 @@ export function AlertDetailsContent({
           ) : (
             <Group gap="xs" wrap="nowrap">
               <ICONS.Settings size="1rem" />
-              System
+              系统
             </Group>
           )}
         </Group>
@@ -128,12 +129,12 @@ export function AlertDetailsContent({
             <Clock size="1rem" />
             {alert.resolved_ts
               ? fmtDuration(alert.ts, alert.resolved_ts)
-              : "ongoing"}
+              : "进行中"}
           </Group>
           <CopyButton
             content={`${location.origin}/alerts/${alert._id?.$oid}`}
             icon={<Link2 size="1rem" />}
-            label="shareable link"
+            label="分享链接"
           />
         </Group>
 
@@ -144,7 +145,7 @@ export function AlertDetailsContent({
             loading={closePending}
             confirmProps={{ variant: "filled", color: "red" }}
           >
-            Close Alert
+            关闭告警
           </ConfirmButton>
         )}
       </Stack>
