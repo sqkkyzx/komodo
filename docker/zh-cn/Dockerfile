@@ -1,5 +1,6 @@
 # UI-only image: keep Core and its bundled CLI identical to the official release.
 # Both digests below select linux/amd64 manifests, not floating image indexes.
+# verify-release.mjs checks these release pins against release.json before CI builds.
 ARG NODE_IMAGE=node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd
 ARG CORE_IMAGE=ghcr.io/moghtech/komodo-core:2.3.3@sha256:79622eea51702d1a26ceda75545594c01688ad567f36c98cbe38aa5c06cb542f
 ARG KOMODO_VERSION=2.3.3

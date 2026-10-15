@@ -29,16 +29,21 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+          fetch-depth: 0
+
+      - name: Verify pinned upstream release
+        id: release
+        run: node docker/zh-cn/verify-release.mjs >> "$GITHUB_OUTPUT"
 
       - name: Prepare image names
         id: image
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
         shell: bash
         run: |
-          version=$(node -p 'require("./client/core/ts/package.json").version')
-          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           name="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/komodo-core"
           echo "name=$name" >> "$GITHUB_OUTPUT"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
           echo "ref=$name:sha-$GITHUB_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Set up Buildx
@@ -90,12 +95,14 @@ jobs:
           digest=$(docker buildx imagetools inspect "$IMAGE_REF" --format '{{json .Manifest}}' | jq -er '.digest')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
-      - name: Promote verified version and rolling tags
+      - name: Promote verified release tag
         env:
           IMAGE_NAME: ${{ steps.image.outputs.name }}
           IMAGE_REF: ${{ steps.image.outputs.ref }}
           EXPECTED_VERSION: ${{ steps.image.outputs.version }}
           IMAGE_DIGEST: ${{ steps.published.outputs.digest }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_COMMIT: ${{ steps.release.outputs.commit }}
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
@@ -106,21 +113,20 @@ jobs:
               echo
               echo "- Commit: $IMAGE_REF"
               echo "- Digest: $IMAGE_NAME@$IMAGE_DIGEST"
-              echo '- Version and rolling tags were preserved because the branch has newer commits.'
+              echo '- The release tag was preserved because the branch has newer commits.'
             } >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          for tag in "$EXPECTED_VERSION-zh-cn" latest-zh-cn; do
-            docker tag "$IMAGE_REF" "$IMAGE_NAME:$tag"
-            docker push "$IMAGE_NAME:$tag"
-            digest=$(docker buildx imagetools inspect "$IMAGE_NAME:$tag" --format '{{json .Manifest}}' | jq -er '.digest')
-            test "$digest" = "$IMAGE_DIGEST"
-          done
+          release_ref="$IMAGE_NAME:$EXPECTED_VERSION-zh-cn"
+          docker tag "$IMAGE_REF" "$release_ref"
+          docker push "$release_ref"
+          digest=$(docker buildx imagetools inspect "$release_ref" --format '{{json .Manifest}}' | jq -er '.digest')
+          test "$digest" = "$IMAGE_DIGEST"
           {
             echo '### Verified linux/amd64 image'
             echo
-            echo "- Version: $IMAGE_NAME:$EXPECTED_VERSION-zh-cn"
-            echo "- Rolling: $IMAGE_NAME:latest-zh-cn"
+            echo "- Upstream release: $RELEASE_TAG ($RELEASE_COMMIT)"
+            echo "- Version: $release_ref"
             echo "- Commit: $IMAGE_REF"
             echo "- Digest: $IMAGE_NAME@$IMAGE_DIGEST"
             echo '- Checks: official Core/CLI binary hashes, /version, homepage, JavaScript, CSS'

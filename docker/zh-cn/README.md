@@ -4,6 +4,28 @@ This fork builds the frontend and replaces `/app/ui` in the matching official
 Core image. Core, the bundled `km` CLI, and the runtime configuration are
 inherited unchanged. Use the official matching Periphery release.
 
+## Release baseline
+
+This localization branch is based on the official **Komodo v2.3.3** release:
+
+- Source tag: `v2.3.3`
+- Source commit: `780ac68b992094a9fccd5fffb760e0c84fd3c3d1`
+- Core base: `ghcr.io/moghtech/komodo-core:2.3.3@sha256:79622eea51702d1a26ceda75545594c01688ad567f36c98cbe38aa5c06cb542f`
+
+`release.json` records this baseline. Before building, `verify-release.mjs`
+checks the tag's exact commit and ancestry, unchanged backend/API client sources
+and lockfiles, original UI dependency versions, and matching Dockerfile pins.
+The official UI package version is `0.0.0`; the API client and running Core
+version are `2.3.3`.
+
+Use the version-specific image:
+
+```sh
+docker pull --platform linux/amd64 ghcr.io/sqkkyzx/komodo-core:2.3.3-zh-cn
+```
+
+The workflow no longer publishes or updates `latest-zh-cn`.
+
 This branch includes Simplified Chinese navigation, resource configuration,
 Docker/Swarm pages, settings, permissions, and shared login/2FA/configuration
 controls. Commands, code, resource names, API identifiers, and backend logs and
@@ -30,12 +52,11 @@ updates these tags:
 
 - `ghcr.io/sqkkyzx/komodo-core:sha-<full-commit-sha>`
 - `ghcr.io/sqkkyzx/komodo-core:2.3.3-zh-cn`
-- `ghcr.io/sqkkyzx/komodo-core:latest-zh-cn`
 
 The SHA tag identifies the source commit; use the digest recorded in the run
-summary to pin the exact image content. The version and rolling tags advance
-as translations change. Rerunning an older commit only publishes its SHA tag
-and preserves the current version and rolling tags.
+summary to pin the exact image content. The `2.3.3-zh-cn` tag advances as
+translations of this release change. Rerunning an older commit only publishes
+its SHA tag and preserves the current version tag.
 The HTTP check does not replace browser testing of translated pages.
 
 The fork's `main` stays aligned with upstream. This workflow uses push events;
@@ -48,12 +69,17 @@ depend on that event.
 Run from the repository root on a Docker host with Buildx:
 
 ```sh
+node docker/zh-cn/verify-release.mjs && \
 docker buildx build --platform linux/amd64 --load \
   --file docker/zh-cn/Dockerfile \
   --build-arg SOURCE_REVISION="$(git rev-parse HEAD)" \
-  --tag komodo-core:zh-cn-local .
+  --tag komodo-core:zh-cn-local . && \
 bash docker/zh-cn/verify-image.sh komodo-core:zh-cn-local 2.3.3
 ```
+
+The baseline check requires Git, Node.js, and the release tag in the local
+checkout. A full clone includes the tag; for a shallow checkout, fetch its
+history and tags first (`git fetch --unshallow --tags`).
 
 The smoke check requires Docker, Bash, curl, and Python 3. Its temporary database
 has no host port, and Core is exposed only on a random loopback port. Containers,
@@ -66,9 +92,12 @@ frontend packages install with Yarn 1.22.22 and `--frozen-lockfile`. Local `.env
 dependencies, and build output are excluded from the Docker context, and
 `VITE_KOMODO_HOST` is empty so the UI uses the deployment's own origin.
 
-When updating upstream, update the Core reference, `KOMODO_VERSION`, and client
-source together. The build rejects a client version that differs from the base
-release. This packaging path only incorporates frontend/client changes; backend
-changes require an updated official base or a full source build. Keep `-zh-cn`
-in the image tags; changing the backend's version causes Core/Periphery version
-warnings.
+For another upstream release, start a separate localization branch from its
+official release tag and port the translations. Update the workflow's branch
+filter, `release.json`, the Dockerfile Core reference, and `KOMODO_VERSION`
+together. Review the shared UI patch catalog against that release's locked
+dependencies. Do not merge upstream `main` into this `v2.3.3` baseline.
+
+This packaging path only replaces the frontend; backend changes require an
+updated official base or a full source build. Keep `-zh-cn` in the image tags;
+changing the backend's version causes Core/Periphery version warnings.

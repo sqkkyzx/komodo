@@ -1,0 +1,6 @@
+{
+  "version": "2.3.3",
+  "tag": "v2.3.3",
+  "commit": "780ac68b992094a9fccd5fffb760e0c84fd3c3d1",
+  "core_image": "ghcr.io/moghtech/komodo-core:2.3.3@sha256:79622eea51702d1a26ceda75545594c01688ad567f36c98cbe38aa5c06cb542f"
+}
