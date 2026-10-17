@@ -77,12 +77,11 @@ jobs:
           done
           python - <<'PY'
           import os
-          import re
           from pathlib import Path
 
-          source = Path(os.environ["RUNNER_TEMP"], "pve-komodo-extension.js").read_text()
-          source = re.sub(r"\\u([0-9a-fA-F]{4})", lambda match: chr(int(match[1], 16)), source)
-          assert "Docker 管理" in source, "The image does not contain the Docker management extension"
+          actual = Path(os.environ["RUNNER_TEMP"], "pve-komodo-extension.js").read_bytes()
+          expected = Path(os.environ["GITHUB_WORKSPACE"], "integrations/proxmox/static/extension.js").read_bytes()
+          assert actual == expected, "The image extension does not match the checked-out source"
           PY
           SH
 

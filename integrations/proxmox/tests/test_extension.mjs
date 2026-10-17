@@ -6,13 +6,29 @@ import vm from 'node:vm';
 const extension = readFileSync(new URL('../static/extension.js', import.meta.url), 'utf8');
 const dockerId = 'pve-komodo-docker';
 
+function treeNode(data) {
+    return {
+        data: { leaf: true, expanded: false, ...data },
+        childNodes: [],
+        parentNode: null,
+        findChild(field, value) {
+            return this.childNodes.find((node) => node.data[field] === value) || null;
+        },
+        appendChild(child) {
+            child.parentNode = this;
+            this.childNodes.push(child);
+            // Ext.data.NodeInterface.appendChild changes a leaf into a parent.
+            this.data.leaf = false;
+        },
+    };
+}
+
 // Model ExtJS's per-method owner/previous metadata, not a global callParent stub.
 // That catches a change which accidentally calls the subclass's parent twice or
 // loses `this` when overriding an inherited method.
 function createExt() {
     const classes = new Map();
     const stack = [];
-    const requests = [];
     let definitions = 0;
 
     function wrap(owner, name, implementation, previous) {
@@ -71,14 +87,15 @@ function createExt() {
         },
     });
 
-    // Preserve PVE 9's relevant lifecycle: dc init replaces items; ConfigPanel
-    // consumes them with insertNodes and then deletes them. These are from
-    // pve-manager aa7db891 www/manager6/{dc/Config.js,panel/ConfigPanel.js}.
+    // Preserve the relevant PVE 9 lifecycle and grouping semantics from fixed
+    // pve-manager aa7db891 dc/Config.js and panel/ConfigPanel.js. Groups contain
+    // parent itemIds, are consumed via shift(), and require parents first.
     define('PVE.panel.Config', {
         extend: 'Ext.panel.Panel',
         initComponent: function () {
             this.savedItems = {};
-            this.navigation = [];
+            this.root = treeNode({ id: 'root', expanded: true });
+            this.navigation = this.root.childNodes;
             this.insertNodes(this.items);
             delete this.items;
             return this.callParent(arguments);
@@ -92,9 +109,26 @@ function createExt() {
                 assert.equal(this.savedItems[item.itemId], undefined, 'PVE rejects duplicate ids');
                 item.header = false;
                 this.savedItems[item.itemId] = item;
-                this.navigation.push({ id: item.itemId, text: item.title });
+                let parent = this.root;
+                while (Array.isArray(item.groups) && item.groups.length > 0) {
+                    const child = parent.findChild('id', item.groups.shift());
+                    if (child === null) break;
+                    parent = child;
+                }
+                assert.equal(parent.findChild('id', item.itemId), null);
+                parent.appendChild(treeNode({
+                    id: item.itemId, text: item.title, iconCls: item.iconCls,
+                    expanded: item.expandedOnInit === true,
+                }));
             }
             return items;
+        },
+        activateCard: function (id) {
+            this.activeCard = this.savedItems[id];
+            if (this.activeCard.listeners?.activate) {
+                this.activeCard.listeners.activate(this.activeCard);
+            }
+            return this.activeCard;
         },
     });
 
@@ -106,24 +140,15 @@ function createExt() {
         define(name, {
             extend: 'PVE.panel.Config',
             initComponent: function () {
-                this.items = [{ xtype: 'panel', itemId: originalId, title: originalId }];
-                this.originalItem = this.items[0];
-                if (this.existingDocker) {
-                    this.items.push(this.existingDocker);
-                }
+                this.items = this.sourceItems || [{ xtype: 'panel', itemId: originalId, title: originalId }];
+                this.originalItems = this.items.slice();
                 return this.callParent(arguments);
             },
         });
     }
 
     return {
-        requests,
-        Ajax: { request: (options) => requests.push(options) },
-        String: {
-            htmlEncode: (value) => String(value).replace(/[&<>"']/g, (character) => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-            })[character]),
-        },
+        Ajax: { request() { assert.fail('blank pages must not make requests'); } },
         ClassManager: { get: (name) => classes.get(name) },
         define,
         get definitions() { return definitions; },
@@ -137,7 +162,7 @@ function createExt() {
 
 function runtime(Ext = createExt()) {
     const warnings = [];
-    const forbiddenRequest = () => { throw new Error('extension must use only the same-origin Ext.Ajax API'); };
+    const forbiddenRequest = () => { throw new Error('blank pages must not make requests'); };
     const context = vm.createContext({
         window: { Ext, console: { warn: (...args) => warnings.push(args) } },
         fetch: forbiddenRequest,
@@ -146,48 +171,101 @@ function runtime(Ext = createExt()) {
     return { Ext, warnings, load: () => vm.runInContext(extension, context) };
 }
 
-test('datacenter gains a native status card after PVE initializes its original items', () => {
+function datacenterItems() {
+    return [
+        { xtype: 'panel', itemId: 'summary', title: 'Summary' },
+        { xtype: 'panel', itemId: 'ceph', title: 'Ceph' },
+        { xtype: 'panel', itemId: 'options', title: 'Options' },
+        { xtype: 'panel', itemId: 'permissions', title: 'Permissions', expandedOnInit: true },
+        { xtype: 'panel', itemId: 'users', title: 'Users', groups: ['permissions'] },
+    ];
+}
+
+const children = [
+    ['stats', '统计', '/stats'], ['servers', '服务器', '/servers'],
+    ['stacks', '应用', '/stacks'], ['alerts', '告警', '/alerts'],
+    ['updates', '操作', '/updates'], ['schedules', '计划任务', '/schedules'],
+];
+const menuIds = (nodes) => nodes.map((node) => node.data.id);
+
+function assertBlank(card) {
+    assert.equal(card.xtype, 'panel');
+    assert.equal(card.header, false);
+    assert.equal(card.border, false);
+    assert.equal(card.items.length, 0);
+    for (const property of ['html', 'loader', 'listeners', 'tbar', 'bbar', 'dockedItems',
+        'buttons', 'store', 'href', 'src', 'url', 'autoEl']) {
+        assert.equal(card[property], undefined, `blank card must not have ${property}`);
+    }
+}
+
+test('Docker is directly below Ceph with six ordered children and a clickable blank parent', () => {
     const browser = runtime();
     browser.load();
-    const dc = browser.Ext.create('PVE.dc.Config', { items: [{ itemId: 'discarded-by-pve' }] });
-
-    assert.deepEqual(dc.navigation, [
-        { id: 'summary', text: 'summary' },
-        { id: dockerId, text: 'Docker 管理' },
-    ]);
-    assert.equal(dc.savedItems.summary, dc.originalItem, 'keep original card identity');
+    const originals = datacenterItems();
+    const dc = browser.Ext.create('PVE.dc.Config', { sourceItems: originals });
+    assert.deepEqual(menuIds(dc.navigation), ['summary', 'ceph', dockerId, 'options', 'permissions']);
+    const docker = dc.root.findChild('id', dockerId);
+    assert.equal(docker.data.text, 'Docker');
+    assert.equal(docker.parentNode, dc.root, 'Docker is beside Ceph, not inside it');
+    assert.equal(docker.data.leaf, false, 'appending children makes the parent expandable');
+    assert.equal(docker.data.expanded, true);
+    assert.deepEqual(menuIds(docker.childNodes), children.map(([id]) => dockerId + '-' + id));
+    assert.deepEqual(docker.childNodes.map((node) => node.data.text), children.map(([, title]) => title));
+    for (const node of docker.childNodes) {
+        assert.equal(node.parentNode, docker);
+        assert.equal(node.data.leaf, true);
+    }
+    assert.equal(dc.activateCard(dockerId), dc.savedItems[dockerId], 'parent retains its own page');
+    assertBlank(dc.activeCard);
+    for (const [suffix] of children) {
+        assertBlank(dc.activateCard(dockerId + '-' + suffix));
+    }
+    for (const item of originals) {
+        assert.equal(dc.savedItems[item.itemId], item, 'keep official card identity');
+    }
+    assert.deepEqual(menuIds(dc.root.findChild('id', 'permissions').childNodes), ['users']);
     assert.equal(dc.items, undefined, 'normal PVE lifecycle still consumes items');
     assert.equal(dc.baseInsertCalls, 1);
     assert.equal(dc.panelInitialized, true);
     assert.equal(dc.initializationResult, 'panel-initialized');
-
-    const card = dc.savedItems[dockerId];
-    assert.equal(card.xtype, 'panel');
-    assert.equal(card.header, false);
-    assert.equal(card.border, false);
-    assert.equal(card.items.length, 2);
-    assert.equal(card.items[0].xtype, 'button');
-    assert.equal(card.items[0].text, '检查连接');
-    assert.equal(card.items[1].xtype, 'component');
-    assert.equal(card.items[1].html, '尚未检查连接');
-    for (const content of ['html', 'loader', 'tbar', 'bbar', 'dockedItems', 'buttons', 'store']) {
-        assert.equal(card[content], undefined, `status card has no ${content}`);
-    }
-    assert.equal(browser.Ext.requests.length, 0, 'registering and building menus must not contact the API');
 });
 
-test('VM and CT menus retain their original cards without Docker management', () => {
+test('every blank page records its future Komodo route without navigation or content', () => {
+    const browser = runtime();
+    browser.load();
+    const dc = browser.Ext.create('PVE.dc.Config');
+    assert.equal(dc.savedItems[dockerId].pveKomodoRoute, '/');
+    for (const [suffix, title, route] of children) {
+        const card = dc.savedItems[dockerId + '-' + suffix];
+        assert.equal(card.title, title);
+        assert.equal(card.pveKomodoRoute, route);
+        assertBlank(card);
+        assert.equal(card.groups.length, 0, 'PVE consumes each own groups array');
+    }
+});
+
+test('when Ceph is unavailable Docker is appended without rearranging existing menus', () => {
+    const browser = runtime();
+    browser.load();
+    const originals = datacenterItems().filter((item) => item.itemId !== 'ceph');
+    const dc = browser.Ext.create('PVE.dc.Config', { sourceItems: originals });
+    assert.deepEqual(menuIds(dc.navigation), ['summary', 'options', 'permissions', dockerId]);
+    assert.equal(dc.root.findChild('id', dockerId).childNodes.length, 6);
+});
+
+test('VM and CT menus retain their original cards without Docker', () => {
     const browser = runtime();
     browser.load();
     for (const [name, originalId] of [['PVE.qemu.Config', 'hardware'], ['PVE.lxc.Config', 'resources']]) {
         const component = browser.Ext.create(name);
-        assert.deepEqual(component.navigation, [{ id: originalId, text: originalId }]);
+        assert.deepEqual(menuIds(component.navigation), [originalId]);
         assert.equal(component.savedItems[dockerId], undefined);
         assert.equal(component.baseInsertCalls, 1);
     }
 });
 
-test('reloading the script registers once and each datacenter gets one independent card', () => {
+test('reloading registers once and separate datacenters receive fresh group arrays and cards', () => {
     const browser = runtime();
     const definitions = browser.Ext.definitions;
     browser.load();
@@ -195,18 +273,24 @@ test('reloading the script registers once and each datacenter gets one independe
     assert.equal(browser.Ext.definitions, definitions + 1);
     const first = browser.Ext.create('PVE.dc.Config');
     const second = browser.Ext.create('PVE.dc.Config');
-    assert.equal(first.navigation.filter((node) => node.id === dockerId).length, 1);
-    assert.equal(second.navigation.filter((node) => node.id === dockerId).length, 1);
+    for (const dc of [first, second]) {
+        assert.equal(dc.navigation.filter((node) => node.data.id === dockerId).length, 1);
+        assert.equal(dc.root.findChild('id', dockerId).childNodes.length, 6);
+    }
     assert.notEqual(first.savedItems[dockerId], second.savedItems[dockerId]);
+    assert.notEqual(first.savedItems[dockerId + '-stats'].groups, second.savedItems[dockerId + '-stats'].groups);
 });
 
-test('an existing Docker card is not duplicated or replaced', () => {
-    const browser = runtime();
-    browser.load();
-    const existingDocker = { xtype: 'panel', itemId: dockerId, title: 'Docker 管理', items: [] };
-    const dc = browser.Ext.create('PVE.dc.Config', { existingDocker });
-    assert.equal(dc.navigation.filter((node) => node.id === dockerId).length, 1);
-    assert.equal(dc.savedItems[dockerId], existingDocker);
+test('an existing reserved parent or child id leaves the original menu untouched', () => {
+    for (const reservedId of [dockerId, dockerId + '-stats']) {
+        const browser = runtime();
+        browser.load();
+        const originals = datacenterItems();
+        originals.push({ xtype: 'panel', itemId: reservedId, title: 'Existing extension' });
+        const dc = browser.Ext.create('PVE.dc.Config', { sourceItems: originals });
+        assert.deepEqual(Object.keys(dc.savedItems), originals.map((item) => item.itemId));
+        assert.equal(dc.savedItems[reservedId], originals.at(-1));
+    }
 });
 
 test('the override preserves parent return values and unknown inputs', () => {
@@ -246,7 +330,7 @@ test('the method works with ExtJS caller-based callParent in an ordinary browser
     const dc = new Datacenter();
     const items = dc.insertNodes([{ itemId: 'summary' }]);
     assert.equal(parentReceiver, dc);
-    assert.equal(items.length, 2);
+    assert.equal(items.length, 8);
     assert.equal(items[1].itemId, dockerId);
 });
 
@@ -269,163 +353,5 @@ test('ExtJS refusing registration does not prevent the PVE page from starting', 
     assert.doesNotThrow(browser.load);
     assert.equal(browser.warnings.length, 1);
     const dc = Ext.create('PVE.dc.Config');
-    assert.deepEqual(dc.navigation, [{ id: 'summary', text: 'summary' }]);
-});
-
-function connectionCard(browser = runtime()) {
-    browser.load();
-    const dc = browser.Ext.create('PVE.dc.Config');
-    const config = dc.savedItems[dockerId];
-    const status = {
-        destroyed: false,
-        html: config.items[1].html,
-        updates: [],
-        update(value) {
-            assert.equal(this.destroyed, false, 'never update a destroyed component');
-            this.html = value;
-            this.updates.push(value);
-        },
-    };
-    const button = {
-        ...config.items[0],
-        disabled: false,
-        destroyed: false,
-        setDisabled(value) {
-            assert.equal(this.destroyed, false, 'never update a destroyed button');
-            this.disabled = value;
-        },
-        up(selector) {
-            assert.equal(selector, '#' + dockerId);
-            return panel;
-        },
-    };
-    const panel = {
-        destroyed: false,
-        down(selector) {
-            return selector === '#pve-komodo-check-connection' ? button :
-                selector === '#pve-komodo-connection-status' ? status : undefined;
-        },
-    };
-    return {
-        browser, panel, button, status,
-        activate: () => config.listeners.activate(panel),
-        check: () => button.handler(button),
-        respond(payload, code = 200, index = browser.Ext.requests.length - 1) {
-            const options = browser.Ext.requests[index];
-            options.callback(options, code >= 200 && code < 300, {
-                status: code,
-                responseText: typeof payload === 'string' ? payload : JSON.stringify(payload),
-            });
-        },
-    };
-}
-
-test('only first activation of the Docker page starts a read-only same-origin check', () => {
-    const card = connectionCard();
-    assert.equal(card.browser.Ext.requests.length, 0);
-    card.activate();
-    assert.equal(card.browser.Ext.requests.length, 1);
-    const options = card.browser.Ext.requests[0];
-    assert.equal(options.method, 'GET');
-    assert.equal(options.url, '/pve-komodo/api/connection');
-    for (const privateData of ['headers', 'params', 'jsonData', 'rawData', 'urlData']) {
-        assert.equal(options[privateData], undefined);
-    }
-    assert.equal(card.button.disabled, true);
-    assert.equal(card.status.html, '正在检查连接…');
-    card.activate();
-    card.check();
-    assert.equal(card.browser.Ext.requests.length, 1, 'pending check cannot be submitted twice');
-
-    card.respond({ user: 'root@pam', komodo: { configured: false, connected: false } });
-    assert.equal(card.status.html, 'Komodo 未配置凭据');
-    assert.equal(card.button.disabled, false);
-    card.activate();
-    assert.equal(card.browser.Ext.requests.length, 1, 'activation is checked once per card');
-    card.check();
-    assert.equal(card.browser.Ext.requests.length, 2, 'manual retry is allowed');
-});
-
-test('connected status HTML-encodes the upstream version and does not display identity or secrets', () => {
-    const card = connectionCard();
-    card.activate();
-    card.respond({
-        user: 'root@pam',
-        komodo: {
-            configured: true, connected: true,
-            version: '2.3.3 <img src=x onerror="alert(1)"> & \'test\'',
-            username: 'PRIVATE_SERVICE_USER',
-            key: 'PRIVATE_KEY', secret: 'PRIVATE_SECRET', url: 'https://private.invalid',
-        },
-    });
-    assert.equal(card.status.html,
-        'Komodo 已连接（版本 2.3.3 &lt;img src=x onerror=&quot;alert(1)&quot;&gt; &amp; &#39;test&#39;）');
-    for (const privateValue of ['PRIVATE_SERVICE_USER', 'PRIVATE_KEY', 'PRIVATE_SECRET', 'private.invalid']) {
-        assert.equal(card.status.html.includes(privateValue), false);
-    }
-    assert.equal(card.button.disabled, false);
-});
-
-test('PVE authentication errors use fixed messages and can be retried', () => {
-    for (const [code, message] of [
-        [401, 'PVE 未登录或会话已过期'], [403, '无访问权限'],
-        [503, 'PVE 会话验证不可用'], [500, 'Komodo 连接失败'], [0, 'Komodo 连接失败'],
-    ]) {
-        const card = connectionCard();
-        card.activate();
-        card.respond({ detail: 'PRIVATE_SECRET https://private.invalid' }, code);
-        assert.equal(card.status.html, message);
-        assert.equal(card.button.disabled, false);
-        card.check();
-        assert.equal(card.browser.Ext.requests.length, 2);
-        card.respond({ user: 'root@pam', komodo: { configured: true, connected: true, version: '2.3.3' } });
-        assert.equal(card.status.html, 'Komodo 已连接（版本 2.3.3）');
-    }
-});
-
-test('disconnected, malformed, and unexpected responses never render upstream error text', () => {
-    for (const payload of [
-        { user: 'root@pam', komodo: { configured: true, connected: false, error_code: 'PRIVATE_SECRET' } },
-        { user: 'root@pam', komodo: { configured: false, connected: true } },
-        { user: 'root@pam', komodo: { configured: true, connected: true, version: { private: 'SECRET' } } },
-        { error: 'PRIVATE_SECRET' }, null, 'invalid json PRIVATE_SECRET',
-    ]) {
-        const card = connectionCard();
-        card.activate();
-        assert.doesNotThrow(() => card.respond(payload));
-        assert.equal(card.status.html, 'Komodo 连接失败');
-        assert.equal(card.button.disabled, false);
-    }
-});
-
-test('callbacks after card destruction do not modify the panel or its children', () => {
-    for (const property of ['destroyed', 'destroying']) {
-        const card = connectionCard();
-        card.activate();
-        card.panel[property] = true;
-        card.button.destroyed = true;
-        card.status.destroyed = true;
-        const before = { ...card.panel };
-        const updateCount = card.status.updates.length;
-        assert.doesNotThrow(() => card.respond({
-            user: 'root@pam', komodo: { configured: true, connected: true, version: '2.3.3' },
-        }));
-        assert.deepEqual(card.panel, before);
-        assert.equal(card.status.updates.length, updateCount);
-        assert.equal(card.button.disabled, true);
-    }
-});
-
-test('a synchronous request error clears the pending state and permits retry', () => {
-    const browser = runtime();
-    const request = browser.Ext.Ajax.request;
-    browser.Ext.Ajax.request = () => { throw new Error('PRIVATE_SECRET'); };
-    const card = connectionCard(browser);
-    assert.doesNotThrow(card.activate);
-    assert.equal(card.status.html, 'Komodo 连接失败');
-    assert.equal(card.button.disabled, false);
-    browser.Ext.Ajax.request = request;
-    card.check();
-    assert.equal(browser.Ext.requests.length, 1);
-    assert.equal(card.button.disabled, true);
+    assert.deepEqual(menuIds(dc.navigation), ['summary']);
 });

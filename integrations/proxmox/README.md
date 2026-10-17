@@ -1,9 +1,9 @@
 # PVE Docker 管理扩展（0.2.0）
 
-用 FastAPI 为现有 PVE 9 桌面添加“数据中心 → Docker 管理”原生 ExtJS 菜单。
-页面提供“检查连接”，复用当前 PVE 登录检查服务端配置的 Komodo 连接，显示连接状态
-与版本。无需在扩展中再次登录 Komodo。
-本版没有 Docker/Stack 操作或 VM/CT 资源绑定。
+用 FastAPI 为现有 PVE 9 桌面添加原生 ExtJS 导航：数据中心的 Ceph 后增加 **Docker**，
+下面包含统计、服务器、应用、告警、操作、计划任务六个子页面。
+Docker 父页面和六个子页面的内容均为空白，本次只搭建导航树，不发起后端请求、
+嵌入 Komodo 页面或跳转外部站点。没有连接检查按钮、Docker/Stack 操作或 VM/CT 资源绑定。
 PVE 的官方文件、API、VM/CT 配置均不修改。
 
 ## 结构
@@ -17,8 +17,26 @@ PVE 继续生成登录用户、CSRF、节点、语言和主题信息。每次取
 本服务不是完整的 PVE 反向代理，直接访问容器端口不能代替完整的 Nginx 入口。
 noVNC、xterm.js、移动页面跳过扩展加载。
 
-扩展只 override `PVE.dc.Config.insertNodes`：该钩子在数据中心构造菜单时追加连接检查面板，
+扩展只 override `PVE.dc.Config.insertNodes`：该钩子在数据中心构造菜单时加入 Docker 导航树，
 不修改 VM/CT 页面。普通 script 保留 ExtJS `callParent` 所需的非 strict 调用语义。
+
+### 导航与路由映射
+
+Docker 父项放在 Ceph 后，子项按下表顺序排列。Komodo 路由作为后续实现的对应关系
+保留；当前选择任一条目只切换到本地空白面板，不请求或打开这些地址。
+
+| PVE 数据中心菜单 | 对应 Komodo 路由 |
+| --- | --- |
+| Docker | `/` |
+| Docker → 统计 | `/stats` |
+| Docker → 服务器 | `/servers` |
+| Docker → 应用 | `/stacks` |
+| Docker → 告警 | `/alerts` |
+| Docker → 操作 | `/updates` |
+| Docker → 计划任务 | `/schedules` |
+
+用户提供的 Komodo 参考站点为 `https://docker.it.blsy.team/`；该地址仅记录页面对应关系，
+不作为扩展的跳转目标或请求上游。后端会话与连接检查接口仍保留可用，当前导航不调用它们。
 
 ## 镜像与构建
 
@@ -52,7 +70,9 @@ curl -f http://127.0.0.1:18080/pve-komodo/health
 如果 Nginx 在其他容器或机器，通过现有私有网络连接本服务，或设置内部绑定地址；
 不需要 privileged、宿主机目录、Docker socket 或 PVE SSH 凭据。
 
-### Komodo 服务端配置
+### Komodo 服务端配置（后端连接检查可选）
+
+只使用空白导航树时无需配置 Komodo 凭据。以下设置供已有后端连接检查接口使用。
 
 Compose 的 `environment` 直接使用变量插值：
 
@@ -66,7 +86,7 @@ KOMODO_TLS_VERIFY: ${KOMODO_TLS_VERIFY:-true}
 
 可在部署文件对应的 `.env` 中提供值，或在自己的 Compose `environment` 中直接填写。
 示例中的 API 密钥和机密为空，不包含真实凭据。`KOMODO_URL`、`KOMODO_API_KEY`、
-`KOMODO_API_SECRET` 三项齐全后才会执行连接检查。`KOMODO_URL` 是固定的 HTTP/HTTPS
+`KOMODO_API_SECRET` 三项齐全后，后端接口才可执行连接检查。`KOMODO_URL` 是固定的 HTTP/HTTPS
 origin，不能包含用户名密码、额外路径、查询参数或 fragment。
 
 `.env.example` 中的 `http://core:9120` 是 Docker 服务名示例；扩展与 Komodo Core
@@ -84,7 +104,7 @@ API 密钥可从 Komodo 的 **Profile → API Keys** 创建；也可由管理员
 
 `PVE_ADMIN_USERS` 是逗号分隔的完整 PVE 用户 ID 白名单，默认 `root@pam`，例如
 `root@pam,operator@pve`。白名单中的用户还必须在 PVE 根路径 `/` 具有 `Sys.Audit`。
-仅登录 PVE 不会自动获得扩展访问权限。
+此规则限制后端集成 API；仅登录 PVE 不会自动获得这些接口的访问权限。
 
 两个接口均为只读：
 
@@ -201,12 +221,14 @@ python -m pytest -q
 node --test tests/test_extension.mjs
 ```
 
-测试覆盖菜单插入顺序、原菜单与 VM/CT 页面保留、重复注入、连接检查交互、Cookie
+测试覆盖 Docker 父项在 Ceph 后的位置、六个子项顺序、路由映射、七个空白页面不发请求
+或跳转、原菜单与 VM/CT 页面保留、重复注入，以及后端接口的 Cookie
 隔离、PVE 会话与白名单、CSRF 内容保留、Komodo 凭据与上游隔离、错误脱敏、压缩
 与缓存头、控制台跳过、未知模板跳过、停用及上游断连。
-首次接入目标 PVE 后，验收登录、允许用户的连接检查、非白名单及过期登录拒绝访问、
-原 VM/CT 页面、控制台与停用回退。修改凭据后需重建容器，确认连接显示的 Komodo
-账号符合预期（连接接口返回账号，页面显示版本）；仅 `health` 成功不能代替此项验收。
+首次接入目标 PVE 后，验收登录、Docker 树的位置与展开收起、七个页面内容空白且不产生
+扩展 API 请求、原 VM/CT 页面、控制台与停用回退。单独验证后端接口时，确认非白名单
+及过期登录被拒绝访问。修改凭据后需重建容器，并通过连接接口确认返回的 Komodo
+账号符合预期；仅 `health` 成功不能代替接口验收。
 
 实现依据：[PVE 桌面模板](https://github.com/proxmox/pve-manager/blob/aa7db891073e78fe1b67032be71ee9c98b6eb635/www/index.html.tpl)、
 [数据中心配置](https://github.com/proxmox/pve-manager/blob/aa7db891073e78fe1b67032be71ee9c98b6eb635/www/manager6/dc/Config.js)、

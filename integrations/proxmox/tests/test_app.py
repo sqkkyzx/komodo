@@ -157,7 +157,7 @@ def test_no_generic_api_or_open_proxy_and_health_does_not_contact_pve():
     client = client_for(unexpected)
     assert client.get("/pve-komodo/health").json()["status"] == "ok"
     assert client.get(EXTENSION_PATH).status_code == 200
-    assert "Docker 管理" in client.get(EXTENSION_PATH).text
+    assert "Docker" in client.get(EXTENSION_PATH).text
     assert client.get("/api2/json/cluster/resources").status_code == 404
     assert client.post("/").status_code == 405
     assert client.get("/pve-komodo/assets/../app/main.py").status_code == 404

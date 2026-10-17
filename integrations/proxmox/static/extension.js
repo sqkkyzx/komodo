@@ -21,72 +21,39 @@
         return;
     }
 
-    function isAlive(panel) {
-        return panel && !panel.destroyed && !panel.destroying;
-    }
+    // Route metadata mirrors https://docker.it.blsy.team for future native views.
+    // It is not a link, an iframe target, or a browser request destination.
+    const pages = [
+        { id: itemId, title: 'Docker', route: '/', icon: 'fa fa-cubes' },
+        { id: itemId + '-stats', title: '统计', route: '/stats', icon: 'fa fa-bar-chart' },
+        { id: itemId + '-servers', title: '服务器', route: '/servers', icon: 'fa fa-server' },
+        { id: itemId + '-stacks', title: '应用', route: '/stacks', icon: 'fa fa-cubes' },
+        { id: itemId + '-alerts', title: '告警', route: '/alerts', icon: 'fa fa-bell-o' },
+        { id: itemId + '-updates', title: '操作', route: '/updates', icon: 'fa fa-history' },
+        { id: itemId + '-schedules', title: '计划任务', route: '/schedules', icon: 'fa fa-calendar' },
+    ];
+    const pageIds = new Set(pages.map(function (page) { return page.id; }));
 
-    function checkConnection(panel) {
-        if (!isAlive(panel) || panel._pveKomodoChecking) {
-            return;
-        }
-        const button = panel.down('#pve-komodo-check-connection');
-        const status = panel.down('#pve-komodo-connection-status');
-        if (!button || !status) {
-            return;
-        }
-
-        function updateStatus(text) {
-            // Never render an upstream version or other response value as HTML.
-            status.update(Ext.String.htmlEncode(text));
-        }
-
-        panel._pveKomodoChecking = true;
-        panel._pveKomodoInitialCheck = true;
-        button.setDisabled(true);
-        updateStatus('正在检查连接…');
-
-        function complete(options, success, response) {
-            if (!isAlive(panel) || !isAlive(button) || !isAlive(status)) {
-                return;
+    function blankCards() {
+        return pages.map(function (page) {
+            const card = {
+                xtype: 'panel',
+                itemId: page.id,
+                title: page.title,
+                iconCls: page.icon,
+                border: false,
+                items: [],
+                pveKomodoRoute: page.route,
+            };
+            if (page.id === itemId) {
+                card.expandedOnInit = true;
+            } else {
+                // PVE consumes groups using shift(), so every card needs its own
+                // fresh array, with the parent declared before its children.
+                card.groups = [itemId];
             }
-            panel._pveKomodoChecking = false;
-            button.setDisabled(false);
-            let message = 'Komodo 连接失败';
-            if (response && response.status === 401) {
-                message = 'PVE 未登录或会话已过期';
-            } else if (response && response.status === 403) {
-                message = '无访问权限';
-            } else if (response && response.status === 503) {
-                message = 'PVE 会话验证不可用';
-            } else if (success) {
-                try {
-                    const result = JSON.parse(response.responseText);
-                    const komodo = result && result.komodo;
-                    if (komodo && komodo.configured === false && komodo.connected === false) {
-                        message = 'Komodo 未配置凭据';
-                    } else if (komodo && komodo.configured === true &&
-                        komodo.connected === true && typeof komodo.version === 'string') {
-                        message = 'Komodo 已连接（版本 ' + komodo.version + '）';
-                    }
-                } catch (error) {
-                    // Use a fixed message; error bodies may contain private data.
-                }
-            }
-            updateStatus(message);
-        }
-
-        try {
-            // API2Request would prefix /api2; this is our own same-origin API.
-            // Ext.Ajax uses the browser's existing PVE session cookie.
-            Ext.Ajax.request({
-                url: '/pve-komodo/api/connection',
-                method: 'GET',
-                timeout: 60000,
-                callback: complete,
-            });
-        } catch (error) {
-            complete(null, false, null);
-        }
+            return card;
+        });
     }
 
     try {
@@ -101,40 +68,15 @@
             // www/manager6/dc/Config.js and panel/ConfigPanel.js.
             insertNodes: function (items) {
                 if (Array.isArray(items) && !items.some(function (item) {
-                    return item && item.itemId === itemId;
+                    return item && pageIds.has(item.itemId);
                 })) {
-                    items = items.concat([{
-                        xtype: 'panel',
-                        itemId: itemId,
-                        title: 'Docker 管理',
-                        iconCls: 'fa fa-cubes',
-                        border: false,
-                        bodyPadding: 16,
-                        layout: { type: 'vbox', align: 'begin' },
-                        items: [{
-                            xtype: 'button',
-                            itemId: 'pve-komodo-check-connection',
-                            text: '检查连接',
-                            handler: function (button) {
-                                checkConnection(button.up('#' + itemId));
-                            },
-                        }, {
-                            xtype: 'component',
-                            itemId: 'pve-komodo-connection-status',
-                            margin: '12 0 0 0',
-                            html: '尚未检查连接',
-                            autoEl: { tag: 'div', role: 'status', 'aria-live': 'polite' },
-                        }],
-                        listeners: {
-                            activate: function (panel) {
-                                // PVE creates saved cards lazily. Do not check
-                                // from page startup or an afterrender listener.
-                                if (!panel._pveKomodoInitialCheck) {
-                                    checkConnection(panel);
-                                }
-                            },
-                        },
-                    }]);
+                    // Ceph is a root card with itemId "ceph". Keep every official
+                    // item in order; if capabilities hide Ceph, append safely.
+                    const ceph = items.findIndex(function (item) {
+                        return item && item.itemId === 'ceph';
+                    });
+                    const position = ceph < 0 ? items.length : ceph + 1;
+                    items = items.slice(0, position).concat(blankCards(), items.slice(position));
                 }
 
                 return this.callParent([items]);
