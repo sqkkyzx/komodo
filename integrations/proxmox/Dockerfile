@@ -4,8 +4,8 @@ ARG SOURCE_REVISION=unknown
 ARG SOURCE_REPOSITORY=https://github.com/sqkkyzx/komodo
 LABEL org.opencontainers.image.source="${SOURCE_REPOSITORY}" \
       org.opencontainers.image.revision="${SOURCE_REVISION}" \
-      org.opencontainers.image.version="0.1.0" \
-      org.opencontainers.image.description="FastAPI entry point for the PVE Docker management extension" \
+      org.opencontainers.image.version="0.2.0" \
+      org.opencontainers.image.description="PVE Docker management extension with server-side Komodo connectivity checks" \
       org.opencontainers.image.licenses="GPL-3.0"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

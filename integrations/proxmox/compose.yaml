@@ -7,6 +7,11 @@ services:
       PVE_EXTENSION_ENABLED: ${PVE_EXTENSION_ENABLED:-true}
       PVE_TLS_VERIFY: ${PVE_TLS_VERIFY:-true}
       PVE_CA_FILE: ${PVE_CA_FILE:-}
+      PVE_ADMIN_USERS: ${PVE_ADMIN_USERS:-root@pam}
+      KOMODO_URL: ${KOMODO_URL:-}
+      KOMODO_API_KEY: ${KOMODO_API_KEY:-}
+      KOMODO_API_SECRET: ${KOMODO_API_SECRET:-}
+      KOMODO_TLS_VERIFY: ${KOMODO_TLS_VERIFY:-true}
     ports:
       - "${PVE_EXTENSION_BIND:-127.0.0.1}:18080:8000"
     read_only: true

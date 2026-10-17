@@ -4,7 +4,7 @@ Only the HTML entry point passes through this service. Existing Nginx routes
 continue to send PVE APIs, uploads, assets, and WebSockets directly to PVE.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import logging
 import os
@@ -17,11 +17,14 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse, Response
 import httpx
 
+from app.komodo import KomodoClient
+from app.pve_auth import PveAuthenticator
+
 
 LOGGER = logging.getLogger("pve_komodo")
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 EXTENSION_PATH = "/pve-komodo/assets/extension.js"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 # Reject unknown desktop shapes instead of injecting into login providers,
 # consoles, mobile UIs, or an HTML error page.
@@ -52,6 +55,11 @@ class Settings:
     extension_enabled: bool = True
     tls_verify: bool = True
     ca_file: str | None = None
+    admin_users: tuple[str, ...] = ("root@pam",)
+    komodo_url: str | None = None
+    komodo_api_key: str | None = field(default=None, repr=False)
+    komodo_api_secret: str | None = field(default=None, repr=False)
+    komodo_tls_verify: bool = True
 
     def __post_init__(self) -> None:
         parsed = urlsplit(self.upstream)
@@ -77,6 +85,11 @@ class Settings:
             extension_enabled=env_bool("PVE_EXTENSION_ENABLED", True),
             tls_verify=env_bool("PVE_TLS_VERIFY", True),
             ca_file=os.environ.get("PVE_CA_FILE") or None,
+            admin_users=tuple(user.strip() for user in os.environ.get("PVE_ADMIN_USERS", "root@pam").split(",") if user.strip()),
+            komodo_url=os.environ.get("KOMODO_URL") or None,
+            komodo_api_key=os.environ.get("KOMODO_API_KEY") or None,
+            komodo_api_secret=os.environ.get("KOMODO_API_SECRET") or None,
+            komodo_tls_verify=env_bool("KOMODO_TLS_VERIFY", True),
         )
 
     def tls_context(self) -> ssl.SSLContext | bool:
@@ -104,11 +117,46 @@ def inject_extension(body: bytes, query: str, enabled: bool, asset_version: str)
     return body[:insertion] + script + body[insertion:], "enabled"
 
 
-def create_app(settings: Settings | None = None, *, transport: httpx.AsyncBaseTransport | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None,
+    *,
+    transport: httpx.AsyncBaseTransport | None = None,
+    pve_auth_transport: httpx.AsyncBaseTransport | None = None,
+    komodo_transport: httpx.AsyncBaseTransport | None = None,
+) -> FastAPI:
     config = settings or Settings.from_env()
     tls = config.tls_context()
     asset_version = hashlib.sha256((STATIC_DIR / "extension.js").read_bytes()).hexdigest()[:16]
     application = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+    authenticator = PveAuthenticator(
+        config.upstream, verify=tls, allowed_users=config.admin_users, transport=pve_auth_transport,
+    )
+    komodo = KomodoClient(
+        config.komodo_url, config.komodo_api_key, config.komodo_api_secret,
+        verify=config.komodo_tls_verify, transport=komodo_transport,
+    )
+
+    @application.middleware("http")
+    async def private_api_responses(request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/pve-komodo/api/"):
+            response.headers["Cache-Control"] = "private, no-store"
+            response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
+
+    @application.get("/pve-komodo/api/session")
+    async def session(request: Request) -> dict:
+        user = await authenticator.authenticate(request)
+        return {"user": user, "komodo_configured": komodo.configured}
+
+    @application.get("/pve-komodo/api/connection")
+    async def connection(request: Request) -> dict:
+        # Authorize the browser session before using the service account. These
+        # routes are read-only; future write routes also need CSRF protection.
+        user = await authenticator.authenticate(request)
+        status = await komodo.connection_status()
+        LOGGER.info("Komodo connection check user=%s connected=%s", user, status["connected"])
+        return {"user": user, "komodo": status}
 
     @application.get("/pve-komodo/health")
     async def health() -> JSONResponse:

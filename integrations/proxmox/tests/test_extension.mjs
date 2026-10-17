@@ -12,6 +12,7 @@ const dockerId = 'pve-komodo-docker';
 function createExt() {
     const classes = new Map();
     const stack = [];
+    const requests = [];
     let definitions = 0;
 
     function wrap(owner, name, implementation, previous) {
@@ -116,6 +117,13 @@ function createExt() {
     }
 
     return {
+        requests,
+        Ajax: { request: (options) => requests.push(options) },
+        String: {
+            htmlEncode: (value) => String(value).replace(/[&<>"']/g, (character) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+            })[character]),
+        },
         ClassManager: { get: (name) => classes.get(name) },
         define,
         get definitions() { return definitions; },
@@ -129,7 +137,7 @@ function createExt() {
 
 function runtime(Ext = createExt()) {
     const warnings = [];
-    const forbiddenRequest = () => { throw new Error('blank extension must not make requests'); };
+    const forbiddenRequest = () => { throw new Error('extension must use only the same-origin Ext.Ajax API'); };
     const context = vm.createContext({
         window: { Ext, console: { warn: (...args) => warnings.push(args) } },
         fetch: forbiddenRequest,
@@ -138,7 +146,7 @@ function runtime(Ext = createExt()) {
     return { Ext, warnings, load: () => vm.runInContext(extension, context) };
 }
 
-test('datacenter gains a native blank card after PVE initializes its original items', () => {
+test('datacenter gains a native status card after PVE initializes its original items', () => {
     const browser = runtime();
     browser.load();
     const dc = browser.Ext.create('PVE.dc.Config', { items: [{ itemId: 'discarded-by-pve' }] });
@@ -157,13 +165,15 @@ test('datacenter gains a native blank card after PVE initializes its original it
     assert.equal(card.xtype, 'panel');
     assert.equal(card.header, false);
     assert.equal(card.border, false);
-    assert.equal(card.items.length, 0);
-    for (const content of ['html', 'htmlEncode', 'loader', 'listeners', 'tbar', 'bbar',
-        'dockedItems', 'buttons', 'items', 'store']) {
-        if (content !== 'items') {
-            assert.equal(card[content], undefined, `blank page has no ${content}`);
-        }
+    assert.equal(card.items.length, 2);
+    assert.equal(card.items[0].xtype, 'button');
+    assert.equal(card.items[0].text, '检查连接');
+    assert.equal(card.items[1].xtype, 'component');
+    assert.equal(card.items[1].html, '尚未检查连接');
+    for (const content of ['html', 'loader', 'tbar', 'bbar', 'dockedItems', 'buttons', 'store']) {
+        assert.equal(card[content], undefined, `status card has no ${content}`);
     }
+    assert.equal(browser.Ext.requests.length, 0, 'registering and building menus must not contact the API');
 });
 
 test('VM and CT menus retain their original cards without Docker management', () => {
@@ -260,4 +270,162 @@ test('ExtJS refusing registration does not prevent the PVE page from starting', 
     assert.equal(browser.warnings.length, 1);
     const dc = Ext.create('PVE.dc.Config');
     assert.deepEqual(dc.navigation, [{ id: 'summary', text: 'summary' }]);
+});
+
+function connectionCard(browser = runtime()) {
+    browser.load();
+    const dc = browser.Ext.create('PVE.dc.Config');
+    const config = dc.savedItems[dockerId];
+    const status = {
+        destroyed: false,
+        html: config.items[1].html,
+        updates: [],
+        update(value) {
+            assert.equal(this.destroyed, false, 'never update a destroyed component');
+            this.html = value;
+            this.updates.push(value);
+        },
+    };
+    const button = {
+        ...config.items[0],
+        disabled: false,
+        destroyed: false,
+        setDisabled(value) {
+            assert.equal(this.destroyed, false, 'never update a destroyed button');
+            this.disabled = value;
+        },
+        up(selector) {
+            assert.equal(selector, '#' + dockerId);
+            return panel;
+        },
+    };
+    const panel = {
+        destroyed: false,
+        down(selector) {
+            return selector === '#pve-komodo-check-connection' ? button :
+                selector === '#pve-komodo-connection-status' ? status : undefined;
+        },
+    };
+    return {
+        browser, panel, button, status,
+        activate: () => config.listeners.activate(panel),
+        check: () => button.handler(button),
+        respond(payload, code = 200, index = browser.Ext.requests.length - 1) {
+            const options = browser.Ext.requests[index];
+            options.callback(options, code >= 200 && code < 300, {
+                status: code,
+                responseText: typeof payload === 'string' ? payload : JSON.stringify(payload),
+            });
+        },
+    };
+}
+
+test('only first activation of the Docker page starts a read-only same-origin check', () => {
+    const card = connectionCard();
+    assert.equal(card.browser.Ext.requests.length, 0);
+    card.activate();
+    assert.equal(card.browser.Ext.requests.length, 1);
+    const options = card.browser.Ext.requests[0];
+    assert.equal(options.method, 'GET');
+    assert.equal(options.url, '/pve-komodo/api/connection');
+    for (const privateData of ['headers', 'params', 'jsonData', 'rawData', 'urlData']) {
+        assert.equal(options[privateData], undefined);
+    }
+    assert.equal(card.button.disabled, true);
+    assert.equal(card.status.html, '正在检查连接…');
+    card.activate();
+    card.check();
+    assert.equal(card.browser.Ext.requests.length, 1, 'pending check cannot be submitted twice');
+
+    card.respond({ user: 'root@pam', komodo: { configured: false, connected: false } });
+    assert.equal(card.status.html, 'Komodo 未配置凭据');
+    assert.equal(card.button.disabled, false);
+    card.activate();
+    assert.equal(card.browser.Ext.requests.length, 1, 'activation is checked once per card');
+    card.check();
+    assert.equal(card.browser.Ext.requests.length, 2, 'manual retry is allowed');
+});
+
+test('connected status HTML-encodes the upstream version and does not display identity or secrets', () => {
+    const card = connectionCard();
+    card.activate();
+    card.respond({
+        user: 'root@pam',
+        komodo: {
+            configured: true, connected: true,
+            version: '2.3.3 <img src=x onerror="alert(1)"> & \'test\'',
+            username: 'PRIVATE_SERVICE_USER',
+            key: 'PRIVATE_KEY', secret: 'PRIVATE_SECRET', url: 'https://private.invalid',
+        },
+    });
+    assert.equal(card.status.html,
+        'Komodo 已连接（版本 2.3.3 &lt;img src=x onerror=&quot;alert(1)&quot;&gt; &amp; &#39;test&#39;）');
+    for (const privateValue of ['PRIVATE_SERVICE_USER', 'PRIVATE_KEY', 'PRIVATE_SECRET', 'private.invalid']) {
+        assert.equal(card.status.html.includes(privateValue), false);
+    }
+    assert.equal(card.button.disabled, false);
+});
+
+test('PVE authentication errors use fixed messages and can be retried', () => {
+    for (const [code, message] of [
+        [401, 'PVE 未登录或会话已过期'], [403, '无访问权限'],
+        [503, 'PVE 会话验证不可用'], [500, 'Komodo 连接失败'], [0, 'Komodo 连接失败'],
+    ]) {
+        const card = connectionCard();
+        card.activate();
+        card.respond({ detail: 'PRIVATE_SECRET https://private.invalid' }, code);
+        assert.equal(card.status.html, message);
+        assert.equal(card.button.disabled, false);
+        card.check();
+        assert.equal(card.browser.Ext.requests.length, 2);
+        card.respond({ user: 'root@pam', komodo: { configured: true, connected: true, version: '2.3.3' } });
+        assert.equal(card.status.html, 'Komodo 已连接（版本 2.3.3）');
+    }
+});
+
+test('disconnected, malformed, and unexpected responses never render upstream error text', () => {
+    for (const payload of [
+        { user: 'root@pam', komodo: { configured: true, connected: false, error_code: 'PRIVATE_SECRET' } },
+        { user: 'root@pam', komodo: { configured: false, connected: true } },
+        { user: 'root@pam', komodo: { configured: true, connected: true, version: { private: 'SECRET' } } },
+        { error: 'PRIVATE_SECRET' }, null, 'invalid json PRIVATE_SECRET',
+    ]) {
+        const card = connectionCard();
+        card.activate();
+        assert.doesNotThrow(() => card.respond(payload));
+        assert.equal(card.status.html, 'Komodo 连接失败');
+        assert.equal(card.button.disabled, false);
+    }
+});
+
+test('callbacks after card destruction do not modify the panel or its children', () => {
+    for (const property of ['destroyed', 'destroying']) {
+        const card = connectionCard();
+        card.activate();
+        card.panel[property] = true;
+        card.button.destroyed = true;
+        card.status.destroyed = true;
+        const before = { ...card.panel };
+        const updateCount = card.status.updates.length;
+        assert.doesNotThrow(() => card.respond({
+            user: 'root@pam', komodo: { configured: true, connected: true, version: '2.3.3' },
+        }));
+        assert.deepEqual(card.panel, before);
+        assert.equal(card.status.updates.length, updateCount);
+        assert.equal(card.button.disabled, true);
+    }
+});
+
+test('a synchronous request error clears the pending state and permits retry', () => {
+    const browser = runtime();
+    const request = browser.Ext.Ajax.request;
+    browser.Ext.Ajax.request = () => { throw new Error('PRIVATE_SECRET'); };
+    const card = connectionCard(browser);
+    assert.doesNotThrow(card.activate);
+    assert.equal(card.status.html, 'Komodo 连接失败');
+    assert.equal(card.button.disabled, false);
+    browser.Ext.Ajax.request = request;
+    card.check();
+    assert.equal(browser.Ext.requests.length, 1);
+    assert.equal(card.button.disabled, true);
 });

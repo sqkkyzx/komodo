@@ -70,6 +70,11 @@ jobs:
           curl --fail --silent --show-error --max-time 5 \
             http://127.0.0.1:18000/pve-komodo/assets/extension.js \
             --output "$RUNNER_TEMP/pve-komodo-extension.js"
+          for route in session connection; do
+            status="$(curl --silent --show-error --max-time 5 --output /dev/null \
+              --write-out '%{http_code}' "http://127.0.0.1:18000/pve-komodo/api/$route")"
+            test "$status" = 401
+          done
           python - <<'PY'
           import os
           import re

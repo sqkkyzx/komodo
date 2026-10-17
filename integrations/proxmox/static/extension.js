@@ -21,6 +21,74 @@
         return;
     }
 
+    function isAlive(panel) {
+        return panel && !panel.destroyed && !panel.destroying;
+    }
+
+    function checkConnection(panel) {
+        if (!isAlive(panel) || panel._pveKomodoChecking) {
+            return;
+        }
+        const button = panel.down('#pve-komodo-check-connection');
+        const status = panel.down('#pve-komodo-connection-status');
+        if (!button || !status) {
+            return;
+        }
+
+        function updateStatus(text) {
+            // Never render an upstream version or other response value as HTML.
+            status.update(Ext.String.htmlEncode(text));
+        }
+
+        panel._pveKomodoChecking = true;
+        panel._pveKomodoInitialCheck = true;
+        button.setDisabled(true);
+        updateStatus('正在检查连接…');
+
+        function complete(options, success, response) {
+            if (!isAlive(panel) || !isAlive(button) || !isAlive(status)) {
+                return;
+            }
+            panel._pveKomodoChecking = false;
+            button.setDisabled(false);
+            let message = 'Komodo 连接失败';
+            if (response && response.status === 401) {
+                message = 'PVE 未登录或会话已过期';
+            } else if (response && response.status === 403) {
+                message = '无访问权限';
+            } else if (response && response.status === 503) {
+                message = 'PVE 会话验证不可用';
+            } else if (success) {
+                try {
+                    const result = JSON.parse(response.responseText);
+                    const komodo = result && result.komodo;
+                    if (komodo && komodo.configured === false && komodo.connected === false) {
+                        message = 'Komodo 未配置凭据';
+                    } else if (komodo && komodo.configured === true &&
+                        komodo.connected === true && typeof komodo.version === 'string') {
+                        message = 'Komodo 已连接（版本 ' + komodo.version + '）';
+                    }
+                } catch (error) {
+                    // Use a fixed message; error bodies may contain private data.
+                }
+            }
+            updateStatus(message);
+        }
+
+        try {
+            // API2Request would prefix /api2; this is our own same-origin API.
+            // Ext.Ajax uses the browser's existing PVE session cookie.
+            Ext.Ajax.request({
+                url: '/pve-komodo/api/connection',
+                method: 'GET',
+                timeout: 60000,
+                callback: complete,
+            });
+        } catch (error) {
+            complete(null, false, null);
+        }
+    }
+
     try {
         Ext.define(overrideName, {
             override: 'PVE.dc.Config',
@@ -41,7 +109,31 @@
                         title: 'Docker 管理',
                         iconCls: 'fa fa-cubes',
                         border: false,
-                        items: [],
+                        bodyPadding: 16,
+                        layout: { type: 'vbox', align: 'begin' },
+                        items: [{
+                            xtype: 'button',
+                            itemId: 'pve-komodo-check-connection',
+                            text: '检查连接',
+                            handler: function (button) {
+                                checkConnection(button.up('#' + itemId));
+                            },
+                        }, {
+                            xtype: 'component',
+                            itemId: 'pve-komodo-connection-status',
+                            margin: '12 0 0 0',
+                            html: '尚未检查连接',
+                            autoEl: { tag: 'div', role: 'status', 'aria-live': 'polite' },
+                        }],
+                        listeners: {
+                            activate: function (panel) {
+                                // PVE creates saved cards lazily. Do not check
+                                // from page startup or an afterrender listener.
+                                if (!panel._pveKomodoInitialCheck) {
+                                    checkConnection(panel);
+                                }
+                            },
+                        },
                     }]);
                 }
 
