@@ -1,0 +1,121 @@
+# PVE Docker 管理扩展（初始版本）
+
+用 FastAPI 为现有 PVE 9 桌面添加“数据中心 → Docker 管理”原生 ExtJS 菜单。
+点击后内容为空白；首版没有 Docker/Stack 操作、Komodo 连接、额外登录或资源绑定。
+PVE 的官方文件、API、VM/CT 配置均不修改。
+
+## 结构
+
+现有 Nginx 的主桌面 `/` 请求经过本服务，从固定的 `PVE_UPSTREAM` 取得动态 HTML，
+在官方 `pvemanagerlib.js` 加载后、`PVE.StdWorkspace` 初始化前插入扩展脚本。
+PVE 继续生成登录用户、CSRF、节点、语言和主题信息。每次取页面使用独立 Cookie 会话，
+动态 HTML 不缓存，不记录请求 Cookie、票据或页面内容。
+
+其他 PVE API、官方资源、上传下载和控制台 WebSocket 仍由 Nginx **直接代理 PVE**。
+本服务不是完整的 PVE 反向代理，直接访问容器端口不能代替完整的 Nginx 入口。
+noVNC、xterm.js、移动页面跳过扩展加载。
+
+扩展只 override `PVE.dc.Config.insertNodes`：该钩子在数据中心构造菜单时追加空白面板，
+不修改 VM/CT 页面。普通 script 保留 ExtJS `callParent` 所需的非 strict 调用语义。
+
+## 镜像与构建
+
+工作流：`.github/workflows/publish-pve-webui.yml`。
+本分支提交推送后，GitHub Actions 执行 Python/Node 测试、构建 linux/amd64 镜像、
+容器启动和静态资源检查，成功后发布：
+
+```text
+ghcr.io/sqkkyzx/pve-komodo-webui:edge
+ghcr.io/sqkkyzx/pve-komodo-webui:sha-<完整提交 SHA>
+```
+
+使用 Actions 摘要中的 digest 或 SHA 标签固定部署版本，`edge` 用于跟随本分支。
+无需在部署机器构建镜像。如果 GHCR 包尚为私有，拉取前需要使用有 `read:packages`
+权限的账号凭据执行 `docker login ghcr.io`。
+
+## 部署
+
+把本目录的 `compose.yaml`、`.env.example` 复制到 Docker 主机。配置 `.env`：
+
+```sh
+cp .env.example .env
+# 编辑 PVE_UPSTREAM、镜像版本和 TLS 设置
+docker compose pull
+docker compose up -d
+curl -f http://127.0.0.1:18080/pve-komodo/health
+```
+
+`health` 仅表示本服务存活，不表示上游 PVE 连通或页面已经注入。
+默认只绑定本机 `127.0.0.1:18080`，适用于 Nginx 在同一机器运行。
+如果 Nginx 在其他容器或机器，通过现有私有网络连接本服务，或设置内部绑定地址；
+不需要 privileged、宿主机目录、Docker socket 或 PVE SSH 凭据。
+
+### TLS
+
+默认验证 PVE HTTPS 证书。PVE 使用自签 CA 时，挂载该 CA 的 **公开证书**（无需私钥）：
+
+```yaml
+# compose.override.yaml
+services:
+  pve-komodo:
+    environment:
+      PVE_CA_FILE: /run/pve-ca.pem
+    volumes:
+      - ./pve-ca.pem:/run/pve-ca.pem:ro
+```
+
+`PVE_UPSTREAM` 的主机名必须匹配证书。临时测试可显式设置 `PVE_TLS_VERIFY=false`，
+此时不能同时配置 `PVE_CA_FILE`；部署时应恢复证书验证。
+
+### 现有 Nginx
+
+参考 `nginx.example.conf`，在现有 Nginx 中添加增强域名的 server 配置：
+
+| 路径 | 上游 |
+| --- | --- |
+| `location = /` | 本服务 `http://127.0.0.1:18080`，保留完整 query string |
+| `/pve-komodo/` | 本服务，提供脚本与健康检查 |
+| 其余路径 | 原 PVE `https://节点:8006`，保留原有 WebSocket/上传配置 |
+
+替换示例中的域名、TLS 证书、CA 和上游地址，先 `nginx -t` 再 reload。
+保留原始 `https://节点:8006` 管理入口。不要缓存含用户信息的 PVE 首页。
+示例在本服务不可达时将首页回退到原 PVE；PVE 本身不可达时无法靠扩展恢复。
+本版本的扩展功能无需 Komodo 凭据。
+
+## 兼容与停用恢复
+
+注入条件为 PVE **9.x** 的已识别桌面结构（官方 manager script + 唯一 StdWorkspace
+启动脚本）；其他主版本、未知模板、控制台和移动页面原样返回。此结构检查不是对所有
+PVE 9 小版本的兼容承诺。实现依据为官方 PVE 9.2.22 源码，实机验收需在目标节点进行。
+宿主机的软件升级照常执行；页面结构失配时不会强行注入。
+
+- 临时绕过：访问增强入口 `/?pve-komodo=off`（这是本服务提供的开关，不是 PVE 内置功能）。
+- 全局停用：`.env` 设置 `PVE_EXTENSION_ENABLED=false`，再 `docker compose up -d`，刷新页面。
+- 取消集成：把 Nginx 的 `location = /` 改回原 PVE 上游，检查配置后 reload，然后停止扩展容器。
+- 紧急入口：直接访问原 PVE `:8006`，或使用独立 SSH；不依赖扩展容器。
+- 版本恢复：将 `PVE_EXTENSION_IMAGE` 改为上一版 SHA/digest，拉取并重建服务。
+
+停用后需刷新已打开的页面，已加载进浏览器的 override 不会从旧页面中自动卸载。
+关闭扩展不会执行任何 VM/CT、Docker 或存储操作。浏览器脚本运行时异常仍可能影响
+增强入口；原版入口作为独立的恢复路径保留。
+
+响应头 `X-PVE-KOMODO-Extension` 给出 `enabled`、`disabled`、`console-or-mobile`、
+`unsupported-page` 等判定，便于在浏览器 Network 中排查。
+
+## 验证
+
+本地可运行代码检查与单元测试；镜像仅在 GitHub Actions 构建：
+
+```sh
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+node --test tests/test_extension.mjs
+```
+
+测试覆盖菜单插入顺序、原菜单与 VM/CT 页面保留、重复注入、空白内容、Cookie 隔离、
+CSRF 内容保留、压缩与缓存头、控制台跳过、未知模板跳过、停用及上游断连。
+首次接入目标 PVE 后，验收登录、数据中心空白页、原 VM/CT 页面、控制台与停用回退。
+
+实现依据：[PVE 桌面模板](https://github.com/proxmox/pve-manager/blob/aa7db891073e78fe1b67032be71ee9c98b6eb635/www/index.html.tpl)、
+[数据中心配置](https://github.com/proxmox/pve-manager/blob/aa7db891073e78fe1b67032be71ee9c98b6eb635/www/manager6/dc/Config.js)、
+[ConfigPanel 菜单构造](https://github.com/proxmox/pve-manager/blob/aa7db891073e78fe1b67032be71ee9c98b6eb635/www/manager6/panel/ConfigPanel.js)。

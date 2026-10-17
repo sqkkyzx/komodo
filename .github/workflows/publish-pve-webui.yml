@@ -1,0 +1,162 @@
+name: Publish PVE Komodo WebUI (amd64)
+
+on:
+  push:
+    branches: [codex/pve-webui-fastapi]
+    paths:
+      - .github/workflows/publish-pve-webui.yml
+      - integrations/proxmox/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-pve-webui-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'sqkkyzx/komodo' && github.ref == 'refs/heads/codex/pve-webui-fastapi'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependencies
+        working-directory: integrations/proxmox
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Test FastAPI service and ExtJS extension
+        working-directory: integrations/proxmox
+        run: |
+          python -m pytest -q
+          node --test tests/test_extension.mjs
+
+      - name: Prepare image names and smoke test
+        id: image
+        shell: bash
+        run: |
+          name="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/pve-komodo-webui"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "ref=$name:sha-$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          cat > "$RUNNER_TEMP/verify-pve-webui-image.sh" <<'SH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          image_ref="$1"
+          cleanup() {
+            docker logs pve-komodo-smoke || true
+            docker rm --force pve-komodo-smoke >/dev/null || true
+          }
+          trap cleanup EXIT
+          docker run --detach --name pve-komodo-smoke \
+            --publish 127.0.0.1:18000:8000 \
+            --env PVE_UPSTREAM=https://pve.invalid:8006 \
+            "$image_ref"
+          curl --fail --silent --show-error --retry 15 --retry-delay 1 \
+            --retry-connrefused --retry-all-errors --max-time 5 \
+            http://127.0.0.1:18000/pve-komodo/health
+          curl --fail --silent --show-error --max-time 5 \
+            http://127.0.0.1:18000/pve-komodo/assets/extension.js \
+            --output "$RUNNER_TEMP/pve-komodo-extension.js"
+          python - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          source = Path(os.environ["RUNNER_TEMP"], "pve-komodo-extension.js").read_text()
+          source = re.sub(r"\\u([0-9a-fA-F]{4})", lambda match: chr(int(match[1], 16)), source)
+          assert "Docker 管理" in source, "The image does not contain the Docker management extension"
+          PY
+          SH
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Build amd64 image for verification
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: integrations/proxmox
+          file: integrations/proxmox/Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          provenance: false
+          tags: ${{ steps.image.outputs.ref }}
+          build-args: |
+            SOURCE_REVISION=${{ github.sha }}
+            SOURCE_REPOSITORY=${{ github.server_url }}/${{ github.repository }}
+          cache-from: type=gha,scope=pve-komodo-webui-amd64
+          cache-to: type=gha,scope=pve-komodo-webui-amd64,mode=max
+
+      - name: Verify container startup and extension assets
+        env:
+          IMAGE_REF: ${{ steps.image.outputs.ref }}
+        run: bash "$RUNNER_TEMP/verify-pve-webui-image.sh" "$IMAGE_REF"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish tested image and verify registry image
+        id: published
+        env:
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+          IMAGE_REF: ${{ steps.image.outputs.ref }}
+        shell: bash
+        run: |
+          docker push "$IMAGE_REF"
+          docker buildx imagetools inspect "$IMAGE_REF" --format '{{json .Image}}' > "$RUNNER_TEMP/pve-webui-image.json"
+          jq -e --arg revision "$GITHUB_SHA" '
+            .os == "linux" and .architecture == "amd64" and
+            .config.Labels["org.opencontainers.image.revision"] == $revision and
+            (.config.User != null and .config.User != "" and
+             .config.User != "root" and (.config.User | startswith("root:") | not) and
+             .config.User != "0" and (.config.User | startswith("0:") | not))
+          ' "$RUNNER_TEMP/pve-webui-image.json"
+          digest=$(docker buildx imagetools inspect "$IMAGE_REF" --format '{{json .Manifest}}' | jq -er '.digest')
+          docker pull "$IMAGE_NAME@$digest"
+          bash "$RUNNER_TEMP/verify-pve-webui-image.sh" "$IMAGE_NAME@$digest"
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+          {
+            echo '### Verified linux/amd64 PVE Komodo WebUI image'
+            echo
+            echo "- Commit: $IMAGE_REF"
+            echo "- Digest: $IMAGE_NAME@$digest"
+            echo '- Checks: Python tests, ExtJS tests, non-root runtime, startup, health endpoint, Docker management extension asset'
+            echo '- The health check is independent of PVE upstream availability.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Promote verified edge tag
+        env:
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+          IMAGE_REF: ${{ steps.image.outputs.ref }}
+          IMAGE_DIGEST: ${{ steps.published.outputs.digest }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          current_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$GITHUB_REF_NAME" --jq '.object.sha')
+          if [[ "$current_sha" != "$GITHUB_SHA" ]]; then
+            echo '- The edge tag was preserved because the branch has newer commits.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          edge_ref="$IMAGE_NAME:edge"
+          docker tag "$IMAGE_REF" "$edge_ref"
+          docker push "$edge_ref"
+          digest=$(docker buildx imagetools inspect "$edge_ref" --format '{{json .Manifest}}' | jq -er '.digest')
+          test "$digest" = "$IMAGE_DIGEST"
+          echo "- Edge: $edge_ref (verified digest: $IMAGE_DIGEST)" >> "$GITHUB_STEP_SUMMARY"

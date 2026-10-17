@@ -1,0 +1,16 @@
+services:
+  pve-komodo:
+    image: ${PVE_EXTENSION_IMAGE:-ghcr.io/sqkkyzx/pve-komodo-webui:edge}
+    restart: unless-stopped
+    environment:
+      PVE_UPSTREAM: ${PVE_UPSTREAM:?Set the original PVE HTTPS address}
+      PVE_EXTENSION_ENABLED: ${PVE_EXTENSION_ENABLED:-true}
+      PVE_TLS_VERIFY: ${PVE_TLS_VERIFY:-true}
+      PVE_CA_FILE: ${PVE_CA_FILE:-}
+    ports:
+      - "${PVE_EXTENSION_BIND:-127.0.0.1}:18080:8000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    logging:
+      driver: local
